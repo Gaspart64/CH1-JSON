@@ -1,0 +1,4143 @@
+[Event "New Orleans"]
+[Site "New Orleans"]
+[Date "1848.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Morphy, Alonzo"]
+[Result "1-0"]
+[ECO "C23"]
+[EventDate "1848.??.??"]
+[PlyCount "61"]
+[EventType "tourn"]
+[EventRounds "4"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Bc4 f5 3. exf5 Nf6 4. Nc3 d5 5. Nxd5 Bc5 6. Nxf6+ Qxf6 7. d3
+Bxf5 8. Nf3 Bg4 9. Bd5 c6 10. Be4 Nd7 11. O-O h6 12. c3 O-O-O 13. b4 Bb6
+14. a4 a6 15. Qb3 *
+
+[Event "New Orleans"]
+[Site "New Orleans"]
+[Date "1848.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Morphy, Alonzo"]
+[Result "1-0"]
+[ECO "C33"]
+[EventDate "1848.??.??"]
+[PlyCount "35"]
+[EventType "tourn"]
+[EventRounds "4"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 exf4 3. Bc4 Qh4+ 4. Kf1 Bc5 5. d4 Bb6 6. Nf3 Qe7 7. Nc3 Nf6
+8. Qd3 c6 9. Bxf4 d5 10. exd5 O-O 11. d6 Qd8 12. Re1 Re8 13. Ng5 Rxe1+ 14.
+Kxe1 Qe8+ 15. Kd2 *
+
+[Event "New Orleans"]
+[Site "New Orleans"]
+[Date "1848.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "NN"]
+[Result "1-0"]
+[ECO "C20"]
+[EventDate "1848.??.??"]
+[PlyCount "37"]
+[EventType "tourn"]
+[EventRounds "4"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. h3 d5 3. exd5 Bc5 4. Bc4 c6 5. Nc3 Nf6 6. d3 a5 7. Bg5 Nbd7 8.
+dxc6 bxc6 9. Nf3 O-O 10. O-O h6 11. Bh4 Qc7 12. d4 exd4 13. Nxd4 Bd6 14.
+Nf5 Bh2+ 15. Kh1 *
+
+[Event "New Orleans"]
+[Site "New Orleans"]
+[Date "1849.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Le Carpentier, C."]
+[Result "1-0"]
+[EventDate "1849.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/1NBQKBNR w Kk - 0 1"]
+[PlyCount "25"]
+[EventType "game"]
+[EventRounds "4"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Bc4 Bb4+ 5. c3 dxc3 6. O-O cxb2 7. Bxb2
+Bf8 8. e5 d6 9. Re1 dxe5 10. Nxe5 Qxd1 11. Bxf7+ Ke7 12. Ng6+ Kxf7 13.
+Nxh8# 1-0
+
+[Event "New Orleans"]
+[Site "New Orleans"]
+[Date "1849.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Mac Connel, James"]
+[Result "1-0"]
+[ECO "C35"]
+[EventDate "1849.??.??"]
+[PlyCount "21"]
+[EventType "game"]
+[EventRounds "4"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 Be7 4. Bc4 Bh4+ 5. Kf1 d6 6. d4 Qf6 7. e5 dxe5
+8. dxe5 Qe7 9. Bxf4 Bg4 10. Nc3 c6 11. Ne4 1-0
+
+[Event "New Orleans"]
+[Site "New Orleans"]
+[Date "1849.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Mac Connel, James"]
+[Result "1-0"]
+[ECO "C40"]
+[EventDate "1849.??.??"]
+[PlyCount "45"]
+[EventType "game"]
+[EventRounds "4"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Qf6 3. Nc3 c6 4. d4 exd4 5. e5 Qg6 6. Bd3 Qxg2 7. Rg1 Qh3
+8. Rg3 Qh5 9. Rg5 Qh3 10. Bf1 Qe6 11. Nxd4 Qe7 12. Ne4 h6 13. Nf5 Qe6 14.
+Nfd6+ Bxd6 15. Nxd6+ *
+
+[Event "New Orleans"]
+[Site "New Orleans"]
+[Date "1849.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Mac Connel, James"]
+[Result "1-0"]
+[ECO "C39"]
+[EventDate "1849.??.??"]
+[PlyCount "56"]
+[EventType "game"]
+[EventRounds "4"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 g5 4. h4 g4 5. Ne5 h5 6. Bc4 Rh7 7. d4 d6 8. Nd3
+f3 9. g3 Nc6 10. Nf4 Bd7 11. Nc3 Nf6 12. Be3 Ne7 13. Kf2 c6 14. Re1 Bg7 15.
+e5 *
+
+[Event "New Orleans"]
+[Site "New Orleans"]
+[Date "1849.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Morphy, Ernest"]
+[Result "1-0"]
+[ECO "C56"]
+[EventDate "1849.??.??"]
+[PlyCount "39"]
+[EventType "game"]
+[EventRounds "4"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 d6 5. O-O Nf6 6. d4 exd4 7. cxd4 Bb6
+8. h3 h6 9. Nc3 O-O 10. Be3 Re8 11. d5 Bxe3 12. dxc6 Bb6 13. e5 dxe5 14.
+Qb3 Re7 15. Bxf7+ *
+
+[Event "New Orleans"]
+[Site "New Orleans"]
+[Date "1849.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "NN"]
+[Result "1-0"]
+[ECO "C39"]
+[EventDate "1849.??.??"]
+[PlyCount "39"]
+[EventType "game"]
+[EventRounds "4"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 g5 4. h4 g4 5. Ne5 h5 6. Bc4 Nh6 7. d4 d6 8. Nd3
+f3 9. gxf3 Be7 10. Bf4 Bxh4+ 11. Kd2 gxf3 12. Qxf3 Bg4 13. Qe3 Be7 14. Nc3
+c6 15. Raf1 *
+
+[Event "New Orleans"]
+[Site "New Orleans"]
+[Date "1849.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Rousseau, Eugene"]
+[Result "1-0"]
+[ECO "C39"]
+[EventDate "1849.??.??"]
+[PlyCount "33"]
+[EventType "game"]
+[EventRounds "4"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 g5 4. h4 g4 5. Ng5 h6 6. Nxf7 Kxf7 7. Qxg4 Qf6
+8. Bc4+ Ke7 9. Nc3 c6 10. e5 Qxe5+ 11. Kd1 Kd8 12. Re1 Qc5 13. Bxg8 d5 14.
+Re8+ Kxe8 15. Qxc8+ *
+
+[Event "New Orleans"]
+[Site "New Orleans"]
+[Date "1849.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Rousseau, Eugene"]
+[Result "1-0"]
+[ECO "C50"]
+[EventDate "1849.??.??"]
+[PlyCount "45"]
+[EventType "game"]
+[EventRounds "4"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 f5 4. d3 Nf6 5. O-O d6 6. Ng5 d5 7. exd5 Nxd5 8.
+Nc3 Nce7 9. Qf3 c6 10. Nce4 fxe4 11. Qf7+ Kd7 12. Qe6+ Kc7 13. Qxe5+ Qd6
+14. Qxd6+ Kxd6 15. Nf7+ *
+
+[Event "New Orleans m"]
+[Site "New Orleans"]
+[Date "1849.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Morphy, Alonzo"]
+[Result "1-0"]
+[ECO "C51"]
+[EventDate "1849.??.??"]
+[PlyCount "41"]
+[EventType "match"]
+[EventRounds "3"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. d4 exd4 7. cxd4 Bb6
+8. O-O Na5 9. Bd3 d5 10. exd5 Qxd5 11. Ba3 Be6 12. Nc3 Qd7 13. d5 Bxd5 14.
+Nxd5 Qxd5 15. Bb5+ *
+
+[Event "New Orleans m"]
+[Site "New Orleans"]
+[Date "1849.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Morphy, Alonzo"]
+[Result "1-0"]
+[ECO "C51"]
+[EventDate "1849.??.??"]
+[PlyCount "91"]
+[EventType "match"]
+[EventRounds "3"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. d4 exd4 7. cxd4 Bb6
+8. O-O Na5 9. Bd3 Ne7 10. Nc3 O-O 11. Ba3 d6 12. e5 Bf5 13. exd6 cxd6 14.
+Ne4 d5 15. Nf6+ *
+
+[Event "New Orleans m"]
+[Site "New Orleans"]
+[Date "1849.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Morphy, Alonzo"]
+[Result "1-0"]
+[ECO "C51"]
+[EventDate "1849.??.??"]
+[PlyCount "29"]
+[EventType "match"]
+[EventRounds "3"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. d4 exd4 7. cxd4 Bb6
+8. O-O Na5 9. Bd3 d5 10. exd5 Qxd5 11. Ba3 Be6 12. Nc3 Qd7 13. d5 Bxd5 14.
+Nxd5 Qxd5 15. Re1+ 1-0
+
+[Event "New Orleans"]
+[Site "New Orleans"]
+[Date "1850.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Loewenthal, Johann Jacob"]
+[Result "1-0"]
+[ECO "B21"]
+[EventDate "1850.??.??"]
+[PlyCount "97"]
+[EventType "tourn"]
+[EventRounds "12"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 c5 2. f4 e6 3. Nf3 d5 4. exd5 exd5 5. d4 Bg4 6. Be2 Bxf3 7. Bxf3 Nf6
+8. O-O Be7 9. Be3 cxd4 10. Bxd4 O-O 11. Nc3 Nc6 12. Bxf6 Bxf6 13. Nxd5 Bxb2
+14. Rb1 Bd4+ 15. Kh1 *
+
+[Event "New Orleans"]
+[Site "New Orleans"]
+[Date "1850.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Loewenthal, Johann Jacob"]
+[Result "1-0"]
+[ECO "C42"]
+[EventDate "1850.??.??"]
+[PlyCount "109"]
+[EventType "tourn"]
+[EventRounds "12"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nf6 3. Nxe5 d6 4. Nf3 Nxe4 5. Qe2 Qe7 6. d3 Nf6 7. Nc3 Be6
+8. Bg5 h6 9. Bxf6 Qxf6 10. d4 c6 11. O-O-O d5 12. Ne5 Bb4 13. Nxd5 Bxd5 14.
+Ng6+ Qe6 15. Nxh8 *
+
+[Event "New Orleans"]
+[Site "New Orleans"]
+[Date "1850.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Morphy, Ernest"]
+[Result "1-0"]
+[ECO "C51"]
+[EventDate "1850.??.??"]
+[PlyCount "73"]
+[EventType "tourn"]
+[EventRounds "12"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. O-O Nf6 5. b4 Bxb4 6. c3 Bd6 7. d4 Qe7 8.
+Bg5 O-O 9. Re1 a6 10. Qc2 h6 11. Bxf6 Qxf6 12. Nbd2 g5 13. dxe5 Bxe5 14.
+Rac1 g4 15. Nxe5 *
+
+[Event "New Orleans"]
+[Site "New Orleans"]
+[Date "1850.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Morphy, Ernest"]
+[Result "1-0"]
+[ECO "C52"]
+[EventDate "1850.??.??"]
+[PlyCount "49"]
+[EventType "tourn"]
+[EventRounds "12"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Ba5 6. d4 exd4 7. O-O Bxc3
+8. Nxc3 dxc3 9. Ba3 d6 10. Qb3 Nh6 11. Qxc3 Qf6 12. e5 dxe5 13. Rfe1 Bd7
+14. Rab1 O-O-O 15. Ba6 *
+
+[Event "New Orleans"]
+[Site "New Orleans"]
+[Date "1850.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "NN"]
+[Result "1-0"]
+[EventDate "1850.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/1NBQKBNR w Kk - 0 1"]
+[PlyCount "35"]
+[EventType "tourn"]
+[EventRounds "12"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Ng5 d5 5. exd5 Nxd5 6. Nxf7 Kxf7 7. Qf3+
+Ke6 8. Nc3 Ne7 9. O-O c6 10. d4 exd4 11. Re1+ Kd7 12. Nxd5 Nxd5 13. Bxd5
+cxd5 14. Qxd5+ Kc7 15. Bf4+ *
+
+[Event "New Orleans"]
+[Site "New Orleans"]
+[Date "1850.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "NN"]
+[Result "1-0"]
+[ECO "C44"]
+[EventDate "1850.??.??"]
+[PlyCount "27"]
+[EventType "tourn"]
+[EventRounds "12"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. d4 Nxd4 4. Nxe5 Ne6 5. Bc4 Nf6 6. Nxf7 Kxf7 7. Bxe6+
+Ke8 8. Bb3 Bc5 9. e5 Qe7 10. O-O Ng8 11. Nc3 c6 12. Ne4 b5 13. Nd6+ Kd8 14.
+Bg5 1-0
+
+[Event "New Orleans"]
+[Site "New Orleans"]
+[Date "1854.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Maurian, Charles Amedee"]
+[Result "1-0"]
+[EventDate "1854.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/2BQKBNR w Kk - 0 1"]
+[PlyCount "31"]
+[EventType "match"]
+[EventRounds "12"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Bc4 Bc5 3. d4 Bxd4 4. Nf3 Nc6 5. c3 Bb6 6. Ng5 Nh6 7. Qh5 Qf6
+8. Rf1 O-O 9. f4 Qg6 10. Qf3 d6 11. f5 Qf6 12. Qg3 Bd7 13. Nxh7 Kxh7 14.
+Bg5 Qxg5 15. Qxg5 *
+
+[Event "New Orleans"]
+[Site "New Orleans"]
+[Date "1854.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Maurian, Charles Amedee"]
+[Result "1-0"]
+[EventDate "1854.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/2BQKBNR w Kk - 0 1"]
+[PlyCount "49"]
+[EventType "match"]
+[EventRounds "12"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e6 2. f4 d5 3. e5 Ne7 4. Nf3 Nec6 5. g4 Be7 6. d4 O-O 7. c3 f5 8.
+exf6 Bxf6 9. h4 Na5 10. g5 Be7 11. h5 Nd7 12. Bd3 Nb6 13. Qc2 h6 14. gxh6
+gxh6 15. Rg1+ *
+
+[Event "Alabama "]
+[Site "Alabama"]
+[Date "1855.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Ayers, T."]
+[Result "1-0"]
+[ECO "C52"]
+[EventDate "1855.??.??"]
+[PlyCount "51"]
+[EventType "game"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Ba5 6. d4 d6 7. Qb3 Qe7 8.
+d5 Nd4 9. Bb5+ c6 10. Nxd4 exd4 11. dxc6 Qxe4+ 12. Kd1 Bg4+ 13. f3 Bxf3+
+14. gxf3 Qxf3+ 15. Kc2 *
+
+[Event "Alabama "]
+[Site "Alabama"]
+[Date "1855.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Meek, Alexander Beaufort"]
+[Result "1-0"]
+[ECO "C38"]
+[EventDate "1855.??.??"]
+[PlyCount "35"]
+[EventType "game"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 g5 4. Bc4 Bg7 5. h4 g4 6. Ng5 Nh6 7. d4 f6 8.
+Bxf4 fxg5 9. Bxg5 Bf6 10. Qd2 Bxg5 11. hxg5 Nf7 12. Bxf7+ Kxf7 13. Qf4+ Kg8
+14. O-O Qe7 15. Nc3 *
+
+[Event "New Orleans"]
+[Site "New Orleans"]
+[Date "1856.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Knight, T."]
+[Result "1-0"]
+[ECO "C37"]
+[EventDate "1856.??.??"]
+[PlyCount "33"]
+[EventType "tourn"]
+[EventRounds "12"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 g5 4. Bc4 Qe7 5. d4 d5 6. Bxd5 c6 7. Bxf7+ Qxf7
+8. Ne5 Qf6 9. Qh5+ Ke7 10. h4 gxh4 11. O-O Bh6 12. b3 Nd7 13. Ba3+ c5 14.
+Rd1 Nxe5 15. Bxc5+ *
+
+[Event "New Orleans"]
+[Site "New Orleans"]
+[Date "1856.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Morphy, Ernest"]
+[Result "1-0"]
+[ECO "C64"]
+[EventDate "1856.??.??"]
+[PlyCount "37"]
+[EventType "tourn"]
+[EventRounds "12"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 Bc5 4. c3 Qe7 5. O-O Nf6 6. d4 Bb6 7. Bg5 h6 8.
+Bxf6 gxf6 9. d5 Nd8 10. Nh4 c6 11. Nf5 Qc5 12. b4 Qf8 13. dxc6 dxc6 14.
+Nd6+ Ke7 15. Qd3 *
+
+[Event "New Orleans"]
+[Site "New Orleans"]
+[Date "1856.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "NN"]
+[Result "1-0"]
+[EventDate "1856.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "57"]
+[EventType "tourn"]
+[EventRounds "12"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Bc4 Nf6 3. Nf3 d6 4. d4 d5 5. exd5 Bg4 6. dxe5 Bxf3 7. gxf3
+Nfd7 8. O-O Bc5 9. e6 Ne5 10. exf7+ Nxf7 11. Bb5+ c6 12. dxc6 bxc6 13. Re1+
+Be7 14. Bd3 O-O 15. f4 *
+
+[Event "New Orleans"]
+[Site "New Orleans"]
+[Date "1856.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "NN"]
+[Result "1-0"]
+[ECO "C25"]
+[EventDate "1856.??.??"]
+[PlyCount "43"]
+[EventType "tourn"]
+[EventRounds "12"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nc3 Nc6 3. Bc4 Bc5 4. Nge2 Nf6 5. f4 Ng4 6. Ng3 Nf2 7. Qh5 O-O
+8. f5 Nxh1 9. d4 Nxd4 10. Bg5 Be7 11. Bxe7 Qxe7 12. Nd5 Qd6 13. f6 Ne6 14.
+Ne7+ Kh8 15. Bxe6 *
+
+[Event "New Orleans"]
+[Site "New Orleans"]
+[Date "1856.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "NN"]
+[Result "1-0"]
+[ECO "C33"]
+[EventDate "1856.??.??"]
+[PlyCount "39"]
+[EventType "tourn"]
+[EventRounds "12"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 exf4 3. Bc4 Qh4+ 4. Kf1 g5 5. Nc3 Bg7 6. d4 Nc6 7. Nf3 Qh5
+8. Nd5 Kd8 9. c3 Nf6 10. Nxf6 Bxf6 11. e5 Bg7 12. h4 f6 13. Kg1 g4 14. Nh2
+fxe5 15. Nxg4 *
+
+[Event "New Orleans"]
+[Site "New Orleans"]
+[Date "1857.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Maurian, Charles Amedee"]
+[Result "1-0"]
+[EventDate "1857.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "33"]
+[EventType "tourn"]
+[EventRounds "10"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 g5 4. Bc4 g4 5. d4 gxf3 6. Qxf3 d5 7. Bxd5 c6 8.
+Bxf7+ Kxf7 9. Qh5+ Kg7 10. Bxf4 Be7 11. O-O Qxd4+ 12. Kh1 Qxe4 13. Rae1 Qg6
+14. Rxe7+ Kf8 15. Bd6+ *
+
+[Event "New Orleans"]
+[Site "New Orleans"]
+[Date "1857.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Meek, Alexander Beaufort"]
+[Result "1-0"]
+[ECO "C52"]
+[EventDate "1857.??.??"]
+[PlyCount "65"]
+[EventType "tourn"]
+[EventRounds "10"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Ba5 6. O-O Nf6 7. d4 Nxe4
+8. Ba3 d6 9. d5 Nxc3 10. Nxc3 Bxc3 11. Rc1 Bb4 12. Bxb4 Nxb4 13. Qa4+ Nc6
+14. dxc6 b6 15. Rcd1 *
+
+[Event "New Orleans"]
+[Site "New Orleans"]
+[Date "1857.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "NN"]
+[Result "1-0"]
+[EventDate "1857.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/1NBQKBNR w Kk - 0 1"]
+[PlyCount "39"]
+[EventType "tourn"]
+[EventRounds "10"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. O-O d6 7. d4 exd4 8.
+cxd4 Bb6 9. Nc3 Na5 10. Bd3 Bg4 11. Be3 Qf6 12. Nd5 Qd8 13. h3 Bxf3 14.
+Qxf3 Nf6 15. Bg5 *
+
+[Event "New Orleans blind sim"]
+[Site "New Orleans"]
+[Date "1857.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Hammond, G."]
+[Result "1-0"]
+[ECO "C52"]
+[EventDate "1857.??.??"]
+[PlyCount "51"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "2003.11.25"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Ba5 6. d4 exd4 7. O-O Bb6
+8. cxd4 Nge7 9. Ng5 d5 10. exd5 Na5 11. d6 Nxc4 12. Qa4+ c6 13. Qxc4 Qxd6
+14. Qxf7+ Kd8 15. Ba3 *
+
+[Event "New Orleans sim"]
+[Site "New Orleans"]
+[Date "1857.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Hart"]
+[Result "1-0"]
+[ECO "C44"]
+[EventDate "1857.??.??"]
+[PlyCount "45"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Bc4 d6 5. c3 dxc3 6. Qb3 Qe7 7. O-O b6 8.
+Nxc3 Na5 9. Qb4 Nxc4 10. Qxc4 Bb7 11. Re1 O-O-O 12. Bf4 f6 13. Rac1 Kb8 14.
+Nd5 Bxd5 15. exd5 *
+
+[Event "New Orleans sim"]
+[Site "New Orleans"]
+[Date "1857.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Worrall, Thomas Herbert"]
+[Result "1-0"]
+[EventDate "1857.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "43"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 g5 4. Bc4 g4 5. d4 gxf3 6. O-O Bh6 7. Qxf3 Nc6
+8. Bxf7+ Kxf7 9. Qh5+ Kg7 10. Bxf4 Bxf4 11. Rxf4 Nh6 12. Raf1 Qe8 13. Qh4
+d6 14. Qf6+ Kg8 15. Qxh6 *
+
+[Event "New Orleans m1"]
+[Site "New Orleans"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Worrall, Thomas Herbert"]
+[Result "1-0"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "53"]
+[EventDate "1858.??.??"]
+[EventType "match"]
+[EventRounds "4"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 d5 3. exd5 Qxd5 4. Nf3 e4 5. Ne5 Be6 6. Bc4 Qd6 7. Qe2 Nf6 8. d4
+Bxc4 9. Nxc4 Qe6 10. O-O Nc6 11. c3 Bd6 12. f5 Qe7 13. Bg5 O-O-O 14. b4 Nb8 15.
+a4
+
+[Event "New York"]
+[Site "New York"]
+[Date "1857.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Kennicott, Hiram"]
+[Result "1-0"]
+[ECO "C51"]
+[EventDate "1857.??.??"]
+[PlyCount "36"]
+[EventType "swiss"]
+[EventRounds "9"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "2003.11.25"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. O-O d6 7. d4 exd4 8.
+cxd4 Bb6 9. Bb2 f6 10. Re1 Nce7 11. e5 d5 12. exf6 Nxf6 13. Ba3 Ne4 14.
+Rxe4 dxe4 15. Ne5 *
+
+[Event "New York"]
+[Site "New York"]
+[Date "1857.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Perrin, Frederick"]
+[Result "1-0"]
+[ECO "B44"]
+[EventDate "1857.??.??"]
+[PlyCount "51"]
+[EventType "swiss"]
+[EventRounds "9"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "2003.11.25"]
+
+1. e4 c5 2. Nf3 e6 3. d4 cxd4 4. Nxd4 Nc6 5. Be3 Nf6 6. Bd3 Bb4+ 7. c3 Ba5
+8. O-O Bb6 9. Nd2 Ne5 10. Be2 d5 11. f4 Nc6 12. e5 Bxd4 13. cxd4 Nd7 14.
+Bd3 f5 15. g4 *
+
+[Event "New York blind"]
+[Site "New York"]
+[Date "1857.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Hammond, G."]
+[Result "1-0"]
+[ECO "C52"]
+[EventDate "1857.??.??"]
+[PlyCount "79"]
+[EventType "game"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "2003.11.25"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Ba5 6. d4 exd4 7. O-O Bb6
+8. cxd4 Nge7 9. Ng5 d5 10. exd5 Na5 11. d6 Nxc4 12. Qa4+ c6 13. Qxc4 Qxd6
+14. Qxf7+ Kd8 15. Ba3 *
+
+[Event "New York blind"]
+[Site "New York"]
+[Date "1857.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Lichtenhein, Theodor"]
+[Result "1-0"]
+[ECO "C36"]
+[EventDate "1857.??.??"]
+[PlyCount "55"]
+[EventType "game"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "2003.11.25"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 d5 4. exd5 Be7 5. Bb5+ c6 6. dxc6 bxc6 7. Bc4
+Bh4+ 8. g3 fxg3 9. O-O gxh2+ 10. Kh1 Bf6 11. Ne5 Nh6 12. d4 Bxe5 13. Qh5
+Qxd4 14. Bxf7+ Nxf7 15. Qxf7+ *
+
+[Event "New York blind"]
+[Site "New York"]
+[Date "1857.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Lichtenhein, Theodor"]
+[Result "1-0"]
+[ECO "C51"]
+[EventDate "1857.??.??"]
+[PlyCount "51"]
+[EventType "game"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "2003.11.25"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. O-O Nf6 7. d4 exd4
+8. cxd4 Bb6 9. e5 d5 10. exf6 dxc4 11. fxg7 Rg8 12. Re1+ Ne7 13. Bg5 Be6
+14. Nc3 Ba5 15. Ne4 *
+
+[Event "New York blind"]
+[Site "New York"]
+[Date "1857.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Meek, Alexander Beaufort"]
+[Result "1-0"]
+[ECO "A43"]
+[EventDate "1857.??.??"]
+[PlyCount "23"]
+[EventType "game"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "2003.11.25"]
+
+1. e4 e6 2. d4 c5 3. d5 e5 4. f4 d6 5. Nf3 Bg4 6. fxe5 Bxf3 7. Qxf3 dxe5 8.
+Bb5+ Nd7 9. Nc3 Nf6 10. Bg5 Be7 11. d6 Bxd6 12. O-O-O 1-0
+
+[Event "New York blind"]
+[Site "New York"]
+[Date "1857.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Paulsen, Louis"]
+[Result "1-0"]
+[ECO "C40"]
+[EventDate "1857.??.??"]
+[PlyCount "107"]
+[EventType "game"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "2003.11.25"]
+
+1. e4 e5 2. Nf3 d5 3. exd5 e4 4. Qe2 f5 5. d3 Bb4+ 6. c3 Be7 7. dxe4 fxe4
+8. Qxe4 Nf6 9. Bb5+ Bd7 10. Qe2 Nxd5 11. Bc4 c6 12. Bg5 Bg4 13. Nbd2 Nd7
+14. O-O N7b6 15. Rfe1 *
+
+[Event "New York blind m"]
+[Site "New York"]
+[Date "1857.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Schulten, John William"]
+[Result "1-0"]
+[ECO "C38"]
+[EventDate "1857.??.??"]
+[PlyCount "97"]
+[EventType "match"]
+[EventRounds "15"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "2003.11.25"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 g5 4. Bc4 Bg7 5. O-O d6 6. c3 Bg4 7. Qb3 Nh6 8.
+Qb5+ Nd7 9. Qxg5 Qxg5 10. Nxg5 Ne5 11. Bb3 Bf6 12. h4 Nd3 13. Bc2 Nxc1 14.
+Rxc1 O-O-O 15. Rf1 *
+
+[Event "New York blind m"]
+[Site "New York"]
+[Date "1857.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Schulten, John William"]
+[Result "1-0"]
+[ECO "C51"]
+[EventDate "1857.??.??"]
+[PlyCount "65"]
+[EventType "match"]
+[EventRounds "15"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "2003.11.25"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. O-O d6 7. d4 exd4 8.
+cxd4 Bb6 9. Nc3 Bg4 10. Bb5 Bxf3 11. gxf3 Kf8 12. Be3 Nce7 13. Kh1 c6 14.
+Ba4 d5 15. Rb1 *
+
+[Event "New York blind m"]
+[Site "New York"]
+[Date "1857.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Schulten, John William"]
+[Result "1-0"]
+[ECO "C51"]
+[EventDate "1857.??.??"]
+[PlyCount "49"]
+[EventType "match"]
+[EventRounds "15"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "2003.11.25"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. O-O d6 7. d4 exd4 8.
+cxd4 Bb6 9. d5 Nce7 10. e5 Bg4 11. h3 Bxf3 12. Qxf3 Bd4 13. Nc3 Bxe5 14.
+Bb5+ Kf8 15. Bb2 *
+
+[Event "New York blind m"]
+[Site "New York"]
+[Date "1857.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Schulten, John William"]
+[Result "1-0"]
+[ECO "C51"]
+[EventDate "1857.??.??"]
+[PlyCount "77"]
+[EventType "match"]
+[EventRounds "15"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "2003.11.25"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. O-O d6 7. d4 exd4 8.
+cxd4 Bb6 9. d5 Nce7 10. e5 Bg4 11. h3 Bh5 12. g4 Bg6 13. Re1 h5 14. Nc3
+hxg4 15. hxg4 *
+
+[Event "New York blind m"]
+[Site "New York"]
+[Date "1857.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Schulten, John William"]
+[Result "1-0"]
+[ECO "C51"]
+[EventDate "1857.??.??"]
+[PlyCount "43"]
+[EventType "match"]
+[EventRounds "15"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "2003.11.25"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. O-O d6 7. d4 exd4 8.
+cxd4 Bb6 9. Nc3 Bg4 10. Bb5 Kf8 11. Be3 Bxf3 12. gxf3 Nge7 13. Kh1 h5 14.
+Rg1 Ng6 15. f4 *
+
+[Event "New York blind m"]
+[Site "New York"]
+[Date "1857.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Schulten, John William"]
+[Result "1-0"]
+[ECO "C50"]
+[EventDate "1857.??.??"]
+[PlyCount "23"]
+[EventType "match"]
+[EventRounds "15"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "2003.11.25"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. O-O f5 5. d4 exd4 6. e5 d6 7. exd6 Qxd6
+8. Re1+ Nge7 9. Ng5 Ne5 10. Bf4 N7g6 11. Bxe5 Nxe5 12. Nf7 1-0
+
+[Event "New York blind m"]
+[Site "New York"]
+[Date "1857.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Schulten, John William"]
+[Result "1-0"]
+[ECO "C64"]
+[EventDate "1857.??.??"]
+[PlyCount "59"]
+[EventType "match"]
+[EventRounds "15"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "2003.11.25"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 Bc5 4. c3 Nge7 5. O-O O-O 6. d4 exd4 7. cxd4 Bb6
+8. d5 Nb8 9. d6 cxd6 10. Bf4 Bc7 11. Nc3 a6 12. Bc4 b5 13. Bb3 Bb7 14. Bxd6
+Bxd6 15. Qxd6 *
+
+[Event "New York blind m2"]
+[Site "New York"]
+[Date "1857.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Stanley, Charles Henry"]
+[Result "1-0"]
+[ECO "C51"]
+[EventDate "1857.??.??"]
+[PlyCount "85"]
+[EventType "match"]
+[EventRounds "4"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "2003.11.25"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Ba5 6. d4 exd4 7. O-O d6 8.
+cxd4 Bb6 9. Nc3 Nf6 10. e5 dxe5 11. Ba3 Bxd4 12. Qb3 Be6 13. Bxe6 fxe6 14.
+Qxe6+ Ne7 15. Nxd4 *
+
+[Event "USA-01.Kongress"]
+[Site "New York"]
+[Date "1857.10.07"]
+[Round "1.2"]
+[White "Morphy, Paul"]
+[Black "Thompson, James"]
+[Result "1-0"]
+[ECO "B44"]
+[EventDate "1857.10.05"]
+[PlyCount "95"]
+[EventType "k.o."]
+[EventRounds "4"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "2001.11.25"]
+
+1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 e6 5. Be3 Be7 6. Nc3 h6 7. Bd3 d5 8.
+Bb5 Bd7 9. exd5 exd5 10. Nxd5 Nf6 11. Nxf6+ Bxf6 12. c3 O-O 13. O-O Qc7 14.
+Qa4 Rfe8 15. Rad1 *
+
+[Event "USA-01.Kongress"]
+[Site "New York"]
+[Date "1857.10.16"]
+[Round "2.2"]
+[White "Morphy, Paul"]
+[Black "Meek, Alexander Beaufort"]
+[Result "1-0"]
+[ECO "C01"]
+[EventDate "1857.10.05"]
+[PlyCount "60"]
+[EventType "k.o."]
+[EventRounds "4"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "2001.11.25"]
+
+1. e4 e6 2. d4 g6 3. Bd3 Bg7 4. Be3 Ne7 5. Ne2 b6 6. Nd2 Bb7 7. O-O d5 8.
+e5 O-O 9. f4 f5 10. h3 Nd7 11. Kh2 c5 12. c3 c4 13. Bc2 a6 14. Nf3 h6 15.
+g4 *
+
+[Event "USA-01.Kongress"]
+[Site "New York"]
+[Date "1857.10.23"]
+[Round "3.2"]
+[White "Morphy, Paul"]
+[Black "Lichtenhein, Theodor"]
+[Result "1-0"]
+[ECO "C42"]
+[EventDate "1857.10.05"]
+[PlyCount "57"]
+[EventType "k.o."]
+[EventRounds "4"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "2001.11.25"]
+
+1. e4 e5 2. Nf3 Nf6 3. Bc4 Nxe4 4. Nc3 d5 5. Bxd5 Nf6 6. Bb3 Bd6 7. d3 O-O
+8. h3 h6 9. Be3 Nc6 10. Qd2 Na5 11. g4 Nxb3 12. axb3 Bd7 13. Rg1 Nh7 14.
+Ne4 Kh8 15. g5 *
+
+[Event "USA-01.Kongress"]
+[Site "New York"]
+[Date "1857.10.29"]
+[Round "4.1"]
+[White "Morphy, Paul"]
+[Black "Paulsen, Louis"]
+[Result "1-0"]
+[ECO "B40"]
+[EventDate "1857.10.05"]
+[PlyCount "79"]
+[EventType "k.o."]
+[EventRounds "4"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "2001.11.25"]
+
+1. e4 c5 2. d4 cxd4 3. Nf3 e6 4. Nxd4 Bc5 5. Nb3 Bb6 6. Nc3 Ne7 7. Bf4 O-O
+8. Bd6 f5 9. e5 a6 10. Be2 Nbc6 11. O-O Rf7 12. Kh1 f4 13. Ne4 Nf5 14. Bh5
+g6 15. Bg4 *
+
+[Event "USA-01.Kongress"]
+[Site "New York"]
+[Date "1857.11.06"]
+[Round "4.5"]
+[White "Morphy, Paul"]
+[Black "Paulsen, Louis"]
+[Result "1-0"]
+[ECO "B40"]
+[EventDate "1857.10.05"]
+[PlyCount "127"]
+[EventType "k.o."]
+[EventRounds "4"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "2001.11.25"]
+
+1. e4 c5 2. Nf3 e6 3. d4 cxd4 4. Nxd4 Bc5 5. Be3 Qb6 6. Nb5 Nf6 7. Bxc5
+Qxc5 8. Nd6+ Ke7 9. Nxc8+ Rxc8 10. Bd3 Nc6 11. O-O h5 12. Nd2 h4 13. h3 g5
+14. a3 Rg8 15. b4 *
+
+[Event "USA-01.Kongress"]
+[Site "New York"]
+[Date "1857.11.08"]
+[Round "4.7"]
+[White "Morphy, Paul"]
+[Black "Paulsen, Louis"]
+[Result "1-0"]
+[ECO "B40"]
+[EventDate "1857.10.05"]
+[PlyCount "51"]
+[EventType "k.o."]
+[EventRounds "4"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "2001.11.25"]
+
+1. e4 c5 2. Nf3 e6 3. d4 cxd4 4. Nxd4 Bc5 5. Be3 Qb6 6. Nc3 Qxb2 7. Ndb5
+Bxe3 8. Rb1 Qxb1 9. Nxb1 Bf4 10. g3 a6 11. gxf4 axb5 12. Nc3 Ne7 13. Nxb5
+O-O 14. Nd6 Nbc6 15. Rg1 *
+
+[Event "Birmingham"]
+[Site "Birmingham"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Kipping, James Stanley"]
+[Result "1-0"]
+[ECO "C52"]
+[EventDate "1858.??.??"]
+[PlyCount "59"]
+[EventType "match"]
+[EventRounds "2"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "2006.11.23"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Ba5 6. d4 exd4 7. O-O d6 8.
+Qb3 Qf6 9. e5 dxe5 10. Re1 Bb6 11. Bg5 Qf5 12. Nxe5 Nxe5 13. f4 dxc3+ 14.
+Kh1 Bd4 15. Nxc3 *
+
+[Event "Birmingham sim"]
+[Site "Birmingham"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Carr, Jay"]
+[Result "1-0"]
+[ECO "B00"]
+[EventDate "1858.??.??"]
+[PlyCount "49"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 h6 2. d4 a5 3. Bd3 b6 4. Ne2 e6 5. O-O Ba6 6. c4 Nf6 7. e5 Nh7 8. f4
+Be7 9. Ng3 d5 10. Qg4 O-O 11. Nh5 g5 12. fxg5 hxg5 13. Bxh7+ Kh8 14. Nf6
+dxc4 15. Bc2 *
+
+[Event "Birmingham sim"]
+[Site "Birmingham"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Freeman, J."]
+[Result "1-0"]
+[ECO "C23"]
+[EventDate "1858.??.??"]
+[PlyCount "73"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Bc4 Bc5 3. b4 Bb6 4. Nf3 d6 5. d4 exd4 6. Nxd4 Nf6 7. Nc3 O-O
+8. O-O Nxe4 9. Nxe4 d5 10. Bg5 Qe8 11. Bxd5 c6 12. Re1 Qd7 13. Nf6+ gxf6
+14. Bxf6 Qd6 15. Ne6 *
+
+[Event "Birmingham sim"]
+[Site "Birmingham"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Lyttelton, George Williams"]
+[Result "1-0"]
+[ECO "C39"]
+[EventDate "1858.??.??"]
+[PlyCount "33"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 g5 4. h4 g4 5. Ne5 d6 6. Nxg4 Be7 7. d4 Bxh4+ 8.
+Nf2 Bxf2+ 9. Kxf2 Nf6 10. Nc3 Qe7 11. Bxf4 Nxe4+ 12. Nxe4 Qxe4 13. Bb5+ Kf8
+14. Bh6+ Kg8 15. Rh5 *
+
+[Event "Birmingham sim"]
+[Site "Birmingham"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Rhodes, J."]
+[Result "1-0"]
+[ECO "C30"]
+[EventDate "1858.??.??"]
+[PlyCount "48"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 Bc5 3. Nf3 Nc6 4. fxe5 d5 5. exd5 Qxd5 6. Nc3 Qd8 7. Ne4 Bb6
+8. c3 Bg4 9. d4 Qd5 10. Nf2 Nxe5 11. Qe2 Bxf3 12. gxf3 Qxf3 13. Qxe5+ Kf8
+14. Be2 Qc6 15. Rg1 *
+
+[Event "Birmingham sim"]
+[Site "Birmingham"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Salmon, George"]
+[Result "1-0"]
+[ECO "C51"]
+[EventDate "1858.??.??"]
+[PlyCount "97"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 d5 5. exd5 Nxb4 6. O-O Ne7 7. Nxe5 O-O
+8. d4 Bd6 9. Nc3 Bf5 10. Bb3 a5 11. a3 a4 12. Nxa4 Nbxd5 13. c4 Rxa4 14.
+cxd5 Ra5 15. Qf3 *
+
+[Event "Birmingham sim"]
+[Site "Birmingham"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Wills, Adrian"]
+[Result "1-0"]
+[ECO "B44"]
+[EventDate "1858.??.??"]
+[PlyCount "73"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 e6 5. Be3 Nf6 6. Bd3 e5 7. Nxc6 bxc6
+8. O-O d6 9. f4 exf4 10. Bxf4 Be7 11. Nc3 Rb8 12. e5 dxe5 13. Bxe5 Rb4 14.
+Qf3 Qb6+ 15. Kh1 *
+
+[Event "London"]
+[Site "London"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Bird, Henry Edward"]
+[Result "1-0"]
+[ECO "C30"]
+[EventDate "1858.??.??"]
+[PlyCount "53"]
+[EventType "game"]
+[EventRounds "1"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "2006.11.23"]
+
+1. e4 e5 2. f4 Bc5 3. Nf3 d6 4. c3 Bg4 5. Bc4 Nc6 6. b4 Bb6 7. a4 a6 8. h3
+Bxf3 9. Qxf3 Nf6 10. d3 Qe7 11. f5 Rd8 12. Bg5 Nb8 13. Nd2 c6 14. Nf1 d5
+15. Bb3 *
+
+[Event "London"]
+[Site "London"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Deacon, Frederic"]
+[Result "1-0"]
+[ECO "C52"]
+[EventDate "1858.??.??"]
+[PlyCount "65"]
+[EventType "game"]
+[EventRounds "1"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Ba5 6. d4 exd4 7. O-O Nf6
+8. Ba3 d6 9. e5 Ng4 10. exd6 cxd6 11. Re1+ Ne7 12. Qxd4 Bb6 13. Qxg7 Bxf2+
+14. Kf1 Rf8 15. Nbd2 *
+
+[Event "London"]
+[Site "London"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Hampton, Thomas Inglis"]
+[Result "1-0"]
+[ECO "C51"]
+[EventDate "1858.??.??"]
+[PlyCount "33"]
+[EventType "game"]
+[EventRounds "1"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Ba5 6. d4 exd4 7. O-O Bb6
+8. cxd4 d6 9. Nc3 Nf6 10. e5 dxe5 11. Ba3 Bg4 12. Qb3 Bh5 13. dxe5 Ng4 14.
+Rad1 Qc8 15. e6 *
+
+[Event "London"]
+[Site "London"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Lewis, Frederic"]
+[Result "1-0"]
+[ECO "C51"]
+[EventDate "1858.??.??"]
+[PlyCount "55"]
+[EventType "game"]
+[EventRounds "1"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bb6 5. O-O Qe7 6. a4 Nxb4 7. a5 Bc5 8.
+c3 Nc6 9. d4 exd4 10. cxd4 Bb4 11. Ne5 Nxe5 12. dxe5 Qxe5 13. Qb3 Qe7 14.
+Bb2 Nf6 15. Nc3 *
+
+[Event "London"]
+[Site "London"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Loewenthal, Johann Jacob"]
+[Result "1-0"]
+[ECO "C43"]
+[EventDate "1858.??.??"]
+[PlyCount "49"]
+[EventType "game"]
+[EventRounds "1"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "2006.11.23"]
+
+1. e4 e5 2. Nf3 Nf6 3. d4 exd4 4. e5 Ne4 5. Bd3 d5 6. Nxd4 c5 7. Ne2 Nc6 8.
+f3 Ng5 9. f4 Ne6 10. O-O Qb6 11. Kh1 Be7 12. Nbc3 Nc7 13. b3 Nb4 14. Ng3
+Nxd3 15. Qxd3 *
+
+[Event "London"]
+[Site "London"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "NN"]
+[Result "1-0"]
+[ECO "C51"]
+[EventDate "1858.??.??"]
+[PlyCount "65"]
+[EventType "game"]
+[EventRounds "1"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. d4 exd4 7. cxd4 Bb6
+8. Bg5 Nge7 9. Nc3 O-O 10. d5 Na5 11. d6 cxd6 12. Nd5 Nac6 13. Nxe7+ Nxe7
+14. Qxd6 Re8 15. Rc1 *
+
+[Event "London m1"]
+[Site "London"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Barnes, Thomas Wilson"]
+[Result "1-0"]
+[ECO "C55"]
+[EventDate "1858.??.??"]
+[PlyCount "75"]
+[EventType "match"]
+[EventRounds "8"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Bc4 Nf6 3. Nf3 Nxe4 4. Nc3 Nxc3 5. dxc3 f6 6. O-O Nc6 7. Nh4
+Qe7 8. Nf5 Qc5 9. Bb3 d5 10. Be3 Qa5 11. Nh4 Be6 12. Qh5+ g6 13. Nxg6 Bf7
+14. Qh4 Bxg6 15. Qxf6 *
+
+[Event "London m1"]
+[Site "London"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Barnes, Thomas Wilson"]
+[Result "1-0"]
+[ECO "C41"]
+[EventDate "1858.??.??"]
+[PlyCount "57"]
+[EventType "match"]
+[EventRounds "8"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 d6 3. d4 exd4 4. Bc4 Be7 5. c3 d3 6. Qb3 Be6 7. Bxe6 fxe6
+8. Qxb7 Nd7 9. Qb5 Nf6 10. Ng5 Rb8 11. Qa4 O-O 12. Nxe6 Nc5 13. Nxc5 dxc5
+14. Qc4+ Kh8 15. O-O *
+
+[Event "London m2"]
+[Site "London"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Owen, John"]
+[Result "1-0"]
+[ECO "B00"]
+[EventDate "1858.??.??"]
+[PlyCount "69"]
+[EventType "match"]
+[EventRounds "10"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 b6 2. d4 Bb7 3. Bd3 e6 4. Nh3 c5 5. c3 Nc6 6. Be3 Nf6 7. Nd2 cxd4 8.
+cxd4 Bb4 9. O-O Bxd2 10. Qxd2 Ne7 11. f3 Ng6 12. Rac1 O-O 13. Bg5 h6 14.
+Bxf6 Qxf6 15. e5 *
+
+[Event "London m3"]
+[Site "London"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Boden, Samuel Standidge"]
+[Result "1-0"]
+[ECO "C56"]
+[EventDate "1858.??.??"]
+[PlyCount "69"]
+[EventType "match"]
+[EventRounds "10"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Bc4 Bc5 5. O-O d6 6. c3 Nf6 7. cxd4 Bb6
+8. Nc3 O-O 9. d5 Na5 10. Bd3 c5 11. Bg5 h6 12. Bh4 Bg4 13. h3 Bh5 14. g4
+Bg6 15. Qd2 *
+
+[Event "London m3"]
+[Site "London"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Boden, Samuel Standidge"]
+[Result "1-0"]
+[ECO "C54"]
+[EventDate "1858.??.??"]
+[PlyCount "105"]
+[EventType "match"]
+[EventRounds "10"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bb6 5. a4 a6 6. c3 d6 7. d3 Nf6 8. Qb3
+Qe7 9. Bg5 h6 10. Bh4 Nd8 11. Nbd2 g5 12. Bg3 Nh5 13. h3 Qf6 14. O-O-O Ne6
+15. Nh2 *
+
+[Event "London m3"]
+[Site "London"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Boden, Samuel Standidge"]
+[Result "1-0"]
+[ECO "C58"]
+[EventDate "1858.??.??"]
+[PlyCount "99"]
+[EventType "match"]
+[EventRounds "10"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Ng5 d5 5. exd5 Na5 6. d3 h6 7. Nf3 Nxc4
+8. dxc4 Bd6 9. Nc3 a6 10. Be3 b6 11. h3 O-O 12. a3 Qe7 13. Qd2 Bf5 14. Qe2
+Bh7 15. g4 *
+
+[Event "London m3"]
+[Site "London"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Boden, Samuel Standidge"]
+[Result "1-0"]
+[ECO "C30"]
+[EventDate "1858.??.??"]
+[PlyCount "59"]
+[EventType "match"]
+[EventRounds "10"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 Bc5 3. Nf3 d6 4. c3 Bg4 5. Bc4 Qe7 6. d4 exd4 7. O-O Nc6 8.
+b4 Bb6 9. a4 dxc3+ 10. Kh1 c2 11. Qxc2 Bxf3 12. gxf3 Nxb4 13. Qb3 a5 14.
+Nc3 Nf6 15. e5 *
+
+[Event "London m3"]
+[Site "London"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Boden, Samuel Standidge"]
+[Result "1-0"]
+[ECO "C30"]
+[EventDate "1858.??.??"]
+[PlyCount "69"]
+[EventType "match"]
+[EventRounds "10"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 Bc5 3. Nf3 d6 4. c3 Bg4 5. Be2 Nc6 6. b4 Bb6 7. b5 Na5 8. d4
+Bxf3 9. Bxf3 exd4 10. cxd4 Qf6 11. Be3 Nc4 12. Bf2 Qxf4 13. O-O Nf6 14. Qd3
+Na5 15. Nc3 *
+
+[Event "London m4"]
+[Site "London"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Medley, George Webb"]
+[Result "1-0"]
+[ECO "C39"]
+[EventDate "1858.??.??"]
+[PlyCount "51"]
+[EventType "match"]
+[EventRounds "5"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 g5 4. h4 g4 5. Ne5 Nf6 6. Bc4 d5 7. exd5 Bd6 8.
+d4 Nh5 9. Nc3 Bf5 10. Ne2 Qf6 11. Nxf4 Ng3 12. Nh5 Nxh5 13. Bg5 Bb4+ 14. c3
+Qd6 15. O-O *
+
+[Event "London m5"]
+[Site "London"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Bird, Henry Edward"]
+[Result "1-0"]
+[ECO "C51"]
+[EventDate "1858.??.??"]
+[PlyCount "61"]
+[EventType "match"]
+[EventRounds "3"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. d4 exd4 7. cxd4 Bb6
+8. O-O d6 9. d5 Na5 10. e5 Nxc4 11. Qa4+ Bd7 12. Qxc4 dxe5 13. Nxe5 Qf6 14.
+Nxd7 Kxd7 15. Qg4+ *
+
+[Event "London m5"]
+[Site "London"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Bird, Henry Edward"]
+[Result "1-0"]
+[ECO "C39"]
+[EventDate "1858.??.??"]
+[PlyCount "35"]
+[EventType "match"]
+[EventRounds "3"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 g5 4. h4 g4 5. Ne5 Nf6 6. Bc4 d5 7. exd5 Bd6 8.
+d4 Nh5 9. Nc3 Bf5 10. Ne2 Bxe5 11. dxe5 f3 12. gxf3 gxf3 13. Bg5 f6 14.
+exf6 Qd6 15. Qd4 *
+
+[Event "New Orleans blind sim"]
+[Site "New Orleans"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Amateur"]
+[Result "1-0"]
+[ECO "C56"]
+[EventDate "1858.??.??"]
+[PlyCount "37"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "2006.11.23"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. d4 exd4 5. Ng5 d5 6. exd5 Nxd5 7. O-O Be7
+8. Nxf7 Kxf7 9. Qf3+ Ke6 10. Nc3 dxc3 11. Re1+ Ne5 12. Bf4 Bd6 13. Bxe5
+Bxe5 14. Rxe5+ Kxe5 15. Re1+ *
+
+[Event "New Orleans m1"]
+[Site "New Orleans"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Worrall, Thomas Herbert"]
+[Result "1-0"]
+[EventDate "1858.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "55"]
+[EventType "match"]
+[EventRounds "4"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e6 2. f4 d5 3. e5 Nc6 4. d4 Nh6 5. Nf3 Be7 6. c3 f6 7. Bd3 O-O 8. O-O
+Qe8 9. h3 Qh5 10. Qe1 Bd7 11. Bd2 Rae8 12. Qg3 f5 13. Rae1 Kh8 14. Be2 Qg6
+15. Qh2 *
+
+[Event "New Orleans m1"]
+[Site "New Orleans"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Worrall, Thomas Herbert"]
+[Result "1-0"]
+[EventDate "1858.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "61"]
+[EventType "match"]
+[EventRounds "4"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 d5 3. exd5 e4 4. Bc4 Bd6 5. Ne2 Bg4 6. O-O f5 7. d4 Nf6 8.
+h3 Bxe2 9. Qxe2 O-O 10. Bb3 Kh8 11. c4 c5 12. dxc6 Nxc6 13. Be3 Bc7 14.
+Rad1 Bb6 15. c5 *
+
+[Event "New Orleans m1"]
+[Site "New Orleans"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Worrall, Thomas Herbert"]
+[Result "1-0"]
+[EventDate "1858.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "53"]
+[EventType "match"]
+[EventRounds "4"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Be7 6. d4 Nf6 7. dxe5 Ng4
+8. O-O Ngxe5 9. Nxe5 Nxe5 10. Bb3 O-O 11. f4 Bc5+ 12. Kh1 Ng6 13. f5 Ne5
+14. f6 gxf6 15. Bh6 *
+
+[Event "New Orleans m2"]
+[Site "New Orleans"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Maurian, Charles Amedee"]
+[Result "1-0"]
+[ECO "C33"]
+[EventDate "1858.??.??"]
+[PlyCount "51"]
+[EventType "match"]
+[EventRounds "3"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 exf4 3. Bc4 Qh4+ 4. Kf1 b5 5. Bb3 Nf6 6. Nf3 Qh6 7. Ne5 d5
+8. Nc3 Bd6 9. d4 Nxe4 10. Nxe4 Bxe5 11. Bxd5 c6 12. dxe5 cxd5 13. Nd6+ Kd7
+14. Qxd5 Kc7 15. c4 *
+
+[Event "New Orleans m2"]
+[Site "New Orleans"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Maurian, Charles Amedee"]
+[Result "1-0"]
+[EventDate "1858.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/1NBQKBNR w Kk - 0 1"]
+[PlyCount "51"]
+[EventType "match"]
+[EventRounds "3"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 exf4 3. Bc4 Qh4+ 4. Kf1 b5 5. Bb3 Nf6 6. Nf3 Qh6 7. d4 Be7
+8. e5 Nh5 9. Kf2 g5 10. g4 Ng7 11. h4 Qg6 12. hxg5 Bxg5 13. Nxg5 Qxg5 14.
+Qf3 Nc6 15. Bxf4 *
+
+[Event "New Orleans sim"]
+[Site "New Orleans"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Forde, A."]
+[Result "1-0"]
+[ECO "C52"]
+[EventDate "1858.??.??"]
+[PlyCount "45"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Ba5 6. O-O Nge7 7. Ng5 d5
+8. exd5 Nxd5 9. Nxf7 Kxf7 10. Qf3+ Ke6 11. Ba3 Bb6 12. Re1 Na5 13. Rxe5+
+Kxe5 14. d4+ Ke6 15. g4 *
+
+[Event "New Orleans sim"]
+[Site "New Orleans"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "NN"]
+[Result "1-0"]
+[ECO "C52"]
+[EventDate "1858.??.??"]
+[PlyCount "57"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Ba5 6. O-O d6 7. d4 exd4 8.
+Qb3 Qf6 9. e5 dxe5 10. Re1 Nge7 11. Bg5 Qg6 12. Bxe7 Nxe7 13. Nxe5 Qb6 14.
+Bb5+ c6 15. Qxf7+ *
+
+[Event "New Orleans sim"]
+[Site "New Orleans"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "NN"]
+[Result "1-0"]
+[ECO "C37"]
+[EventDate "1858.??.??"]
+[PlyCount "55"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 g5 4. Bc4 g4 5. O-O gxf3 6. Qxf3 Qf6 7. e5 Qxe5
+8. d3 Bh6 9. Nc3 Nc6 10. Bxf4 Qxf4 11. Qh5 Qg5 12. Rae1+ Nge7 13. Qxf7+ Kd8
+14. Ne4 Qg7 15. Qh5 *
+
+[Event "New Orleans sim"]
+[Site "New Orleans"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "NN"]
+[Result "1-0"]
+[ECO "C52"]
+[EventDate "1858.??.??"]
+[PlyCount "53"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Ba5 6. d4 exd4 7. O-O dxc3
+8. Ba3 d6 9. Qb3 Nh6 10. Nxc3 Bxc3 11. Qxc3 O-O 12. Rad1 Ng4 13. h3 Nge5
+14. Nxe5 Nxe5 15. Be2 *
+
+[Event "New Orleans sim"]
+[Site "New Orleans"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "NN"]
+[Result "1-0"]
+[EventDate "1858.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/1NBQKBNR w Kk - 0 1"]
+[PlyCount "49"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Bc4 Bc5 3. d4 exd4 4. Nf3 b5 5. Bb3 d6 6. Ng5 Nh6 7. O-O O-O 8.
+f4 a5 9. f5 Qf6 10. Qh5 a4 11. Bd5 c6 12. Nxh7 Kxh7 13. Bg5 Qe5 14. Nd2
+cxd5 15. Nf3 *
+
+[Event "New Orleans sim"]
+[Site "New Orleans"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "NN"]
+[Result "1-0"]
+[ECO "C51"]
+[EventDate "1858.??.??"]
+[PlyCount "69"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. O-O d6 7. d4 exd4 8.
+cxd4 Bb6 9. Nc3 Na5 10. Ng5 Nxc4 11. Qa4+ c6 12. Qxc4 Nh6 13. Kh1 O-O 14.
+f4 Kh8 15. f5 *
+
+[Event "New Orleans sim"]
+[Site "New Orleans"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "NN"]
+[Result "1-0"]
+[ECO "C52"]
+[EventDate "1858.??.??"]
+[PlyCount "65"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Ba5 6. d4 exd4 7. O-O h6 8.
+Qb3 Qf6 9. e5 Qg6 10. cxd4 Nge7 11. d5 Nd8 12. d6 Nec6 13. Ba3 Ne6 14. Bxe6
+fxe6 15. dxc7 *
+
+[Event "New Orleans sim"]
+[Site "New Orleans"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "NN"]
+[Result "1-0"]
+[ECO "C56"]
+[EventDate "1858.??.??"]
+[PlyCount "45"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. d4 exd4 5. Ng5 d5 6. exd5 Nxd5 7. O-O Be7
+8. Nxf7 Kxf7 9. Qf3+ Ke6 10. Nc3 dxc3 11. Re1+ Ne5 12. Bf4 Bf6 13. Bxe5
+Bxe5 14. Rxe5+ Kxe5 15. Re1+ *
+
+[Event "New Orleans sim"]
+[Site "New Orleans"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "NN"]
+[Result "1-0"]
+[ECO "C37"]
+[EventDate "1858.??.??"]
+[PlyCount "37"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 g5 4. Bc4 g4 5. d4 gxf3 6. O-O d5 7. Bxd5 c6 8.
+Bxf7+ Kxf7 9. Qxf3 Nf6 10. c3 Bh6 11. Bxf4 Bxf4 12. Qxf4 h5 13. e5 Be6 14.
+Nd2 Nd7 15. Ne4 *
+
+[Event "New Orleans sim"]
+[Site "New Orleans"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Ross, Paul"]
+[Result "1-0"]
+[ECO "C34"]
+[EventDate "1858.??.??"]
+[PlyCount "47"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 c6 4. Nc3 Bb4 5. Bc4 Bxc3 6. dxc3 Ne7 7. Qd6 O-O
+8. Bxf4 Ng6 9. Bg5 Qe8 10. O-O Kh8 11. Rae1 f6 12. e5 f5 13. Nd4 f4 14. e6
+dxe6 15. Nxe6 *
+
+[Event "New Orleans sim"]
+[Site "New Orleans"]
+[Date "1858.??.??"]
+[Round "5"]
+[White "Morphy, Paul"]
+[Black "NN"]
+[Result "1-0"]
+[ECO "C57"]
+[EventDate "1858.??.??"]
+[PlyCount "33"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Ng5 d5 5. exd5 Nxd5 6. Nxf7 Kxf7 7. Qf3+
+Ke6 8. Nc3 Nd4 9. Bxd5+ Kd6 10. Qf7 Be6 11. Bxe6 Nxe6 12. Ne4+ Kd5 13. c4+
+Kxe4 14. Qxe6 Qd4 15. Qg4+ *
+
+[Event "Paris it"]
+[Site "Paris"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Anderssen, Adolf"]
+[Result "1-0"]
+[ECO "C38"]
+[EventDate "1858.??.??"]
+[PlyCount "37"]
+[EventType "tourn"]
+[EventRounds "30"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 g5 4. Bc4 Bg7 5. O-O d6 6. c3 Nc6 7. Qb3 Qe7 8.
+d4 Nf6 9. Nxg5 Nxe4 10. Bxf7+ Kd8 11. Nxe4 Qxe4 12. Bxf4 Bh3 13. gxh3 Nxd4
+14. Nd2 Ne2+ 15. Kf2 *
+
+[Event "Paris it"]
+[Site "Paris"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Bottin, A."]
+[Result "1-0"]
+[ECO "C20"]
+[EventDate "1858.??.??"]
+[PlyCount "19"]
+[EventType "tourn"]
+[EventRounds "30"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. c3 Nf6 3. d4 Nxe4 4. dxe5 Bc5 5. Qg4 Nxf2 6. Qxg7 Rf8 7. Bg5 f6
+8. exf6 Rxf6 9. Bxf6 Be7 10. Qg8+ 1-0
+
+[Event "Paris it"]
+[Site "Paris"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Chamouillet, M."]
+[Result "1-0"]
+[ECO "C01"]
+[EventDate "1858.??.??"]
+[PlyCount "51"]
+[EventType "tourn"]
+[EventRounds "30"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e6 2. d4 d5 3. exd5 exd5 4. Nf3 Nf6 5. Bd3 Bd6 6. O-O O-O 7. Nc3 c5
+8. dxc5 Bxc5 9. Bg5 Be6 10. Qd2 Nc6 11. Rad1 Be7 12. Rfe1 a6 13. Qf4 Nh5
+14. Qh4 g6 15. g4 *
+
+[Event "Paris it"]
+[Site "Paris"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Isouard, Carl"]
+[Result "1-0"]
+[ECO "C41"]
+[EventDate "1858.??.??"]
+[PlyCount "33"]
+[EventType "tourn"]
+[EventRounds "30"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 d6 3. d4 Bg4 4. dxe5 Bxf3 5. Qxf3 dxe5 6. Bc4 Nf6 7. Qb3
+Qe7 8. Nc3 c6 9. Bg5 b5 10. Nxb5 cxb5 11. Bxb5+ Nbd7 12. O-O-O Rd8 13. Rxd7
+Rxd7 14. Rd1 Qe6 15. Bxd7+ *
+
+[Event "Paris it"]
+[Site "Paris"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Journoud, Paul"]
+[Result "1-0"]
+[ECO "B21"]
+[EventDate "1858.??.??"]
+[PlyCount "33"]
+[EventType "tourn"]
+[EventRounds "30"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 c5 2. d4 cxd4 3. Nf3 e5 4. Bc4 Be7 5. c3 d6 6. Qb3 dxc3 7. Bxf7+ Kf8
+8. Nxc3 Nc6 9. Bxg8 Rxg8 10. O-O Qe8 11. Ng5 Bxg5 12. Bxg5 Be6 13. Nd5 h6
+14. f4 Qd7 15. fxe5+ *
+
+[Event "Paris m3"]
+[Site "Paris"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "De Riviere, Jules Arnous"]
+[Result "1-0"]
+[ECO "C51"]
+[EventDate "1858.??.??"]
+[PlyCount "43"]
+[EventType "match"]
+[EventRounds "11"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. O-O d6 7. d4 exd4 8.
+cxd4 Bb6 9. Nc3 Nf6 10. e5 d5 11. exf6 dxc4 12. fxg7 Rg8 13. Re1+ Be6 14.
+d5 Qf6 15. Bg5 *
+
+[Event "Paris sim"]
+[Site "Paris"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Baucher, Henri"]
+[Result "1-0"]
+[ECO "C62"]
+[EventDate "1858.??.??"]
+[PlyCount "53"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 d6 3. d4 exd4 4. Qxd4 Nc6 5. Bb5 Bd7 6. Bxc6 Bxc6 7. Bg5 f6
+8. Bh4 Nh6 9. Nc3 Be7 10. O-O O-O 11. Qc4+ Kh8 12. Nd4 Qd7 13. Rad1 Rf7 14.
+f4 a5 15. f5 *
+
+[Event "Paris sim"]
+[Site "Paris"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Bierwisch, Bernhard"]
+[Result "1-0"]
+[ECO "C01"]
+[EventDate "1858.??.??"]
+[PlyCount "67"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e6 2. d4 c6 3. Bd3 d5 4. exd5 exd5 5. Nf3 Bg4 6. O-O Bd6 7. h3 Bh5 8.
+Be3 Nd7 9. Re1 Ne7 10. Nbd2 Bxf3 11. Nxf3 h6 12. Qd2 Qc7 13. c4 dxc4 14.
+Bxc4 f5 15. Ne5 *
+
+[Event "Paris sim"]
+[Site "Paris"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Bornemann"]
+[Result "1-0"]
+[ECO "C30"]
+[EventDate "1858.??.??"]
+[PlyCount "63"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 Bc5 3. Nf3 d6 4. c3 Bg4 5. Bc4 Nf6 6. fxe5 Bxf3 7. Qxf3 dxe5
+8. d3 Nc6 9. Bg5 a6 10. Nd2 Be7 11. O-O-O Qd7 12. Nf1 O-O-O 13. Ne3 h6 14.
+Bh4 g5 15. Bg3 *
+
+[Event "Paris sim"]
+[Site "Paris"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Potier"]
+[Result "1-0"]
+[ECO "C42"]
+[EventDate "1858.??.??"]
+[PlyCount "49"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nf6 3. Bc4 Nxe4 4. Nc3 Nf6 5. Nxe5 d5 6. Bb3 Be7 7. d4 c6
+8. O-O Nbd7 9. f4 Nb6 10. Qf3 h5 11. f5 Qc7 12. Bf4 Bd6 13. Rae1 Kf8 14.
+Qg3 h4 15. Ng6+ *
+
+[Event "Paris sim"]
+[Site "Paris"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Preti, Jean Louis"]
+[Result "1-0"]
+[ECO "B21"]
+[EventDate "1858.??.??"]
+[PlyCount "47"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 c5 2. d4 cxd4 3. Nf3 e5 4. Bc4 Bb4+ 5. c3 dxc3 6. bxc3 Bc5 7. Nxe5
+Qf6 8. Bxf7+ Kf8 9. Nd3 Bb6 10. Bb3 Nc6 11. Ba3+ d6 12. O-O Nh6 13. e5 Qg6
+14. Nf4 Qg4 15. Ne6+ *
+
+[Event "Paris sim"]
+[Site "Paris"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Seguin, M."]
+[Result "1-0"]
+[ECO "C41"]
+[EventDate "1858.??.??"]
+[PlyCount "93"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 d6 3. d4 exd4 4. Nxd4 Nf6 5. Nc3 Be7 6. Bd3 O-O 7. f4 c5 8.
+Nf3 Nc6 9. O-O Bg4 10. Be3 a6 11. a4 h6 12. h3 Bxf3 13. Qxf3 Nb4 14. Rad1
+Qc7 15. b3 *
+
+[Event "London m"]
+[Site "London"]
+[Date "1858.07.20"]
+[Round "2"]
+[White "Morphy, Paul"]
+[Black "Loewenthal, Johann Jacob"]
+[Result "1-0"]
+[ECO "C30"]
+[EventDate "1858.07.19"]
+[PlyCount "55"]
+[EventType "match"]
+[EventRounds "14"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "2001.11.25"]
+
+1. e4 e5 2. f4 Bc5 3. Nf3 d6 4. c3 Bg4 5. Bc4 Bxf3 6. Qxf3 Nf6 7. b4 Bb6 8.
+d3 Nbd7 9. f5 Qe7 10. g4 h6 11. Ke2 c6 12. g5 hxg5 13. Bxg5 d5 14. Bb3 Qd6
+15. Nd2 *
+
+[Event "London m"]
+[Site "London"]
+[Date "1858.07.23"]
+[Round "4"]
+[White "Morphy, Paul"]
+[Black "Loewenthal, Johann Jacob"]
+[Result "1-0"]
+[ECO "C30"]
+[EventDate "1858.07.19"]
+[PlyCount "61"]
+[EventType "match"]
+[EventRounds "14"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "2001.11.25"]
+
+1. e4 e5 2. f4 Bc5 3. Nf3 d6 4. c3 Bg4 5. Be2 Bxf3 6. Bxf3 Nc6 7. b4 Bb6 8.
+b5 Nce7 9. d4 exf4 10. Bxf4 Ng6 11. Be3 Nf6 12. Nd2 O-O 13. O-O h6 14. a4
+c6 15. Qe2 *
+
+[Event "London m"]
+[Site "London"]
+[Date "1858.07.27"]
+[Round "6"]
+[White "Morphy, Paul"]
+[Black "Loewenthal, Johann Jacob"]
+[Result "1-0"]
+[ECO "B32"]
+[EventDate "1858.07.19"]
+[PlyCount "57"]
+[EventType "match"]
+[EventRounds "14"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "2001.11.25"]
+
+1. e4 c5 2. d4 cxd4 3. Nf3 Nc6 4. Nxd4 e5 5. Nxc6 bxc6 6. Bc4 Nf6 7. O-O d5
+8. exd5 cxd5 9. Bb5+ Bd7 10. Bxd7+ Qxd7 11. Re1 Bd6 12. Nc3 e4 13. Bg5 Ng4
+14. Qxd5 Bxh2+ 15. Kh1 *
+
+[Event "London m"]
+[Site "London"]
+[Date "1858.08.06"]
+[Round "10"]
+[White "Morphy, Paul"]
+[Black "Loewenthal, Johann Jacob"]
+[Result "1-0"]
+[ECO "C01"]
+[EventDate "1858.07.19"]
+[PlyCount "67"]
+[EventType "match"]
+[EventRounds "14"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "2001.11.25"]
+
+1. e4 e6 2. d4 d5 3. exd5 exd5 4. Nf3 Nf6 5. Bd3 Bd6 6. O-O O-O 7. Nc3 c6
+8. Bg5 h6 9. Bh4 Bg4 10. h3 Bxf3 11. Qxf3 Nbd7 12. Bf5 Qc7 13. Rae1 Rae8
+14. Re3 Bf4 15. Re2 *
+
+[Event "London m"]
+[Site "London"]
+[Date "1858.08.14"]
+[Round "12"]
+[White "Morphy, Paul"]
+[Black "Loewenthal, Johann Jacob"]
+[Result "1-0"]
+[ECO "C01"]
+[EventDate "1858.07.19"]
+[PlyCount "49"]
+[EventType "match"]
+[EventRounds "14"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "2001.11.25"]
+
+1. e4 e6 2. d4 d5 3. exd5 exd5 4. Nf3 Nf6 5. Bd3 Be6 6. O-O Bd6 7. Nc3 c6
+8. Ne5 Qb6 9. Be3 Nbd7 10. f4 Bxe5 11. fxe5 Ng4 12. Qd2 Nxe3 13. Qxe3 Qxb2
+14. Ne2 Qa3 15. Nf4 *
+
+[Event "London m"]
+[Site "London"]
+[Date "1858.08.21"]
+[Round "14"]
+[White "Morphy, Paul"]
+[Black "Loewenthal, Johann Jacob"]
+[Result "1-0"]
+[ECO "C77"]
+[EventDate "1858.07.19"]
+[PlyCount "97"]
+[EventType "match"]
+[EventRounds "14"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "2001.11.25"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. d4 exd4 6. e5 Ne4 7. O-O Nc5 8.
+Bxc6 dxc6 9. Nxd4 Ne6 10. Nxe6 Bxe6 11. Qe2 Bc5 12. Nc3 Qe7 13. Ne4 h6 14.
+Be3 Bxe3 15. Qxe3 *
+
+[Event "Paris m1"]
+[Site "Paris"]
+[Date "1858.??.??"]
+[Round "4"]
+[White "Morphy, Paul"]
+[Black "Harrwitz, Daniel"]
+[Result "1-0"]
+[ECO "C62"]
+[EventDate "1858.09.??"]
+[PlyCount "69"]
+[EventType "match"]
+[EventRounds "8"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "2001.11.25"]
+
+1. e4 e5 2. Nf3 d6 3. d4 exd4 4. Qxd4 Nc6 5. Bb5 Bd7 6. Bxc6 Bxc6 7. Bg5 f6
+8. Bh4 Nh6 9. Nc3 Qd7 10. O-O Be7 11. Rad1 O-O 12. Qc4+ Rf7 13. Nd4 Ng4 14.
+h3 Ne5 15. Qe2 *
+
+[Event "Paris m1"]
+[Site "Paris"]
+[Date "1858.??.??"]
+[Round "6"]
+[White "Morphy, Paul"]
+[Black "Harrwitz, Daniel"]
+[Result "1-0"]
+[ECO "C41"]
+[EventDate "1858.09.??"]
+[PlyCount "95"]
+[EventType "match"]
+[EventRounds "8"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "2001.11.25"]
+
+1. e4 e5 2. Nf3 d6 3. d4 exd4 4. Qxd4 Nf6 5. e5 dxe5 6. Qxd8+ Kxd8 7. Nxe5
+Be6 8. Nc3 Bd6 9. Nc4 Bxc4 10. Bxc4 Re8+ 11. Be3 Ke7 12. O-O-O a6 13. Bg5
+Nd7 14. Ne4 h6 15. Bxf6+ *
+
+[Event "Paris m1"]
+[Site "Paris"]
+[Date "1858.??.??"]
+[Round "8"]
+[White "Morphy, Paul"]
+[Black "Harrwitz, Daniel"]
+[Result "1-0"]
+[ECO "C41"]
+[EventDate "1858.09.??"]
+[PlyCount "117"]
+[EventType "match"]
+[EventRounds "8"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "2001.11.25"]
+
+1. e4 e5 2. Nf3 d6 3. d4 Bg4 4. dxe5 Bxf3 5. Qxf3 dxe5 6. Bc4 Nf6 7. Qb3
+Bd6 8. Bxf7+ Kf8 9. Bg5 Nbd7 10. Bh5 g6 11. Bh6+ Ke7 12. Bf3 Nc5 13. Qc4 b5
+14. Qe2 Ne6 15. Be3 *
+
+[Event "Paris m2"]
+[Site "Paris"]
+[Date "1858.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Anderssen, Adolf"]
+[Result "1-0"]
+[ECO "C38"]
+[EventDate "1858.12.20"]
+[PlyCount "37"]
+[EventType "match"]
+[EventRounds "8"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "2006.11.23"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 g5 4. Bc4 Bg7 5. O-O d6 6. c3 Nc6 7. Qb3 Qe7 8.
+d4 a6 9. Nxg5 Qxg5 10. Bxf7+ Kd8 11. Bxf4 Qe7 12. Bxg8 Bg4 13. Nd2 Kd7 14.
+Bd5 Nd8 15. Bxb7 *
+
+[Event "Paris m2"]
+[Site "Paris"]
+[Date "1858.??.??"]
+[Round "3"]
+[White "Morphy, Paul"]
+[Black "Anderssen, Adolf"]
+[Result "1-0"]
+[ECO "C65"]
+[EventDate "1858.12.20"]
+[PlyCount "39"]
+[EventType "match"]
+[EventRounds "8"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "2001.11.25"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. d4 Nxd4 5. Nxd4 exd4 6. e5 c6 7. O-O cxb5
+8. Bg5 Be7 9. exf6 Bxf6 10. Re1+ Kf8 11. Bxf6 Qxf6 12. c3 d5 13. cxd4 Be6
+14. Nc3 a6 15. Re5 *
+
+[Event "Paris m2"]
+[Site "Paris"]
+[Date "1858.??.??"]
+[Round "5"]
+[White "Morphy, Paul"]
+[Black "Anderssen, Adolf"]
+[Result "1-0"]
+[ECO "B01"]
+[EventDate "1858.12.20"]
+[PlyCount "105"]
+[EventType "match"]
+[EventRounds "8"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "2001.11.25"]
+
+1. e4 d5 2. exd5 Nf6 3. d4 Nxd5 4. c4 Nf6 5. Nc3 Bf5 6. Nf3 e6 7. Be3 Bb4
+8. Qb3 Bxc3+ 9. bxc3 Be4 10. Nd2 Bc6 11. Bd3 Nbd7 12. Qc2 h6 13. O-O O-O
+14. Rae1 b6 15. h3 *
+
+[Event "Paris m2"]
+[Site "Paris"]
+[Date "1858.??.??"]
+[Round "7"]
+[White "Morphy, Paul"]
+[Black "Anderssen, Adolf"]
+[Result "1-0"]
+[ECO "B01"]
+[EventDate "1858.12.20"]
+[PlyCount "49"]
+[EventType "match"]
+[EventRounds "8"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "2001.11.25"]
+
+1. e4 d5 2. exd5 Qxd5 3. Nc3 Qa5 4. d4 e5 5. dxe5 Qxe5+ 6. Be2 Bb4 7. Nf3
+Bxc3+ 8. bxc3 Qxc3+ 9. Bd2 Qc5 10. Rb1 Nc6 11. O-O Nf6 12. Bf4 O-O 13. Bxc7
+Nd4 14. Qxd4 Qxc7 15. Bd3 *
+
+[Event "Paris m2"]
+[Site "Paris"]
+[Date "1858.??.??"]
+[Round "9"]
+[White "Morphy, Paul"]
+[Black "Anderssen, Adolf"]
+[Result "1-0"]
+[ECO "B32"]
+[EventDate "1858.12.20"]
+[PlyCount "33"]
+[EventType "match"]
+[EventRounds "8"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "1997.08.01"]
+
+1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 e6 5. Nb5 d6 6. Bf4 e5 7. Be3 f5 8.
+N1c3 f4 9. Nd5 fxe3 10. Nbc7+ Kf7 11. Qf3+ Nf6 12. Bc4 Nd4 13. Nxf6+ d5 14.
+Bxd5+ Kg6 15. Qh5+ *
+
+[Event "Paris m2"]
+[Site "Paris"]
+[Date "1858.12.28"]
+[Round "11"]
+[White "Morphy, Paul"]
+[Black "Anderssen, Adolf"]
+[Result "1-0"]
+[ECO "C01"]
+[EventDate "1858.12.20"]
+[PlyCount "69"]
+[EventType "match"]
+[EventRounds "8"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "2001.11.25"]
+
+1. e4 e6 2. d4 g6 3. Bd3 Bg7 4. Be3 c5 5. c3 cxd4 6. cxd4 Nc6 7. Ne2 Nge7
+8. O-O O-O 9. Nbc3 d5 10. e5 f6 11. f4 fxe5 12. fxe5 a6 13. Qd2 Nb4 14. Bg5
+Nxd3 15. Qxd3 *
+
+[Event "Paris m2"]
+[Site "Paris"]
+[Date "1858.??.??"]
+[Round "13"]
+[White "Morphy, Paul"]
+[Black "Anderssen, Adolf"]
+[Result "1-0"]
+[ECO "C39"]
+[EventDate "1858.12.20"]
+[PlyCount "45"]
+[EventType "match"]
+[EventRounds "8"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "1999.07.01"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 g5 4. h4 g4 5. Ne5 Nf6 6. Nxg4 Nxe4 7. d3 Ng3 8.
+Bxf4 Nxh1 9. Qe2+ Qe7 10. Nf6+ Kd8 11. Bxc7+ Kxc7 12. Nd5+ Kd8 13. Nxe7
+Bxe7 14. Qg4 d6 15. Qf4 *
+
+[Event "London m1"]
+[Site "London"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Loewenthal, Johann Jacob"]
+[Result "1-0"]
+[ECO "C51"]
+[EventDate "1859.??.??"]
+[PlyCount "61"]
+[EventType "match"]
+[EventRounds "4"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. O-O d6 7. d4 exd4 8.
+cxd4 Bb6 9. d5 Ne5 10. Nxe5 dxe5 11. Bb2 Qe7 12. Bb5+ Bd7 13. Bxd7+ Kxd7
+14. Qg4+ f5 15. Qxf5+ *
+
+[Event "London sim"]
+[Site "London"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Bird, Henry Edward"]
+[Result "1-0"]
+[ECO "C35"]
+[EventDate "1859.??.??"]
+[PlyCount "87"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "2006.11.23"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 Be7 4. Bc4 Bh4+ 5. g3 fxg3 6. O-O gxh2+ 7. Kh1
+d5 8. Bxd5 Nf6 9. Bxf7+ Kxf7 10. Nxh4 Re8 11. d3 Bh3 12. Qh5+ Kg8 13. Rxf6
+gxf6 14. Nc3 Re5 15. Qf3 *
+
+[Event "London sim blind"]
+[Site "London"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Catley, H."]
+[Result "1-0"]
+[ECO "C84"]
+[EventDate "1859.??.??"]
+[PlyCount "61"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "2004.11.15"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Be7 6. Nc3 d6 7. d4 b5 8.
+Bb3 Bg4 9. d5 Nd4 10. Be3 Nxb3 11. axb3 O-O 12. h3 Bh5 13. b4 Qd7 14. Kh2
+c6 15. dxc6 *
+
+[Event "London sim blind"]
+[Site "London"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Cremorne, R."]
+[Result "1-0"]
+[ECO "C30"]
+[EventDate "1859.??.??"]
+[PlyCount "57"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "2004.11.15"]
+
+1. e4 e5 2. f4 Bc5 3. Nf3 Nc6 4. b4 Bxb4 5. c3 Ba5 6. Bc4 Bb6 7. d4 exd4 8.
+cxd4 d6 9. Bb2 f6 10. f5 Qe7 11. O-O Bd7 12. Nc3 O-O-O 13. Re1 Qe8 14. Nd5
+g6 15. Nxb6+ *
+
+[Event "London sim blind"]
+[Site "London"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Cunningham, James"]
+[Result "1-0"]
+[ECO "C54"]
+[EventDate "1859.??.??"]
+[PlyCount "45"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "2004.11.15"]
+
+1. e4 e5 2. Bc4 Bc5 3. c3 Nc6 4. Nf3 Nf6 5. d4 exd4 6. e5 Qe7 7. O-O Ng8 8.
+cxd4 Bb6 9. d5 Qc5 10. Na3 Nd4 11. Be3 Nxf3+ 12. Qxf3 Qf8 13. Bxb6 axb6 14.
+Nb5 Kd8 15. Rac1 *
+
+[Event "London sim blind"]
+[Site "London"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Jones, JP."]
+[Result "1-0"]
+[ECO "C37"]
+[EventDate "1859.??.??"]
+[PlyCount "43"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "2004.11.15"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 g5 4. Bc4 g4 5. d4 Qe7 6. O-O gxf3 7. Nc3 c6 8.
+Qxf3 Bg7 9. Bxf4 Bxd4+ 10. Kh1 Bg7 11. e5 Bh6 12. Ne4 d5 13. exd6 Qf8 14.
+Rae1 Be6 15. Bxe6 *
+
+[Event "London sim blind"]
+[Site "London"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Kennedy, Hugh Alexander"]
+[Result "1-0"]
+[ECO "C51"]
+[EventDate "1859.??.??"]
+[PlyCount "41"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "2004.11.15"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. O-O d6 7. d4 exd4 8.
+cxd4 Bb6 9. d5 Nce7 10. e5 Ng6 11. e6 fxe6 12. dxe6 N8e7 13. Nc3 c6 14. Ng5
+Ne5 15. Bf4 *
+
+[Event "London sim blind"]
+[Site "London"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Lewis, Samuel"]
+[Result "1-0"]
+[ECO "B00"]
+[EventDate "1859.??.??"]
+[PlyCount "49"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "2004.11.15"]
+
+1. e4 b6 2. d4 Bb7 3. Bd3 e6 4. Nh3 d5 5. e5 Ne7 6. O-O Ng6 7. f4 Be7 8. f5
+exf5 9. Bxf5 Bc8 10. Bxc8 Qxc8 11. Nc3 c6 12. Bg5 O-O 13. Bxe7 Nxe7 14. Qh5
+h6 15. Rf3 *
+
+[Event "London sim blind"]
+[Site "London"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Maude, P."]
+[Result "1-0"]
+[ECO "C58"]
+[EventDate "1859.??.??"]
+[PlyCount "67"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "2004.11.15"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Ng5 d5 5. exd5 Na5 6. d3 e4 7. Qe2 Qe7 8.
+Nxe4 Nxe4 9. dxe4 Qb4+ 10. Nd2 Nxc4 11. Qxc4 Qb6 12. O-O Bd7 13. a4 c6 14.
+Nf3 Bd6 15. Be3 *
+
+[Event "London sim blind"]
+[Site "London"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Smyth, Samuel"]
+[Result "1-0"]
+[ECO "C01"]
+[EventDate "1859.??.??"]
+[PlyCount "66"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "2004.11.15"]
+
+1. e4 e6 2. d4 d5 3. exd5 exd5 4. Nf3 Be6 5. Bd3 Nf6 6. O-O h6 7. Ne5 Bd6
+8. f4 Nc6 9. c3 Qe7 10. Re1 Bxe5 11. fxe5 Nd7 12. b4 O-O 13. b5 Na5 14. Ba3
+Qg5 15. Bxf8 *
+
+[Event "London sim blind"]
+[Site "London"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Thomas, WG."]
+[Result "1-0"]
+[ECO "C50"]
+[EventDate "1859.??.??"]
+[PlyCount "65"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "2004.11.15"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 d6 4. c3 Be7 5. Qb3 Nh6 6. d4 Na5 7. Qa4+ c6 8.
+Bxh6 b5 9. Qc2 Nxc4 10. Bc1 exd4 11. cxd4 Qc7 12. b3 Nb6 13. O-O h6 14. Nc3
+a6 15. Bf4 *
+
+[Event "London sim blind"]
+[Site "London"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Tilghman, Benjamin"]
+[Result "1-0"]
+[ECO "C37"]
+[EventDate "1859.??.??"]
+[PlyCount "47"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "2004.11.15"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 g5 4. Bc4 d6 5. h4 g4 6. Ng5 Nh6 7. d4 f6 8.
+Bxf4 Nc6 9. O-O Qe7 10. Nc3 Qg7 11. Ne6 Bxe6 12. Bxe6 Ke7 13. Nd5+ Kxe6 14.
+Bxh6 Qxh6 15. Qxg4+ *
+
+[Event "London sim blind"]
+[Site "London"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Worall, TS."]
+[Result "1-0"]
+[ECO "C50"]
+[EventDate "1859.??.??"]
+[PlyCount "39"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "ENG"]
+[Source "ChessBase"]
+[SourceDate "2004.11.15"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 f5 4. d4 d6 5. dxe5 dxe5 6. Qxd8+ Kxd8 7. Bg5+
+Nf6 8. Nc3 Bb4 9. O-O-O+ Bd6 10. Rhe1 h6 11. Bxf6+ gxf6 12. Nb5 Ke7 13. Nh4
+Rd8 14. exf5 Ke8 15. Re3 *
+
+[Event "New York m1"]
+[Site "New York"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Thompson, James"]
+[Result "1-0"]
+[EventDate "1859.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "47"]
+[EventType "match"]
+[EventRounds "12"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bb6 5. a4 a6 6. d4 exd4 7. c3 d6 8.
+Qb3 Qe7 9. O-O Be6 10. a5 Ba7 11. b5 Bxc4 12. Qxc4 Ne5 13. Nxe5 dxe5 14.
+bxa6 c6 15. Rb1 *
+
+[Event "New York m1"]
+[Site "New York"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Thompson, James"]
+[Result "1-0"]
+[EventDate "1859.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "33"]
+[EventType "match"]
+[EventRounds "12"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Ba5 6. O-O Nf6 7. Ng5 O-O
+8. f4 h6 9. Nxf7 Rxf7 10. Bxf7+ Kxf7 11. fxe5 Bb6+ 12. d4 Nxe5 13. Qh5+ Ng6
+14. e5 c5 15. exf6 *
+
+[Event "New York m1"]
+[Site "New York"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Thompson, James"]
+[Result "1-0"]
+[EventDate "1859.??.??"]
+[SetUp "1"]
+[FEN "4k3/pp2n1K1/6RP/8/8/1b6/8/8 w - - 0 1"]
+[PlyCount "3"]
+[EventType "match"]
+[EventRounds "12"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. Re6 Bxe6 2. h7 1-0
+
+[Event "New York m1"]
+[Site "New York"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Thompson, James"]
+[Result "1-0"]
+[EventDate "1859.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "31"]
+[EventType "match"]
+[EventRounds "12"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 d6 3. d4 Nc6 4. c3 Nf6 5. Bd3 Bg4 6. O-O exd4 7. cxd4 Bxf3
+8. gxf3 Nxd4 9. Qa4+ Nc6 10. Bb5 Qd7 11. Rd1 a6 12. e5 Nh5 13. Bg5 h6 14.
+Rac1 Rc8 15. Qe4 *
+
+[Event "New York m1"]
+[Site "New York"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Thompson, James"]
+[Result "1-0"]
+[EventDate "1859.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "51"]
+[EventType "match"]
+[EventRounds "12"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Ba5 6. O-O Bb6 7. d4 d6 8.
+dxe5 Nxe5 9. Nxe5 dxe5 10. Bxf7+ Ke7 11. Qb3 Nf6 12. Ba3+ c5 13. Rad1 Qc7
+14. f4 Rf8 15. Bc4 *
+
+[Event "New York m1"]
+[Site "New York"]
+[Date "1859.??.??"]
+[Round "4"]
+[White "Morphy, Paul"]
+[Black "Thompson, James"]
+[Result "1-0"]
+[EventDate "1859.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "61"]
+[EventType "match"]
+[EventRounds "12"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. f4 d5 2. e3 Nf6 3. Nf3 Bg4 4. h3 Bxf3 5. Qxf3 c5 6. b3 e6 7. Bb2 Ne4 8.
+O-O-O Nc6 9. d3 Nd6 10. g4 d4 11. Bg2 Qc7 12. Rhe1 Rc8 13. c4 b5 14. Kb1 a5
+15. exd4 *
+
+[Event "New York m1"]
+[Site "New York"]
+[Date "1859.??.??"]
+[Round "5"]
+[White "Morphy, Paul"]
+[Black "Thompson, James"]
+[Result "1-0"]
+[EventDate "1859.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "67"]
+[EventType "match"]
+[EventRounds "12"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. f4 d5 2. e3 Nf6 3. Nf3 Bg4 4. Be2 c5 5. O-O Nc6 6. b3 e6 7. Bb2 Be7 8.
+h3 Bxf3 9. Bxf3 d4 10. Qe1 Qb6 11. Rb1 Nb4 12. Qe2 Rd8 13. a3 Nbd5 14. Kh1
+dxe3 15. dxe3 *
+
+[Event "New York m1"]
+[Site "New York"]
+[Date "1859.??.??"]
+[Round "6"]
+[White "Morphy, Paul"]
+[Black "Thompson, James"]
+[Result "1-0"]
+[EventDate "1859.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "101"]
+[EventType "match"]
+[EventRounds "12"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. f4 f5 2. Nf3 Nf6 3. e3 e6 4. Be2 Be7 5. O-O b6 6. b3 d5 7. Bb2 Ba6 8. c4
+O-O 9. Rc1 c5 10. Qe1 Nc6 11. Ng5 Qd7 12. cxd5 Bxe2 13. dxc6 Qxc6 14. Qxe2
+Rad8 15. Rfd1 *
+
+[Event "New York m2"]
+[Site "New York"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Lichtenhein, Theodor"]
+[Result "1-0"]
+[EventDate "1859.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "51"]
+[EventType "match"]
+[EventRounds "6"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. O-O Bb6 7. d4 d6 8.
+dxe5 dxe5 9. Qb3 Qf6 10. Bg5 Qg6 11. Bb5 Be6 12. Qa4 Bd7 13. Rad1 f6 14.
+Rxd7 Kxd7 15. Bxc6+ *
+
+[Event "New York m2"]
+[Site "New York"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Lichtenhein, Theodor"]
+[Result "1-0"]
+[EventDate "1859.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "53"]
+[EventType "match"]
+[EventRounds "6"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. O-O Nf6 7. d4 exd4
+8. cxd4 Bb6 9. Ba3 d6 10. e5 dxe5 11. Qb3 Be6 12. Bxe6 fxe6 13. Qxe6+ Ne7
+14. Nxe5 Rf8 15. Rfe1 *
+
+[Event "New York m2"]
+[Site "New York"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Lichtenhein, Theodor"]
+[Result "1-0"]
+[EventDate "1859.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "61"]
+[EventType "match"]
+[EventRounds "6"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. O-O Bb6 7. d4 d6 8.
+dxe5 Nxe5 9. Nxe5 dxe5 10. Bxf7+ Ke7 11. Qb3 Nf6 12. Ba3+ c5 13. Rad1 Qc7
+14. f4 Bg4 15. Rde1 *
+
+[Event "New York sim"]
+[Site "New York"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Conway, M."]
+[Result "1-0"]
+[EventDate "1859.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/1NBQKBNR w Kk - 0 1"]
+[PlyCount "23"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 g5 4. Bc4 g4 5. d4 gxf3 6. Qxf3 Bh6 7. O-O Ne7
+8. Bxf4 Bxf4 9. Bxf7+ Kxf7 10. Qxf4+ Kg7 11. Qf6+ Kg8 12. Qf7# 1-0
+
+[Event "New York sim"]
+[Site "New York"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Fuller, William James"]
+[Result "1-0"]
+[EventDate "1859.??.??"]
+[SetUp "1"]
+[FEN "r4k2/ppp1r1pp/2n2q1P/b7/2B2BR1/2P3Q1/PP5P/1N3K2 w - - 0 1"]
+[PlyCount "13"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. Rg6 Qxg6 2. Qxg6 hxg6 3. h7 Re1+ 4. Kxe1 Ke7 5. Bg8 Kf6 6. h8=Q Ne7 7.
+Qh4+ 1-0
+
+[Event "New York sim"]
+[Site "New York"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Hart"]
+[Result "1-0"]
+[ECO "C44"]
+[EventDate "1859.??.??"]
+[PlyCount "43"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Bc4 d6 5. c3 dxc3 6. Qb3 Qe7 7. O-O b6 8.
+Nxc3 Na5 9. Qb4 Nxc4 10. Qxc4 Bb7 11. Re1 O-O-O 12. Bf4 f6 13. Rac1 Kb8 14.
+Nd5 Bxd5 15. exd5 *
+
+[Event "New York sim"]
+[Site "New York"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Jefferson, BT."]
+[Result "1-0"]
+[ECO "C52"]
+[EventDate "1859.??.??"]
+[PlyCount "45"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. O-O d6 7. d4 Bb6 8.
+dxe5 dxe5 9. Qb3 Qf6 10. Bb5 Be6 11. Qa4 Ne7 12. Bg5 Qg6 13. Bxe7 Kxe7 14.
+Bxc6 bxc6 15. Nxe5 *
+
+[Event "New York sim"]
+[Site "New York"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Julien, Didier"]
+[Result "1-0"]
+[EventDate "1859.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "37"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 d6 3. d4 exd4 4. Bc4 Nc6 5. c3 Ne5 6. Nxe5 dxe5 7. Qb3 Qe7
+8. f4 dxc3 9. O-O c6 10. fxe5 Be6 11. Bxe6 fxe6 12. Bg5 Qxg5 13. Qxb7 Bc5+
+14. Kh1 Qxe5 15. Qxa8+ *
+
+[Event "New York sim"]
+[Site "New York"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Knott, Simon JB"]
+[Result "1-0"]
+[ECO "C37"]
+[EventDate "1859.??.??"]
+[PlyCount "53"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 g5 4. Bc4 g4 5. d4 gxf3 6. O-O d5 7. Bxd5 Bg4 8.
+Qd3 fxg2 9. Rf2 c6 10. Bxf7+ Kxf7 11. Bxf4 Nf6 12. e5 Nbd7 13. Nc3 Bg7 14.
+Ne4 h6 15. exf6 *
+
+[Event "New York sim"]
+[Site "New York"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Mead, Charles Dillingham"]
+[Result "1-0"]
+[EventDate "1859.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "61"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 g5 4. Bc4 Bg7 5. O-O d6 6. c3 Nc6 7. d4 a6 8.
+Qb3 Na5 9. Bxf7+ Kf8 10. Qd5 c6 11. Qxg5 Qxg5 12. Nxg5 h6 13. Bxf4 Ke7 14.
+Bxg8 Rxg8 15. Nf3 *
+
+[Event "New York sim"]
+[Site "New York"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Michaelis, O."]
+[Result "1-0"]
+[EventDate "1859.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/1NBQKBNR w Kk - 0 1"]
+[PlyCount "99"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Ba5 6. d4 exd4 7. O-O Bb6
+8. cxd4 d6 9. Nc3 Nf6 10. e5 Ng4 11. h3 Nh6 12. Bg5 Qd7 13. Re1 Kf8 14. e6
+Qe8 15. e7+ *
+
+[Event "New York sim"]
+[Site "New York"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Montgomery, Hardman Philips"]
+[Result "1-0"]
+[EventDate "1859.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "55"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 d6 3. d4 exd4 4. Bc4 Be7 5. c3 d3 6. Qb3 Be6 7. Bxe6 fxe6
+8. Nd4 Bf6 9. Nxe6 Qc8 10. f4 Nc6 11. e5 dxe5 12. fxe5 Bxe5 13. O-O Nf6 14.
+Nxg7+ Kd8 15. Bg5 *
+
+[Event "New York sim"]
+[Site "New York"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "NN"]
+[Result "1-0"]
+[ECO "C51"]
+[EventDate "1859.??.??"]
+[PlyCount "45"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. O-O d6 7. d4 exd4 8.
+cxd4 Bb6 9. Nc3 Bg4 10. Bb5 Bd7 11. Re1 Nge7 12. e5 dxe5 13. d5 Nd4 14.
+Bxd7+ Qxd7 15. Nxe5 *
+
+[Event "New York sim"]
+[Site "New York"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "NN"]
+[Result "1-0"]
+[EventDate "1859.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/1NBQKBNR w Kk - 0 1"]
+[PlyCount "39"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 g5 4. Bc4 g4 5. d4 gxf3 6. Qxf3 Qh4+ 7. g3 Qe7
+8. Nc3 Bh6 9. Nd5 Qd6 10. e5 Qc6 11. Bb5 Qxc2 12. O-O a6 13. Bd3 Qc6 14.
+Be4 Qc4 15. Bxf4 *
+
+[Event "New York sim"]
+[Site "New York"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Napoleon de Santos, A."]
+[Result "1-0"]
+[EventDate "1859.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/1NBQKBNR w Kk - 0 1"]
+[PlyCount "68"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 Bc5 3. Nf3 Nc6 4. b4 Bb6 5. b5 Nd4 6. Nxd4 Bxd4 7. c3 Bb6 8.
+Bc4 Qe7 9. d4 d6 10. O-O Be6 11. Bxe6 Qxe6 12. f5 Qd7 13. Qd3 c6 14. Kh1
+Nf6 15. Bg5 *
+
+[Event "New York sim"]
+[Site "New York"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Perrin, Frederick"]
+[Result "1-0"]
+[EventDate "1859.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "83"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Bc4 d6 5. c3 d3 6. Qb3 Qf6 7. O-O h6 8.
+Be3 g5 9. Nd4 Rh7 10. f4 g4 11. e5 Qe7 12. e6 fxe6 13. Nxe6 Nf6 14. Rae1
+Bxe6 15. Bxe6 *
+
+[Event "New York sim"]
+[Site "New York"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Richardson, H."]
+[Result "1-0"]
+[EventDate "1859.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "85"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Ba5 6. O-O d6 7. d4 exd4 8.
+cxd4 Nf6 9. Qb3 O-O 10. e5 dxe5 11. dxe5 Nh5 12. Ba3 Ne7 13. Rad1 Qe8 14.
+Ng5 Bf5 15. e6 *
+
+[Event "New York sim"]
+[Site "New York"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Stone, J."]
+[Result "1-0"]
+[ECO "C51"]
+[EventDate "1859.??.??"]
+[PlyCount "59"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. O-O Bb6 7. d4 exd4
+8. cxd4 Qf6 9. e5 Qg6 10. d5 Na5 11. Bd3 Qh5 12. Ba3 Ne7 13. d6 Ng6 14.
+dxc7 Nc6 15. Bd6 *
+
+[Event "New York sim"]
+[Site "New York"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Ware, Gary"]
+[Result "1-0"]
+[EventDate "1859.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "55"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 g5 4. Bc4 Bg7 5. h4 h6 6. d4 d6 7. c3 Qe7 8. O-O
+Bg4 9. Qb3 c6 10. Bd2 Bxf3 11. Rxf3 Nf6 12. Re1 Ng4 13. Ref1 O-O 14. hxg5
+hxg5 15. Bd3 *
+
+[Event "Paris"]
+[Site "Paris"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Amateur"]
+[Result "1-0"]
+[ECO "C56"]
+[EventDate "1859.??.??"]
+[PlyCount "47"]
+[EventType "tourn"]
+[EventRounds "8"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "2006.11.23"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. d4 exd4 5. O-O Nxe4 6. Re1 d5 7. Bxd5
+Qxd5 8. Nc3 Qh5 9. Nxe4 Be6 10. Neg5 Bb4 11. Rxe6+ fxe6 12. Nxe6 Qf7 13.
+Nfg5 Qe7 14. Qe2 Bd6 15. Nxg7+ *
+
+[Event "Paris"]
+[Site "Paris"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Budzinsky, J."]
+[Result "1-0"]
+[ECO "C42"]
+[EventDate "1859.??.??"]
+[PlyCount "47"]
+[EventType "tourn"]
+[EventRounds "8"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "2006.11.23"]
+
+1. e4 e5 2. Nf3 Nf6 3. Nxe5 d6 4. Nf3 Nxe4 5. d4 d5 6. Bd3 Be7 7. O-O Nc6
+8. c4 Be6 9. Qb3 Na5 10. Qa4+ c6 11. Re1 f5 12. cxd5 Bxd5 13. Bd2 Nxd2 14.
+Nbxd2 b5 15. Qc2 *
+
+[Event "Paris"]
+[Site "Paris"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "De Riviere, Jules Arnous"]
+[Result "1-0"]
+[ECO "C51"]
+[EventDate "1859.??.??"]
+[PlyCount "57"]
+[EventType "tourn"]
+[EventRounds "8"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "2006.11.23"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. O-O d6 7. d4 exd4 8.
+cxd4 Bb6 9. d5 Nce7 10. e5 dxe5 11. Nxe5 Nf6 12. Bb5+ c6 13. dxc6 O-O 14.
+Ba3 Bxf2+ 15. Kh1 *
+
+[Event "Paris"]
+[Site "Paris"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Journoud, Paul"]
+[Result "1-0"]
+[ECO "C51"]
+[EventDate "1859.??.??"]
+[PlyCount "65"]
+[EventType "tourn"]
+[EventRounds "8"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "2006.11.23"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 d5 5. exd5 Nxb4 6. c3 Nxd5 7. Qb3 c6
+8. O-O e4 9. Re1 f5 10. d3 Ngf6 11. Bg5 Qd6 12. Bxf6 Nxf6 13. Nbd2 b5 14.
+Bf7+ Kf8 15. dxe4 *
+
+[Event "Paris"]
+[Site "Paris"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Laroche, H."]
+[Result "1-0"]
+[ECO "C52"]
+[EventDate "1859.??.??"]
+[PlyCount "25"]
+[EventType "tourn"]
+[EventRounds "8"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "2006.11.23"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Ba5 6. d4 Nf6 7. dxe5 Ng4
+8. Bg5 f6 9. exf6 Nxf6 10. e5 h6 11. exf6 hxg5 12. fxg7 Qe7+ 13. Qe2 1-0
+
+[Event "Paris blind sim"]
+[Site "Paris"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Bousserolles, A."]
+[Result "1-0"]
+[ECO "C50"]
+[EventDate "1859.??.??"]
+[PlyCount "61"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "2006.11.23"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 h6 4. d4 exd4 5. c3 Nge7 6. Qb3 d5 7. exd5 Nb8
+8. d6 Qxd6 9. Bxf7+ Kd8 10. cxd4 Nbc6 11. Nc3 Na5 12. Qa4 Nac6 13. O-O Bd7
+14. Be3 Qf6 15. Bc4 *
+
+[Event "Philadelphia m"]
+[Site "Philadelphia"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Thomas, W."]
+[Result "1-0"]
+[EventDate "1859.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "105"]
+[EventType "match"]
+[EventRounds "3"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 d5 3. exd5 Qxd5 4. Nf3 e4 5. Ne5 Be6 6. Bc4 Qd6 7. Qe2 Nc6
+8. Bb5 Nf6 9. b3 Bd7 10. Bb2 Be7 11. O-O-O a6 12. Bc4 Be6 13. d4 exd3 14.
+Rxd3 Bxc4 15. bxc4 *
+
+[Event "USA tour sim"]
+[Site "USA"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Arnold, W."]
+[Result "1-0"]
+[EventDate "1859.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "41"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e6 2. f4 Bc5 3. d4 Bb6 4. Nf3 d5 5. e5 f6 6. Bd3 Nc6 7. c3 Bd7 8. O-O
+Qe7 9. Be3 Nh6 10. h3 O-O 11. g4 fxe5 12. fxe5 Nf7 13. Qe2 Qe8 14. Rf2 Ne7
+15. Raf1 *
+
+[Event "USA tour sim"]
+[Site "USA"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Hammond, G."]
+[Result "1-0"]
+[ECO "C70"]
+[EventDate "1859.??.??"]
+[PlyCount "43"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 b5 5. Bb3 Bc5 6. c3 d6 7. d4 Bb6 8.
+dxe5 Qe7 9. Bd5 Bb7 10. Bg5 f6 11. exf6 Nxf6 12. O-O Qd7 13. Bxf6 gxf6 14.
+Nd4 Bxd4 15. Qh5+ *
+
+[Event "USA tour sim"]
+[Site "USA"]
+[Date "1859.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Nicholson, C."]
+[Result "1-0"]
+[EventDate "1859.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "43"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 g5 4. Bc4 Bg7 5. O-O h6 6. c3 d6 7. Qb3 Qf6 8.
+d4 Ne7 9. Bd2 O-O 10. Bd3 Nbc6 11. Rae1 Bg4 12. h4 Bxf3 13. Rxf3 b6 14.
+hxg5 hxg5 15. Rh3 *
+
+[Event "Paris m1"]
+[Site "Paris"]
+[Date "1859.??.??"]
+[Round "2"]
+[White "Morphy, Paul"]
+[Black "Mongredien, Augustus"]
+[Result "1-0"]
+[ECO "C51"]
+[EventDate "1859.02.??"]
+[PlyCount "47"]
+[EventType "match"]
+[EventRounds "8"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "2001.11.25"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. O-O d6 7. d4 exd4 8.
+cxd4 Bb6 9. Bb2 Nf6 10. Nbd2 O-O 11. d5 Ne5 12. Nxe5 dxe5 13. Bxe5 Re8 14.
+Bxf6 Qxf6 15. Kh1 *
+
+[Event "Paris m1"]
+[Site "Paris"]
+[Date "1859.??.??"]
+[Round "4"]
+[White "Morphy, Paul"]
+[Black "Mongredien, Augustus"]
+[Result "1-0"]
+[ECO "C58"]
+[EventDate "1859.02.??"]
+[PlyCount "57"]
+[EventType "match"]
+[EventRounds "8"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "2001.11.25"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Ng5 d5 5. exd5 Na5 6. d3 h6 7. Nf3 Bg4 8.
+h3 Bxf3 9. Qxf3 Bd6 10. Bb5+ c6 11. dxc6 bxc6 12. Bxc6+ Nxc6 13. Qxc6+ Ke7
+14. Nc3 Rc8 15. Qf3 *
+
+[Event "Paris m1"]
+[Site "Paris"]
+[Date "1859.??.??"]
+[Round "6"]
+[White "Morphy, Paul"]
+[Black "Mongredien, Augustus"]
+[Result "1-0"]
+[ECO "C40"]
+[EventDate "1859.02.??"]
+[PlyCount "43"]
+[EventType "match"]
+[EventRounds "8"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "2001.11.25"]
+
+1. e4 e5 2. Nf3 d5 3. exd5 e4 4. Qe2 Qe7 5. Nd4 Qe5 6. Nb5 Bd6 7. d4 Qe7 8.
+c4 Bb4+ 9. Bd2 Bxd2+ 10. Nxd2 a6 11. Nc3 f5 12. O-O-O Nf6 13. Re1 O-O 14.
+f3 b5 15. fxe4 *
+
+[Event "Paris m1"]
+[Site "Paris"]
+[Date "1859.??.??"]
+[Round "8"]
+[White "Morphy, Paul"]
+[Black "Mongredien, Augustus"]
+[Result "1-0"]
+[ECO "C41"]
+[EventDate "1859.02.??"]
+[PlyCount "59"]
+[EventType "match"]
+[EventRounds "8"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "2001.11.25"]
+
+1. e4 e5 2. Nf3 d6 3. d4 exd4 4. Qxd4 a6 5. Bg5 f6 6. Be3 Be6 7. Nc3 Ne7 8.
+Be2 Nec6 9. Qd2 Be7 10. O-O O-O 11. Rad1 Nd7 12. Nd4 Nxd4 13. Bxd4 f5 14.
+exf5 Bxf5 15. Bc4+ *
+
+[Event "New Orleans"]
+[Site "New Orleans"]
+[Date "1860.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Meunier, J."]
+[Result "1-0"]
+[EventDate "1860.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/1NBQKBNR w Kk - 0 1"]
+[PlyCount "53"]
+[EventType "game"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 d5 3. exd5 exf4 4. Nf3 Bd6 5. Be2 Bg4 6. O-O Bxf3 7. Bxf3
+Ne7 8. d4 O-O 9. c4 c6 10. dxc6 Nbxc6 11. c5 Bb8 12. d5 Ne5 13. d6 Nxf3+
+14. Qxf3 Nc6 15. Bxf4 *
+
+[Event "USA"]
+[Site "USA"]
+[Date "1860.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "NN"]
+[Result "1-0"]
+[ECO "C37"]
+[EventDate "1860.??.??"]
+[PlyCount "35"]
+[EventType "game"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "2006.11.23"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 g5 4. Bc4 g4 5. d4 gxf3 6. Qxf3 Bh6 7. O-O c6 8.
+Bxf7+ Kxf7 9. Bxf4 Bxf4 10. Qxf4+ Kg6 11. Qf7+ Kh6 12. Rf5 Qh4 13. Nd2 Ne7
+14. Nf3 Qg4 15. Rg5 *
+
+[Event "Havana m"]
+[Site "Havana"]
+[Date "1862.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Sicre, JM."]
+[Result "1-0"]
+[ECO "C01"]
+[EventDate "1862.??.??"]
+[PlyCount "53"]
+[EventType "match"]
+[EventRounds "2"]
+[EventCountry "CUB"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e6 2. d4 d5 3. exd5 exd5 4. Nf3 Bd6 5. Bd3 Nf6 6. O-O O-O 7. Nc3 c6
+8. Bg5 Bg4 9. h3 Bxf3 10. Qxf3 Nbd7 11. Rfe1 Qc7 12. g4 Rfe8 13. Be3 Kh8
+14. g5 Ng8 15. Qxf7 *
+
+[Event "Paris m"]
+[Site "Paris"]
+[Date "1863.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "De Riviere, Jules Arnous"]
+[Result "1-0"]
+[ECO "C56"]
+[EventDate "1863.??.??"]
+[PlyCount "51"]
+[EventType "match"]
+[EventRounds "15"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "1997.11.17"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. d4 exd4 5. O-O Be7 6. Nxd4 O-O 7. Nc3 Ne5
+8. Be2 d5 9. f4 Nc6 10. Nxc6 bxc6 11. e5 Bc5+ 12. Kh1 Nd7 13. Bd3 Re8 14.
+Bd2 Nf8 15. Qh5 *
+
+[Event "Paris m"]
+[Site "Paris"]
+[Date "1863.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "De Riviere, Jules Arnous"]
+[Result "1-0"]
+[ECO "C51"]
+[EventDate "1863.??.??"]
+[PlyCount "79"]
+[EventType "match"]
+[EventRounds "15"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "1997.11.17"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. O-O d6 7. d4 exd4 8.
+cxd4 Bb6 9. Nc3 Bg4 10. Bb5 Kf8 11. Be3 Nce7 12. h3 Bh5 13. Bd3 f6 14. a4
+c6 15. Qb3 *
+
+[Event "Paris m"]
+[Site "Paris"]
+[Date "1863.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "De Riviere, Jules Arnous"]
+[Result "1-0"]
+[ECO "C53"]
+[EventDate "1863.??.??"]
+[PlyCount "67"]
+[EventType "match"]
+[EventRounds "15"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "1997.11.17"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Qe7 5. d4 Bb6 6. O-O d6 7. h3 Nf6 8.
+Re1 h6 9. a4 a5 10. Na3 Nd8 11. Nc2 Be6 12. Ne3 Bxc4 13. Nxc4 Nd7 14. Ne3
+g6 15. Nd5 *
+
+[Event "Paris m"]
+[Site "Paris"]
+[Date "1863.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "De Riviere, Jules Arnous"]
+[Result "1-0"]
+[ECO "C51"]
+[EventDate "1863.??.??"]
+[PlyCount "47"]
+[EventType "match"]
+[EventRounds "15"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "1997.11.17"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. O-O d6 7. d4 exd4 8.
+cxd4 Bb6 9. Nc3 Qf6 10. Nd5 Qg6 11. Nf4 Qf6 12. e5 dxe5 13. dxe5 Qf5 14. e6
+f6 15. Nh4 *
+
+[Event "Paris m"]
+[Site "Paris"]
+[Date "1863.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "De Riviere, Jules Arnous"]
+[Result "1-0"]
+[ECO "C66"]
+[EventDate "1863.??.??"]
+[PlyCount "127"]
+[EventType "match"]
+[EventRounds "15"]
+[EventCountry "FRA"]
+[Source "ChessBase"]
+[SourceDate "1997.11.17"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. O-O d6 5. d4 exd4 6. Nxd4 Bd7 7. Bxc6
+bxc6 8. Nc3 Be7 9. h3 c5 10. Nde2 O-O 11. f4 Bc6 12. Ng3 Nd7 13. Qd3 Rb8
+14. b3 Bf6 15. Bd2 *
+
+[Event "Havana sim"]
+[Site "Havana"]
+[Date "1864.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Capdevielle, P."]
+[Result "1-0"]
+[ECO "C51"]
+[EventDate "1864.??.??"]
+[PlyCount "71"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "CUB"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. O-O Nf6 7. d4 exd4
+8. cxd4 Bb4 9. e5 Ne4 10. Bd5 Bc3 11. Bxe4 Bxa1 12. Bg5 f6 13. exf6 gxf6
+14. Bxc6 dxc6 15. Re1+ *
+
+[Event "Havana sim"]
+[Site "Havana"]
+[Date "1864.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Dominguez"]
+[Result "1-0"]
+[ECO "C56"]
+[EventDate "1864.??.??"]
+[PlyCount "39"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "CUB"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. d4 exd4 5. O-O Bc5 6. e5 Ne4 7. Bd5 f5 8.
+exf6 Nxf6 9. Bg5 Be7 10. Bxf6 Bxf6 11. Re1+ Ne7 12. Ne5 Bxe5 13. Qh5+ g6
+14. Qxe5 Rf8 15. Nd2 *
+
+[Event "Havana sim"]
+[Site "Havana"]
+[Date "1864.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Golmayo Zupide, Celso"]
+[Result "1-0"]
+[ECO "C51"]
+[EventDate "1864.??.??"]
+[PlyCount "57"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "CUB"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. O-O d6 7. d4 exd4 8.
+cxd4 Bb6 9. Nc3 Nf6 10. e5 dxe5 11. Ba3 Bxd4 12. Qb3 Be6 13. Bxe6 fxe6 14.
+Qxe6+ Ne7 15. Nxd4 *
+
+[Event "Havana sim"]
+[Site "Havana"]
+[Date "1864.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Medina Garcia, Antonio Angel"]
+[Result "1-0"]
+[EventDate "1864.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "71"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "CUB"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e6 2. f4 d5 3. e5 Bc5 4. d4 Bb6 5. Be3 Ne7 6. Nf3 Nf5 7. Bf2 Qe7 8.
+c3 c5 9. g4 Nh6 10. Bh4 Qc7 11. h3 Nc6 12. Be2 cxd4 13. cxd4 Ba5+ 14. Kf2
+Bd7 15. a3 *
+
+[Event "Havana sim"]
+[Site "Havana"]
+[Date "1864.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Sicre, Felix"]
+[Result "1-0"]
+[ECO "C41"]
+[EventDate "1864.??.??"]
+[PlyCount "41"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "CUB"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 d6 3. d4 exd4 4. Bc4 h6 5. c3 c6 6. O-O dxc3 7. Qb3 Qc7 8.
+Nxc3 g5 9. Be3 Bg7 10. Rac1 Bxc3 11. Qxc3 Rh7 12. e5 Nd7 13. Bd3 Nf8 14.
+exd6 Qd8 15. Rfe1 *
+
+[Event "New Orleans sim"]
+[Site "New Orleans"]
+[Date "1864.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Mc Connell, L."]
+[Result "1-0"]
+[EventDate "1864.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "43"]
+[EventType "simul"]
+[EventRounds "1"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. O-O d6 7. d4 exd4 8.
+cxd4 Bb6 9. d5 Ne5 10. Nxe5 dxe5 11. Bb2 Qe7 12. Qb3 Nf6 13. Kh1 Ng4 14.
+Qg3 Qc5 15. Bb3 *
+
+[Event "New Orleans"]
+[Site "New Orleans"]
+[Date "1866.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Maurian, Charles Amedee"]
+[Result "1-0"]
+[EventDate "1866.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "49"]
+[EventType "tourn"]
+[EventRounds "8"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. O-O d6 7. d4 exd4 8.
+cxd4 Bb6 9. d5 Na5 10. e5 Nxc4 11. Qa4+ Bd7 12. Qxc4 Bf5 13. Re1 Ne7 14.
+Bg5 dxe5 15. Bxe7 *
+
+[Event "New Orleans"]
+[Site "New Orleans"]
+[Date "1866.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Maurian, Charles Amedee"]
+[Result "1-0"]
+[EventDate "1866.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "59"]
+[EventType "tourn"]
+[EventRounds "8"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. O-O d6 7. d4 exd4 8.
+cxd4 Bb6 9. d5 Na5 10. e5 Nxc4 11. Qa4+ Bd7 12. Qxc4 Ne7 13. e6 fxe6 14.
+dxe6 Bc6 15. Bg5 *
+
+[Event "New Orleans"]
+[Site "New Orleans"]
+[Date "1866.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Maurian, Charles Amedee"]
+[Result "1-0"]
+[EventDate "1866.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "55"]
+[EventType "tourn"]
+[EventRounds "8"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. O-O d6 7. d4 exd4 8.
+cxd4 Bb6 9. d5 Na5 10. e5 Nxc4 11. Qa4+ Qd7 12. Qxc4 Ne7 13. Re1 dxe5 14.
+Nxe5 Qxd5 15. Qa4+ *
+
+[Event "New Orleans"]
+[Site "New Orleans"]
+[Date "1866.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Maurian, Charles Amedee"]
+[Result "1-0"]
+[EventDate "1866.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "53"]
+[EventType "tourn"]
+[EventRounds "8"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Ba5 6. O-O Nf6 7. d4 O-O 8.
+Qc2 exd4 9. cxd4 d5 10. exd5 Ne7 11. Ba3 Bf5 12. Qa4 Bb6 13. Rfe1 Ne4 14.
+Bxe7 Qxe7 15. Bd3 *
+
+[Event "New Orleans"]
+[Site "New Orleans"]
+[Date "1866.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Muarian, C."]
+[Result "1-0"]
+[ECO "C37"]
+[EventDate "1866.??.??"]
+[PlyCount "35"]
+[EventType "tourn"]
+[EventRounds "8"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 g5 4. Bc4 g4 5. d4 gxf3 6. Qxf3 Nc6 7. Bxf7+
+Kxf7 8. Qh5+ Ke7 9. Bxf4 Nf6 10. Bg5 Bg7 11. e5 Qe8 12. Qh4 Qg6 13. O-O d5
+14. exf6+ Kf7 15. fxg7+ *
+
+[Event "New Orleans m"]
+[Site "New Orleans"]
+[Date "1869.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Maurian, Charles Amedee"]
+[Result "1-0"]
+[EventDate "1869.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "33"]
+[EventType "match"]
+[EventRounds "8"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. b3 e5 2. Bb2 Nc6 3. e3 d5 4. g3 Nf6 5. Bg2 Be7 6. Ne2 Be6 7. O-O O-O 8.
+f4 exf4 9. Nxf4 Ne4 10. d3 Bf6 11. dxe4 Bxb2 12. Rb1 dxe4 13. Nxe6 Qe7 14.
+Nxf8 Rd8 15. Qh5 *
+
+[Event "New Orleans m"]
+[Site "New Orleans"]
+[Date "1869.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Maurian, Charles Amedee"]
+[Result "1-0"]
+[EventDate "1869.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "49"]
+[EventType "match"]
+[EventRounds "8"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 g5 4. Bc4 Bg7 5. c3 h6 6. Qb3 Qe7 7. d4 d6 8.
+O-O c6 9. Bd2 Be6 10. d5 Bg4 11. e5 cxd5 12. Bxd5 Nc6 13. exd6 Qd7 14.
+Rae1+ Kf8 15. Nd4 *
+
+[Event "New Orleans m"]
+[Site "New Orleans"]
+[Date "1869.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Maurian, Charles Amedee"]
+[Result "1-0"]
+[EventDate "1869.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "67"]
+[EventType "match"]
+[EventRounds "8"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. O-O d6 7. d4 exd4 8.
+cxd4 Bb6 9. d5 Ne5 10. Nxe5 dxe5 11. Bb2 Qf6 12. Bb5+ Kf8 13. Kh1 Nh6 14.
+Be2 Qf4 15. f3 *
+
+[Event "New Orleans m"]
+[Site "New Orleans"]
+[Date "1869.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Maurian, Charles Amedee"]
+[Result "1-0"]
+[EventDate "1869.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "37"]
+[EventType "match"]
+[EventRounds "8"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. f4 e6 2. Nf3 g6 3. e3 Bg7 4. Be2 Ne7 5. O-O f5 6. Qe1 b6 7. d3 Bb7 8. c3
+Nbc6 9. e4 fxe4 10. dxe4 O-O 11. Qg3 Qe8 12. Be3 e5 13. fxe5 Nd8 14. Bc4+
+Kh8 15. Ng5 *
+
+[Event "New Orleans m"]
+[Site "New Orleans"]
+[Date "1869.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Maurian, Charles Amedee"]
+[Result "1-0"]
+[EventDate "1869.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "31"]
+[EventType "match"]
+[EventRounds "8"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. f4 exf4 3. Nf3 g5 4. Bc4 g4 5. d4 gxf3 6. Qxf3 d6 7. O-O Be6 8.
+d5 Bc8 9. Bxf4 Qd7 10. e5 Qg4 11. Qe3 Be7 12. exd6 cxd6 13. Rae1 h5 14.
+Bxd6 Qd7 15. Bxe7 *
+
+[Event "New Orleans m"]
+[Site "New Orleans"]
+[Date "1869.??.??"]
+[Round "?"]
+[White "Morphy, Paul"]
+[Black "Maurian, Charles Amedee"]
+[Result "1-0"]
+[EventDate "1869.??.??"]
+[SetUp "1"]
+[FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R1BQKBNR w KQk - 0 1"]
+[PlyCount "51"]
+[EventType "match"]
+[EventRounds "8"]
+[EventCountry "USA"]
+[Source "ChessBase"]
+[SourceDate "1998.11.10"]
+
+1. e4 e5 2. Nf3 d5 3. exd5 e4 4. Qe2 Be7 5. Qxe4 Nf6 6. Qa4+ Bd7 7. Qb3 Bg4
+8. Ne5 O-O 9. Bc4 Bh5 10. d4 Re8 11. O-O Ne4 12. Qxb7 Nd7 13. Nc6 Qc8 14.
+Qxc8 Raxc8 15. Ba6 *
+
