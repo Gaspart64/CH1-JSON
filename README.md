@@ -1,5 +1,5 @@
-# Chess PGN Trainer
-Online tool that opens chess PGN files and allows the user to practice the moves.  This tool is to help with drilling, ***as efficiently as possible***, a set group of puzzles/games in an appropriately configured PGN file. Once the set is complete, the player sees how many errors they made as well as how long the set took to complete.
+# Chess JSON Trainer
+Online tool that opens chess JSON and PGN files and allows the user to practice the moves. This tool is adapted to read puzzle data from custom JSON files instead of PGN files, featuring a two-level collection browser. Once the set is complete, the player sees how many errors they made as well as how long the set took to complete.
 
 The original design goal was to help with implementing a learning approach where a player repeatedly completes the same series of puzzles, striving to reduce both errors and time needed with each round.
 The idea for this came from a recommendation by Dan Heisman (https://www.danheisman.com/recommended-books.html) on how to practice tactics puzzles.  In the article, Dan strongly recommends the idea of "repeatedly going through the book faster and faster until you can get 85%+ within 10-15 seconds". You can read about my own results following this approach using this tool [here](https://www.chess.com/forum/view/for-beginners/applying-dan-heismans-guide-to-using-chess-tactics-for-students).
@@ -11,7 +11,7 @@ Since then, the tool has grown and can now be used to:
 
 See the sample PGN files in the /examples folder for more information.  The samples include puzzles, openings for both white and black, as well as some famous games to practice.  Also included is a PGN of a slighly modified [Aman Hambleton's reset mate](https://www.youtube.com/watch?v=XAlcDWQ6iTM) for those who want to practice that sequence along with the same sequence mirrored for black pieces.
 
-[A live online copy of tool is available here](https://rodpolako.github.io/)
+[A live online copy of tool is available here](https://gaspart64.github.io/CH1-JSON/)
 
 ![screenshot](screenshot.png)
 

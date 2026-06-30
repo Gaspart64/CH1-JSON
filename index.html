@@ -2,7 +2,7 @@
 <html style="overscroll-behavior: contain;"> <!-- Prevent swiping on mobile forcing a refresh of the page -->
 
 <head>
-        <title>Chess PGN Trainer</title>
+        <title>Chess JSON Trainer</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-16">
         <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
 
@@ -54,6 +54,8 @@
         <script type="text/javascript" src="./assets/jquery.wheelcolorpicker.js"></script>
         <link type="text/css" rel="stylesheet" href="./assets/wheelcolorpicker.css" />
 
+        <script src="./assets/puzzle-manifest.js"></script>
+        <script src="./assets/json-parser.js"></script>
 </head>
 
 <body onload='initalize();' onresize="resizeBoards(); ">
@@ -63,23 +65,30 @@
                         style="text-align: right; padding-bottom: 4px;">Close &times;</button>
 
                 <div class="landscapemode">
-                        <h3>Chess PGN Trainer</h3>
+                        <h3>Chess JSON Trainer</h3>
                 </div>
                 <p>
-    <button type="button" id="openPGN_button" class="w3-button w3-round-large w3-indigo w3-hover-blue">Open PGN File</button>
-    
-    <!-- Dropdown to select a PGN file -->
-    <select id="openPGN" onchange="loadPGNFile()">
-        <option value="">Select a PGN file...</option>
-        <option value="./PGN/1.pgn">Chessimo 1</option>
-        <option value="./PGN/2.pgn">Chessimo 2</option>
-        <option value="./PGN/3.pgn">Chessimo 3</option>
-        <option value="./PGN/4.pgn">Chessimo 4</option>
-        <option value="./PGN/5.pgn">Chessimo 5</option>
-        <option value="./PGN/MorphyWhite15.pgn">Morphy as white</option>
-        <option value="./PGN/pgn1.pgn">Spaced test</option>
-        <!-- Options will be dynamically added here, either statically or via API -->
+    <button type="button" id="openPGN_button"
+            class="w3-button w3-round-large w3-indigo w3-hover-blue">
+        Open JSON / PGN File
+    </button>
+    <input type="file" id="pgn_file_input"
+           accept=".pgn,.json,text/plain,application/json,application/octet-stream"
+           style="display:none"
+           onchange="handlePGNFileUpload(event)">
+
+    <!-- Two-level puzzle browser -->
+    <select id="folderSelect" onchange="onFolderChange()">
+        <option value="">— Select a collection —</option>
     </select>
+
+    <select id="fileSelect" style="display:none"
+            onchange="document.getElementById('openPGN').value=this.value; loadPGNFile()">
+        <option value="">— Select a file —</option>
+    </select>
+
+    <!-- Hidden: keeps existing code that reads $('#openPGN').val() working -->
+    <select id="openPGN" style="display:none"></select>
     
     <select id="game-mode-select-manual" onchange="if(typeof setGameMode === 'function') setGameMode(this.value)">
         <option value="standard">Standard Mode</option>
@@ -165,8 +174,7 @@
                 <div class="w3-container w3-indigo portraitmode light-mode" id="title_header">
                         <div>
                                 <h3><button class="w3-button w3-large w3-hide-large" onclick="w3_open()"
-                                                style="float: right; padding-top: 4px;">&#9776;</button><span id='Title'>Chess PGN
-                                                Trainer</span></h3>
+                                                style="float: right; padding-top: 4px;">&#9776;</button><span id='Title'>Chess JSON Trainer</span></h3>
                         </div>
                 </div>
 
@@ -365,9 +373,17 @@
 
         <!-- Custom code for this project (needs to be here AFTER elements are built & labelled)-->
         <script src="./assets/storage.js"></script>
+        <script src="./assets/pgn-upload-handler.js"></script>
         <script src="./assets/game-modes.js"></script>
         <script src="./assets/chess-pgn-trainer.js"></script>
         <script src="./assets/piece-list.js"></script>
+        <script>
+                if ('serviceWorker' in navigator) {
+                        window.addEventListener('load', () => {
+                                navigator.serviceWorker.register('./service-worker.js');
+                        });
+                }
+        </script>
 </body>
 
 </html>

@@ -399,6 +399,10 @@ function initalize() {
         if (typeof initializeGameModes === 'function') {
                 initializeGameModes();
         }
+
+        if (typeof initPuzzleBrowser === 'function') {
+                initPuzzleBrowser();
+        }
 }
 
 /**
@@ -1251,35 +1255,58 @@ function loadPGNFile() { // eslint-disable-line no-unused-vars
     const selectedFile = document.getElementById('openPGN').value;
     
     if (selectedFile) {
-        fetch(selectedFile)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.text();
-            })
-            .then(PGNFile => {
-                try {
-                    parsePGN(PGNFile.trim());
+        if (selectedFile === 'uploaded' || selectedFile === 'uploaded_json') {
+            try {
+                const isJson = selectedFile === 'uploaded_json';
+                if (isJson) parseJSON(window.uploadedPGNContent);
+                else        parsePGN(window.uploadedPGNContent.trim());
 
-                    $('#puzzleNumber_landscape').text('1');
-                    $('#puzzleNumber_portrait').text('1');
+                $('#puzzleNumber_landscape').text('1');
+                $('#puzzleNumber_portrait').text('1');
 
-                    $('#puzzleNumbertotal_landscape').text(puzzleset.length);
-                    $('#puzzleNumbertotal_portrait').text(puzzleset.length);
+                $('#puzzleNumbertotal_landscape').text(puzzleset.length);
+                $('#puzzleNumbertotal_portrait').text(puzzleset.length);
 
-                    setDisplayAndDisabled(['#btn_starttest_landscape', '#btn_starttest_portrait'], 'block', false);
-                }
-                catch (err) {
-                    alert('There is an issue with the PGN file. Error message is as follows:\n\n' + err
-                        + '\n\nPuzzles loaded successfully before error: ' + puzzleset.length);
-                    resetGame();
-                }
-            })
-            .catch(error => {
-                alert('Error loading PGN file: ' + error);
+                setDisplayAndDisabled(['#btn_starttest_landscape', '#btn_starttest_portrait'], 'block', false);
+            }
+            catch (err) {
+                alert('There is an issue with the file. Error message is as follows:\n\n' + err
+                    + '\n\nPuzzles loaded successfully before error: ' + puzzleset.length);
                 resetGame();
-            });
+            }
+        } else {
+            fetch(selectedFile)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(PGNFile => {
+                    try {
+                        const isJson = selectedFile.endsWith('.json') || selectedFile === 'uploaded_json';
+                        if (isJson) parseJSON(PGNFile);
+                        else        parsePGN(PGNFile.trim());
+
+                        $('#puzzleNumber_landscape').text('1');
+                        $('#puzzleNumber_portrait').text('1');
+
+                        $('#puzzleNumbertotal_landscape').text(puzzleset.length);
+                        $('#puzzleNumbertotal_portrait').text(puzzleset.length);
+
+                        setDisplayAndDisabled(['#btn_starttest_landscape', '#btn_starttest_portrait'], 'block', false);
+                    }
+                    catch (err) {
+                        alert('There is an issue with the file. Error message is as follows:\n\n' + err
+                            + '\n\nPuzzles loaded successfully before error: ' + (puzzleset ? puzzleset.length : 0));
+                        resetGame();
+                    }
+                })
+                .catch(error => {
+                    alert('Error loading file: ' + error);
+                    resetGame();
+                });
+        }
 
         setCheckboxSelectability(true);
     }
