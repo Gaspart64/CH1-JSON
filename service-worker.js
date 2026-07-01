@@ -1,9 +1,11 @@
-const CACHE_NAME = 'pgn-trainer-v2';
+const CACHE_NAME = 'chess-json-trainer-v1.2.0';
 
 const PRECACHE = [
     './', './index.html',
     './assets/app.js', './assets/chess-pgn-trainer.js',
     './assets/game-modes.js', './assets/storage.js',
+    './assets/database.js', './assets/puzzle-manifest.js',
+    './assets/json-parser.js', './assets/pgn-upload-handler.js',
     './assets/piece-list.js', './assets/pagestyle.css', './assets/w3.js',
     './assets/jquery.wheelcolorpicker.js', './assets/wheelcolorpicker.css',
     './assets/cm-chessboard/assets/chessboard.css',
@@ -37,9 +39,11 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
-    const isPGN = e.request.url.endsWith('.pgn');
-    if (isPGN) {
-        // Network-first for PGN files so content updates propagate
+    const url = new URL(e.request.url);
+    const isData = url.pathname.endsWith('.pgn') || url.pathname.endsWith('.json');
+    
+    if (isData) {
+        // Network-first for data files so content updates propagate
         e.respondWith(
             fetch(e.request)
                 .then(r => { caches.open(CACHE_NAME).then(c => c.put(e.request, r.clone())); return r; })

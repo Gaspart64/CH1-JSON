@@ -36,6 +36,7 @@ let pieceThemePath;
 let game;
 let config;
 let PieceList;
+let lastCompletedSet = null; // Track the last finished JSON set for resume suggestions
 
 // Game & Performance variables
 let moveCfg;
@@ -359,12 +360,72 @@ function updateBoard(animate) {
 function handleResumeChoice(resume) {
         document.getElementById('resume-modal').style.display = 'none';
         if (resume) {
-                if (resumeSavedGame()) {
-                        console.log('Game resumed from saved state');
+                if (loadGameState()) {
+                        resumeSavedGame();
+                } else if (window.suggestedNextSet) {
+                        // Automatically load the suggested next set
+                        $('#openPGN').val(window.suggestedNextSet);
+                        loadPGNFile();
+                        // Sync the dropdowns if possible
+                        syncBrowserToPath(window.suggestedNextSet);
+                        // Auto-start the test after loading
+                        setTimeout(() => startTest(), 500);
                 }
         } else {
                 clearSavedGameState();
                 resetGame();
+        }
+}
+
+/**
+ * Helper to get the next puzzle set from the manifest
+ */
+function getNextPuzzleSet(currentPath) {
+        if (typeof PUZZLE_MANIFEST === 'undefined') return null;
+        let allFiles = [];
+        PUZZLE_MANIFEST.forEach(col => {
+                col.files.forEach(f => {
+                        allFiles.push({ label: `${col.label} ${f.label}`, path: f.path });
+                });
+        });
+        const currentIndex = allFiles.findIndex(f => f.path === currentPath);
+        if (currentIndex !== -1 && currentIndex < allFiles.length - 1) {
+                return allFiles[currentIndex + 1];
+        }
+        return null;
+}
+
+/**
+ * Helper to get a human-readable label for a path
+ */
+function getSetLabel(path) {
+        if (typeof PUZZLE_MANIFEST === 'undefined') return path;
+        for (const col of PUZZLE_MANIFEST) {
+                for (const f of col.files) {
+                        if (f.path === path) return `${col.label} ${f.label}`;
+                }
+        }
+        return path;
+}
+
+/**
+ * Sync the two-level browser dropdowns to a specific path
+ */
+function syncBrowserToPath(path) {
+        if (typeof PUZZLE_MANIFEST === 'undefined') return;
+        const folderSel = document.getElementById('folderSelect');
+        const fileSel = document.getElementById('fileSelect');
+        if (!folderSel || !fileSel) return;
+
+        for (let i = 0; i < PUZZLE_MANIFEST.length; i++) {
+                const col = PUZZLE_MANIFEST[i];
+                const fileIdx = col.files.findIndex(f => f.path === path);
+                if (fileIdx !== -1) {
+                        folderSel.value = i;
+                        onFolderChange();
+                        fileSel.value = path;
+                        break;
+                }
         }
 }
 
@@ -379,8 +440,26 @@ function initalize() {
 
         // Try to resume a saved game
         setTimeout(() => {
-                if (loadGameState()) {
-                        document.getElementById('resume-modal').style.display = 'block';
+                const savedState = loadGameState();
+                const lastCompleted = localStorage.getItem('lastCompletedSet');
+                const modal = document.getElementById('resume-modal');
+                const modalContent = modal ? modal.querySelector('p') : null;
+
+                if (savedState) {
+                        // Case 1: Active game in progress
+                        if (modalContent) modalContent.textContent = "You have a game in progress. Would you like to continue where you left off?";
+                        if (modal) modal.style.display = 'block';
+                } else if (lastCompleted && typeof getNextPuzzleSet === 'function') {
+                        // Case 2: Just finished a set, suggest the next one
+                        const nextSet = getNextPuzzleSet(lastCompleted);
+                        if (nextSet) {
+                                window.suggestedNextSet = nextSet.path;
+                                if (modalContent) {
+                                        const lastLabel = getSetLabel(lastCompleted);
+                                        modalContent.textContent = `You finished ${lastLabel}. Would you like to solve ${nextSet.label}?`;
+                                }
+                                if (modal) modal.style.display = 'block';
+                        }
                 }
         }, 500);
 
@@ -673,6 +752,12 @@ function checkAndPlayNext() {
                 setTimeout(() => {
                         // Clear saved progress as the set is finished
                         clearSavedGameState();
+
+                        // Save the completion for resume suggestions
+                        lastCompletedSet = $('#openPGN').val();
+                        if (lastCompletedSet) {
+                                localStorage.setItem('lastCompletedSet', lastCompletedSet);
+                        }
 
                         // Stop any mode-specific timers
                         if (typeof stopModeTimer === 'function') {
