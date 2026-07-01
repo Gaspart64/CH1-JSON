@@ -24,8 +24,8 @@ const PUZZLE_MANIFEST = [
     {
         label: "Collection 01",
         files: [
-            { label: "Exercise 01", path: "./Puzzles/Col01/Exe-01.json" },
-            { label: "Exercise 02", path: "./Puzzles/Col01/Exe-02.json" },
+            { label: "Exercise 01", path: "./Puzzles/Mod-01/Exe-01.json" },
+            { label: "Exercise 02", path: "./Puzzles/Mod-01/Exe-02.json" },
         ]
     },
     {
