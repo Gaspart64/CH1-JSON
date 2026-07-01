@@ -1,374 +1,1182 @@
-/* For Table format debugging */
-/*
-th {
-	border: 1px solid rgb(140, 7, 69);
+/* ============================================================
+   Chess PGN Trainer — Lichess-inspired Mobile UI
+   ============================================================ */
+
+/* ── Google Fonts ─────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap');
+
+/* ── CSS Custom Properties ────────────────────────────────── */
+:root {
+  /* Lichess dark palette */
+  --lc-bg:          #262421;
+  --lc-surface:     #302e2b;
+  --lc-surface2:    #3a3835;
+  --lc-border:      #4a4846;
+  --lc-text:        #bababa;
+  --lc-text-dim:    #7c7c7c;
+  --lc-accent:      #759900;   /* Lichess green */
+  --lc-accent-dim:  #4d6600;
+  --lc-blue:        #3692e7;
+  --lc-red:         #c14a4a;
+  --lc-orange:      #d65d0e;
+  --lc-gold:        #d79921;
+  --lc-white:       #f0f0ef;
+  --lc-radius:      4px;
+  --lc-radius-lg:   8px;
+
+  /* Board square colours (overridden at runtime) */
+  --board-light:    #f0d9b5;
+  --board-dark:     #b58863;
+
+  font-family: 'Noto Sans', 'Segoe UI', Arial, sans-serif;
+  font-size: 14px;
+  color: var(--lc-text);
 }
-*/
-
-/* Custom CSS settings for handling portrait vs. landscape modes
-*/
-@media all and (orientation: portrait) {
-	div.landscapemode {
-		display: none;
-	}
-}
-
-@media all and (orientation: landscape) {
-	div.portraitmode {
-		display: none;
-	}
-}
-
-
-.darkmode {
-	background-color: #171513 !important;
-	color: #949494;
-  }
-
-  .darkmode-control {
-	background-color: #2A2724 !important;
-	color: #949494;
-  }
-
-.ui-progressbar-value {
-	font-size: 16px;
-	font-weight: bold;
-	line-height: 18px;
-	padding-left: 0px;
-	padding-top: 6px;
-	text-align: center;
-}
-
-td {
-	/*border: 1px solid rgb(63, 181, 16);*/
-	font-size: 11pt;
+/* ── Last-Move Highlight (Lichess-style olive-yellow tint) ── */
+/* markers.css may not be loaded in older sessions; define here as override */
+.cm-chessboard .markers .marker.marker-last-move {
+  fill: #cdd16a !important;
+  stroke: none !important;
+  opacity: 0.42 !important;
 }
 
-.tdspacer1 {
-	height: 25px;
-}
+/* ── Global Reset ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
 
-.tdspacer2 {
-	height: 50px;
-}
-
-.tdspacer3 {
-	height: 75px;
-}
-
-.tdspacer4 {
-	height: 150px;
+html {
+  overscroll-behavior: contain;
+  touch-action: none;
+  height: 100%;
 }
 
 body {
-	font-family: Arial;
-	overscroll-behavior: none;
-            touch-action: none;
+  background: var(--lc-bg);
+  color: var(--lc-text);
+  font-family: inherit;
+  margin: 0;
+  padding: 0;
+  overscroll-behavior: none;
+  touch-action: none;
+  min-height: 100dvh;
+  /* Override pagestyle body padding — safe-area handled per-element */
 }
 
-.puzzlenumbers {
-	font-weight: bold;
-	font-size: 14pt;
+/* ── Orientation visibility ───────────────────────────────── */
+@media all and (orientation: portrait) {
+  div.landscapemode { display: none !important; }
+}
+@media all and (orientation: landscape) {
+  div.portraitmode  { display: none !important; }
 }
 
-.puzzletitle {
-	width: 310px;
-	max-width: 310px;
-	height: 62px;
-	max-height: 62px !important;
-	overflow-wrap: break-word; 
-	word-wrap: break-word;
+/* ── Desktop overrides ────────────────────────────────────── */
+@media (min-width: 993px) {
+  .desktop-mode div.landscapemode { display: block !important; }
+  .desktop-mode div.portraitmode { display: none !important; }
 }
 
-table {
-	/*border: 1px solid blue;*/
-	width: 80%;
+/* ── Dark mode (already default — legacy toggle support) ──── */
+.darkmode            { background-color: var(--lc-bg) !important; color: var(--lc-text) !important; }
+.darkmode-control    { background-color: var(--lc-surface) !important; color: var(--lc-text) !important; }
+.light-mode          { background-color: var(--lc-surface) !important; color: var(--lc-text) !important; }
+.light-mode-control  { background-color: var(--lc-surface2) !important; color: var(--lc-text) !important; }
+
+/* ── Sidebar ──────────────────────────────────────────────── */
+#mySidebar {
+  background: var(--lc-surface) !important;
+  color: var(--lc-text) !important;
+  border-left: 1px solid var(--lc-border) !important;
+  box-shadow: -4px 0 24px rgba(0,0,0,0.5) !important;
+  padding: 0 !important;
+  width: 280px !important;
+  font-family: inherit;
+  z-index: 500;
+  overflow-y: auto;
 }
 
-.chessboard {
-	width: 660px
+#mySidebar h3 {
+  color: var(--lc-white);
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0;
+  /* Top padding clears the Dynamic Island / status bar */
+  padding: max(16px, env(safe-area-inset-top, 16px)) 16px 16px 16px;
+  border-bottom: 1px solid var(--lc-border);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
-.center {
-	margin-left: auto;
-	margin-right: auto;
+/* Close button in sidebar */
+#mySidebar .w3-button.w3-large {
+  color: var(--lc-text-dim);
+  background: none !important;
+  border: none;
+  font-size: 1.2rem;
+  /* Match the safe-area-aware top padding of the h3 it floats inside */
+  padding: max(12px, env(safe-area-inset-top, 12px)) 16px 12px 16px;
+  float: right;
+}
+#mySidebar .w3-button.w3-large:hover { color: var(--lc-white); }
+
+/* ── Sidebar sections ─────────────────────────────────────── */
+#mySidebar > p,
+#mySidebar > div.landscapemode,
+#mySidebar > div.w3-container {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--lc-border);
 }
 
-.maxwidth {
-	width: 100%;
+/* ── Selects & inputs in sidebar ─────────────────────────── */
+#mySidebar select,
+#openPGN,
+#game-mode-select-manual {
+  width: 100%;
+  background: var(--lc-surface2);
+  color: var(--lc-text);
+  border: 1px solid var(--lc-border);
+  border-radius: var(--lc-radius);
+  padding: 8px 10px;
+  font-size: 0.85rem;
+  font-family: inherit;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%237c7c7c' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  cursor: pointer;
+  margin-bottom: 8px;
+  transition: border-color 0.15s;
+}
+#mySidebar select:focus,
+#openPGN:focus,
+#game-mode-select-manual:focus {
+  outline: none;
+  border-color: var(--lc-accent);
 }
 
-.maxheight {
-	height: 100%;
+/* ── Buttons — base ───────────────────────────────────────── */
+button, .button {
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border: none;
+  border-radius: var(--lc-radius);
+  cursor: pointer;
+  transition: background 0.15s, transform 0.08s, box-shadow 0.15s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 14px;
+  min-height: 36px;
+  text-decoration: none;
 }
 
-/* Used https://htmlcolorcodes.com/ to get colors*/
-
-.button {
-	background-color: #335BFF;
-	color: #fff;
-	border: none;
-	border-radius: 7px;
-	padding: 10px;
-	min-height: 30px;
-	min-width: 120px;
-	margin: auto;
-	display: block;
-
+/* W3 overrides for indigo buttons → Lichess green */
+.w3-indigo, .w3-button.w3-indigo {
+  background: var(--lc-accent) !important;
+  color: #fff !important;
 }
+.w3-hover-blue:hover, .w3-button.w3-indigo:hover {
+  background: #8aad00 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.35);
+}
+.w3-button.w3-indigo:active { transform: translateY(0); }
 
 button:disabled,
 button[disabled] {
-	border: 7d7d7d;
-	background-color: #7d7d7d;
-	color: #fff;
+  background: var(--lc-surface2) !important;
+  color: var(--lc-text-dim) !important;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
 }
 
-
-.button:hover {
-	background-color: #6886FF;
+/* Reset button */
+#btn_reset {
+  width: 100%;
+  margin-top: 4px;
+  background: var(--lc-surface2) !important;
+  color: var(--lc-text) !important;
+  border: 1px solid var(--lc-border) !important;
+}
+#btn_reset:hover {
+  background: var(--lc-red) !important;
+  color: #fff !important;
+  border-color: var(--lc-red) !important;
 }
 
-.button:focus {
-	outline-color: transparent;
-	outline-style: solid;
-	box-shadow: 0 0 0 2px #0839FF;
+/* Open PGN button */
+#openPGN_button {
+  width: 100%;
+  background: var(--lc-blue) !important;
+  color: #fff !important;
+  margin-bottom: 8px;
 }
+#openPGN_button:hover { background: #4da3f5 !important; }
 
-.statusarea {
-	width: 100%;
-	height: 150px;
+/* ── Checkboxes ───────────────────────────────────────────── */
+.container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--lc-text);
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: none;
+  position: relative;
+  padding-left: 32px;
+  margin-bottom: 4px;
+}
+.container input { position: absolute; opacity: 0; width: 0; height: 0; }
+
+.checkmark {
+  position: absolute;
+  top: 50%; left: 0;
+  transform: translateY(-50%);
+  width: 20px; height: 20px;
+  background: var(--lc-surface2);
+  border: 1px solid var(--lc-border);
+  border-radius: 3px;
+  transition: background 0.15s, border-color 0.15s;
+}
+.container:hover .checkmark { border-color: var(--lc-accent); }
+.container input:checked ~ .checkmark {
+  background: var(--lc-accent);
+  border-color: var(--lc-accent);
+}
+.checkmark::after {
+  content: '';
+  position: absolute;
+  display: none;
+  left: 6px; top: 2px;
+  width: 5px; height: 10px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+.container input:checked ~ .checkmark::after { display: block; }
+
+/* W3 checkboxes (sidebar options) */
+.w3-check {
+  accent-color: var(--lc-accent);
+  width: 16px; height: 16px;
+  margin-right: 6px;
+  cursor: pointer;
 }
 
 label {
-	font-weight: bold;
-	font-size: 14pt;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--lc-text);
+  cursor: pointer;
 }
 
-div {
-	font-size: 11pt;
+/* ── Main layout ──────────────────────────────────────────── */
+.w3-main {
+  background: var(--lc-bg);
+  margin-right: 0 !important;
+}
+@media (min-width: 993px) {
+  .desktop-mode .w3-main {
+    margin-right: 280px !important;
+  }
+  .desktop-mode #mySidebar {
+    display: block !important;
+  }
 }
 
-
-/* The container */
-.container {
-	display: block;
-	position: relative;
-	padding-left: 35px;
-	margin-bottom: 12px;
-	cursor: pointer;
-	font-size: 14px;
-	 -webkit-touch-callout: none;
-    -webkit-user-select: none;
-     -khtml-user-select: none;
-       -moz-user-select: none;
-        -ms-user-select: none;
-            user-select: none;
-	touch-action: none;
+/* ── Portrait header bar ──────────────────────────────────── */
+#title_header {
+  background: var(--lc-surface) !important;
+  border-bottom: 1px solid var(--lc-border) !important;
+  /* Push content below the Dynamic Island / notch on iPhone */
+  padding-top: env(safe-area-inset-top, 0px) !important;
+  padding-left: env(safe-area-inset-left, 0px) !important;
+  padding-right: env(safe-area-inset-right, 0px) !important;
+  padding-bottom: 0 !important;
 }
 
-/* Hide the browser's default checkbox */
-.container input {
-	position: absolute;
-	opacity: 0;
-	cursor: pointer;
-	height: 0;
-	width: 0;
+@media (min-width: 993px) {
+  .desktop-mode #title_header {
+    display: none !important;
+  }
 }
 
-/* Create a custom checkbox */
-.checkmark {
-	position: absolute;
-	top: 0;
-	left: 0;
-	height: 25px;
-	width: 25px;
-	background-color: #eee;
+#title_header h3 {
+    margin: 0;
+    padding: 6px 12px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--lc-white);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-/* On mouse-over, add a grey background color */
-.container:hover input~.checkmark {
-	background-color: #ccc;
+#title_header h3 #Title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+#title_header h3 #Title::before {
+  content: '♟';
+  font-size: 1.2em;
+  color: var(--lc-accent);
 }
 
-/* When the checkbox is checked, add a blue background */
-.container input:checked~.checkmark {
-	background-color: #335BFF;
+/* Hamburger menu button */
+#title_header .w3-button.w3-large {
+  background: none !important;
+  color: var(--lc-text) !important;
+  border: none;
+  font-size: 1.4rem;
+  padding: 0;
+  min-height: auto;
+  min-width: auto;
+  float: right;
 }
 
-/* Create the checkmark/indicator (hidden when not checked) */
-.checkmark:after {
-	content: "";
-	position: absolute;
-	display: none;
+/* ── Board area ───────────────────────────────────────────── */
+#board-wrapper {
+    padding: 0 !important;
+    background: var(--lc-bg);
+    position: relative;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-grow: 1 !important;
+    min-height: 0 !important;
+    width: 100% !important;
 }
 
-/* Show the checkmark when checked */
-.container input:checked~.checkmark:after {
-	display: block;
+.chessboard {
+  width: min(640px, 100%, 82vh); /* Constraint by width, height, or absolute max */
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+  display: block;
 }
 
-/* Style the checkmark/indicator */
-.container .checkmark:after {
-	left: 9px;
-	top: 5px;
-	width: 5px;
-	height: 10px;
-	border: solid white;
-	border-width: 0 3px 3px 0;
-	-webkit-transform: rotate(45deg);
-	-ms-transform: rotate(45deg);
-	transform: rotate(45deg);
+#myBoard,
+#blankBoard {
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    aspect-ratio: 1 / 1;
 }
 
+/* ── Move indicator ───────────────────────────────────────── */
+#moveturn {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--lc-text-dim);
+    padding: 2px 0 1px;
+    text-align: center;
+    min-height: 18px;
+    margin: 0;
+}
 
+/* ── Portrait control panel (below board) ─────────────────── */
+.portraitmode {
+    background: var(--lc-surface);
+    border-top: 1px solid var(--lc-border);
+    padding: 5px 10px !important;
+    padding-bottom: max(8px, env(safe-area-inset-bottom, 8px)) !important;
+    flex-shrink: 0;
+}
+
+/* Puzzle counter row */
+.portraitmode > div:first-child {
+    font-size: 0.75rem;
+    color: var(--lc-text-dim);
+    letter-spacing: 0.04em;
+    text-align: center;
+    margin-bottom: 3px;
+}
+
+.puzzlenumbers {
+  font-weight: 700;
+  font-size: 0.82rem;
+  color: var(--lc-white);
+}
+
+/* Progress bar container */
+.w3-border {
+  background: var(--lc-surface2) !important;
+  border: none !important;
+  border-radius: 3px !important;
+  overflow: hidden;
+  height: 6px !important;
+}
+
+/* Progress bar fill */
+#progressbar_portrait,
+#progressbar_landscape {
+  background: var(--lc-accent) !important;
+  height: 6px !important;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+  font-size: 0 !important; /* hide % text on small bar */
+  text-align: unset;
+  line-height: unset;
+  padding: 0;
+}
+
+/* Analyse button */
+#btn_analyze,
+#btn_analyze_landscape {
+  background: var(--lc-surface2) !important;
+  border: 1px solid var(--lc-border) !important;
+  border-radius: var(--lc-radius) !important;
+  color: var(--lc-text) !important;
+  width: 28px !important;
+  height: 24px !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  padding: 0 !important;
+  min-height: unset !important;
+  flex-shrink: 0;
+  transition: background 0.15s !important;
+}
+#btn_analyze:hover, #btn_analyze_landscape:hover {
+  background: var(--lc-surface) !important;
+  border-color: var(--lc-text-dim) !important;
+}
+
+/* Puzzle name */
+.portraitmode .w3-container.w3-center {
+    background: none !important;
+    padding: 2px 0 !important;
+}
+#puzzlename_portrait,
+#puzzlename_landscape {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--lc-white);
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+/* ── Action button row ────────────────────────────────────── */
+.w3-bar {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    margin-top: 4px;
+    flex-wrap: wrap;
+}
+
+/* Hint button */
+#btn_hint_portrait,
+#btn_hint_landscape {
+    background: var(--lc-surface2) !important;
+    color: var(--lc-text) !important;
+    border: 1px solid var(--lc-border) !important;
+    font-size: 0.75rem !important;
+    padding: 6px 10px !important;
+    min-height: 30px !important;
+    border-radius: var(--lc-radius) !important;
+    display: inline-flex !important;
+    pointer-events: auto;
+}
+
+#btn_hint_portrait[style*="visibility: hidden"],
+#btn_hint_landscape[style*="visibility: hidden"] {
+    pointer-events: none;
+}
+#btn_hint_portrait:hover:not(:disabled),
+#btn_hint_landscape:hover:not(:disabled) {
+  background: var(--lc-surface) !important;
+  border-color: var(--lc-gold) !important;
+  color: var(--lc-gold) !important;
+}
+
+/* Start / Restart buttons */
+#btn_starttest_portrait,
+#btn_starttest_landscape,
+#btn_restart_portrait,
+#btn_restart_landscape {
+    background: var(--lc-accent) !important;
+    color: #fff !important;
+    font-size: 0.78rem !important;
+    padding: 7px 16px !important;
+    min-height: 32px !important;
+    border-radius: var(--lc-radius) !important;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-weight: 700 !important;
+}
+#btn_starttest_portrait:hover:not(:disabled),
+#btn_starttest_landscape:hover:not(:disabled),
+#btn_restart_portrait:hover:not(:disabled),
+#btn_restart_landscape:hover:not(:disabled) {
+  background: #8aad00 !important;
+}
+
+/* Pause button */
+#btn_pause_portrait,
+#btn_pause_landscape {
+    background: var(--lc-surface2) !important;
+    color: var(--lc-text) !important;
+    border: 1px solid var(--lc-border) !important;
+    font-size: 0.78rem !important;
+    padding: 7px 12px !important;
+    min-height: 32px !important;
+    border-radius: var(--lc-radius) !important;
+}
+#btn_pause_portrait:hover, #btn_pause_landscape:hover {
+  background: var(--lc-border) !important;
+}
+
+/* Show Results */
+#btn_showresults {
+  background: var(--lc-blue) !important;
+  color: #fff !important;
+  font-size: 0.82rem !important;
+  padding: 9px 18px !important;
+  min-height: 38px !important;
+  border-radius: var(--lc-radius) !important;
+  font-weight: 700 !important;
+}
+
+/* ── Landscape sidebar extras ─────────────────────────────── */
+.landscapemode .w3-container.w3-center {
+  background: none !important;
+}
+
+/* Puzzle count + name in landscape sidebar */
+.landscapemode .w3-container.w3-center > div {
+  font-size: 0.8rem;
+  color: var(--lc-text-dim);
+  margin-bottom: 4px;
+}
+
+/* Woodpecker status */
+#wp-status-display {
+  background: var(--lc-surface2);
+  border: 1px solid var(--lc-border);
+  border-radius: var(--lc-radius);
+  padding: 4px 12px;
+  text-align: center;
+  margin: 0 !important;
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  min-width: 88px;
+}
+#wp-status-display div { font-size: 0.62rem; font-weight: 600; color: var(--lc-text-dim); text-transform: uppercase; line-height: 1.2; }
+#wp-status-display strong { color: var(--lc-gold); font-size: 0.88rem; }
+
+/* ── #mode-hud — shared HUD container ────────────────────── */
 /*
-CSS from pawn promotion example
--------------------------------
-*/
-#promotion-dialog {
-	display: none;
+ * #mode-hud is placed in the portrait panel (index.html).
+ * JS appends #mode-timer, #mode-lives, #mode-hints, #mode-level,
+ * #sr-stats, #streak-display into it.
+ *
+ * In PORTRAIT: renders as a horizontal flex row of compact pills.
+ * In LANDSCAPE: #mode-hud sits inside .portraitmode which is hidden,
+ *   but game-modes.js falls back to .landscapemode .w3-container.w3-center
+ *   if #mode-hud is not found — so landscape still works with the old target.
+ *   If you add id="mode-hud" to the landscape sidebar too (see PATCH_NOTES.md),
+ *   CSS below will style it as a vertical stack there.
+ */
+#mode-hud {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 4px 0 2px;
+}
+#mode-hud:empty { display: none; }
+
+/* ── Individual HUD cards ─────────────────────────────────── */
+#mode-timer,
+#mode-lives,
+#mode-hints,
+#mode-level {
+  background: var(--lc-surface2);
+  border: 1px solid var(--lc-border);
+  border-radius: var(--lc-radius);
+  padding: 4px 12px;
+  text-align: center;
+  margin: 0 !important;       /* override w3 margins */
+  display: flex !important;   /* always show when JS sets display:block */
+  flex-direction: column;
+  align-items: center;
+  min-width: 68px;
 }
 
-.ui-dialog {
-	padding: 0 !important;
-	width: 184px !important;
-	border: 0 !important;
+/* Hide when JS explicitly sets display:none */
+#mode-timer[style*="display: none"],
+#mode-lives[style*="display: none"],
+#mode-hints[style*="display: none"],
+#mode-level[style*="display: none"] {
+  display: none !important;
 }
 
-.ui-dialog-content {
-	padding: 0 !important;
-	width: 184px !important;
-	border: 0 !important;
+/* Label line inside each card */
+#mode-timer > div,
+#mode-lives > div,
+#mode-hints > div,
+#mode-level > div,
+.mode-hud-label {
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--lc-text-dim);
+  line-height: 1.2;
 }
 
-.ui-corner-all {
-	border-radius: 0;
+/* Timer value */
+#mode-timer { min-width: 88px; }
+#timer-display {
+  font-size: 1.4rem !important;
+  font-weight: 700;
+  font-feature-settings: 'tnum';
+  font-variant-numeric: tabular-nums;
+  color: var(--lc-accent) !important;
+  line-height: 1.2;
 }
 
-.ui-state-default,
-.ui-widget-content .ui-state-default,
-.ui-widget-header .ui-state-default {
-	border: 0 !important;
+/* Lives & hints values */
+#lives-display { font-size: 1rem !important; color: var(--lc-red) !important; line-height: 1.3; }
+#hints-display { font-size: 1rem !important; color: var(--lc-gold) !important; line-height: 1.3; }
+
+/* Level value */
+#level-display {
+  font-size: 0.88rem !important;
+  font-weight: 700;
+  color: var(--lc-accent) !important;
+  line-height: 1.3;
 }
 
-#promote-to .ui-selecting {
-	background: #FECA40;
+/* SR stats — full width pill */
+#sr-stats {
+  background: var(--lc-surface2);
+  border: 1px solid var(--lc-border);
+  border-radius: var(--lc-radius);
+  padding: 4px 10px;
+  font-size: 0.72rem;
+  margin: 0 !important;
+  display: flex !important;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  width: 100%;
+  text-align: center;
+}
+#sr-stats[style*="display: none"] { display: none !important; }
+
+/* Streak display */
+#streak-display {
+  font-size: 0.72rem;
+  color: var(--lc-text-dim);
+  text-align: center;
+  padding: 2px 0;
+  width: 100%;
+}
+#streak-display strong { color: var(--lc-gold); }
+
+/* ── Landscape: when #mode-hud is in the sidebar, stack vertically ─ */
+@media all and (orientation: landscape) {
+  #mode-hud {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+  }
+  #mode-timer,
+  #mode-lives,
+  #mode-hints,
+  #mode-level { min-width: 0; width: 100%; }
+  #sr-stats { flex-direction: column; gap: 2px; }
 }
 
-#promote-to .ui-selected {
-	background: #F39814;
-	color: white;
+/* ── Landscape sidebar mode HUD anchor ───────────────────── */
+#mode-hud-landscape {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+    margin: 4px 0;
 }
 
-#promote-to {
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
-	width: 184px;
-	height: 46px;
+#mode-hud-landscape:empty { display: none; }
+
+#mode-hud-landscape #mode-timer,
+#mode-hud-landscape #mode-lives,
+#mode-hud-landscape #mode-hints,
+#mode-hud-landscape #mode-level,
+#mode-hud-landscape #sr-stats,
+#mode-hud-landscape #brutal-hud,
+#mode-hud-landscape #streak-display {
+    min-width: 0;
+    width: 100%;
 }
 
-#promote-to li {
-	margin: 0;
-	padding: 0;
-	width: 46px;
-	height: 46px;
-	cursor: pointer;
-	float: left !important;
+/* ── Modals ───────────────────────────────────────────────── */
+.w3-modal {
+  background: rgba(0,0,0,0.7) !important;
+  z-index: 600;
 }
 
-.ui-dialog .ui-dialog-content {
-	padding: 0;
+.w3-modal-content {
+  background: var(--lc-surface) !important;
+  color: var(--lc-text) !important;
+  border-radius: var(--lc-radius-lg) !important;
+  border: 1px solid var(--lc-border) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6) !important;
+  max-width: 480px;
 }
 
-.no-close .ui-dialog-titlebar-close {
-	display: none;
+.w3-modal-content header,
+.w3-modal-content .w3-container.w3-indigo,
+.w3-modal-content .w3-indigo {
+  background: var(--lc-surface2) !important;
+  border-bottom: 1px solid var(--lc-border) !important;
+  border-radius: var(--lc-radius-lg) var(--lc-radius-lg) 0 0 !important;
 }
 
-
-.noTitleStuff .ui-dialog-titlebar {
-	display: none;
+.w3-modal-content h3 {
+  color: var(--lc-white);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin: 0;
+  padding: 14px 16px;
 }
 
-.promotion-piece {
-	width: 46px;
-	height: 46px;
+.w3-modal .w3-display-topright {
+  background: none !important;
+  color: var(--lc-text-dim) !important;
+  font-size: 1.2rem;
+  padding: 10px 14px;
+  line-height: 1;
+}
+.w3-modal .w3-display-topright:hover { color: var(--lc-white) !important; }
+
+/* Results modal content */
+#resmodal .w3-container { background: var(--lc-surface) !important; padding: 20px 16px; }
+#messagecomplete h2 { color: var(--lc-white); font-size: 1.1rem; margin: 0 0 12px; }
+#errors, #errorRate, #elapsedTime, #avgTime {
+  color: var(--lc-text);
+  font-size: 0.85rem;
+  padding: 3px 0;
+  border-bottom: 1px solid var(--lc-border);
+  margin-bottom: 4px;
 }
 
-.piece-name {
-	display: none;
+/* Results action buttons */
+.w3-button.w3-orange {
+  background: var(--lc-orange) !important;
+  color: #fff !important;
+  border-radius: var(--lc-radius) !important;
+}
+.w3-button.w3-deep-purple {
+  background: #5e4194 !important;
+  color: #fff !important;
+  border-radius: var(--lc-radius) !important;
 }
 
-/*
-CSS from pawn promotion example
--------------------------------
-*/
+/* Modal bar items (copy / CSV) */
+.w3-modal-content .w3-bar-item.w3-button {
+  background: var(--lc-surface2) !important;
+  color: var(--lc-text) !important;
+  border-top: 1px solid var(--lc-border);
+  font-size: 0.82rem;
+  padding: 10px 16px;
+  display: block;
+  width: 100%;
+  text-align: left;
+}
+.w3-modal-content .w3-bar-item.w3-button:hover {
+  background: var(--lc-border) !important;
+  color: var(--lc-white) !important;
+}
 
+/* Resume modal */
+#resume-modal > div {
+  background: var(--lc-surface) !important;
+  color: var(--lc-text) !important;
+  border: 1px solid var(--lc-border);
+  border-radius: var(--lc-radius-lg);
+}
 
-/* The switch - the box around the slider */
+/* ── Settings modal ───────────────────────────────────────── */
+#settings-dialog .w3-modal-content { max-width: 340px; }
+#settings-dialog table { width: 100%; color: var(--lc-text); font-size: 0.82rem; }
+#settings-dialog td { padding: 6px 4px; }
+
+#settings-dialog input[type="text"],
+#settings-dialog input[type="number"] {
+  background: var(--lc-surface2) !important;
+  color: var(--lc-text) !important;
+  border: 1px solid var(--lc-border) !important;
+  border-radius: var(--lc-radius) !important;
+  padding: 5px 8px;
+  font-size: 0.82rem;
+  font-family: inherit;
+}
+#settings-dialog input:focus {
+  outline: none;
+  border-color: var(--lc-accent) !important;
+}
+
+.w3-modal-content a.w3-bar-item.w3-button[onclick*="resetSettings"] {
+  color: var(--lc-red) !important;
+}
+
+/* ── Toggle switch ────────────────────────────────────────── */
 .switch {
-	position: relative;
-	display: inline-block;
-	width: 55px;
-	height: 30px;
-  }
-  
-  /* Hide default HTML checkbox */
-  .switch input {
-	opacity: 0;
-	width: 0;
-	height: 0;
-  }
-  
-  /* The slider */
-  .slider {
-	position: absolute;
-	cursor: pointer;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background-color: #ccc;
-	-webkit-transition: .4s;
-	transition: .4s;
-  }
-  
-  .slider:before {
-	position: absolute;
-	content: "";
-	height: 22px;
-	width: 21px;
-	left: 4px;
-	bottom: 4px;
-	background-color: white;
-	-webkit-transition: .4s;
-	transition: .4s;
-  }
-  
-  input:checked + .slider {
-	background-color: #3F51B5;
-  }
-  
-  input:focus + .slider {
-	box-shadow: 0 0 1px #3F51B5;
-  }
-  
-  input:checked + .slider:before {
-	-webkit-transform: translateX(26px);
-	-ms-transform: translateX(26px);
-	transform: translateX(26px);
-  }
-  
-  /* Rounded sliders */
-  .slider.round {
-	border-radius: 30px;
-  }
-  
-  .slider.round:before {
-	border-radius: 50%;
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 22px;
+}
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background: var(--lc-surface2);
+  border: 1px solid var(--lc-border);
+  transition: 0.25s;
+}
+.slider::before {
+  content: '';
+  position: absolute;
+  height: 14px; width: 14px;
+  left: 3px; bottom: 3px;
+  background: var(--lc-text-dim);
+  transition: 0.25s;
+}
+input:checked + .slider { background: var(--lc-accent); border-color: var(--lc-accent); }
+input:checked + .slider::before { transform: translateX(18px); background: #fff; }
+input:focus + .slider { box-shadow: 0 0 0 2px rgba(117,153,0,0.35); }
+.slider.round { border-radius: 22px; }
+.slider.round::before { border-radius: 50%; }
+
+/* ── SR Dashboard Modal ───────────────────────────────────── */
+#modal_sr_dashboard .w3-modal-content,
+#modal_wp_dashboard .w3-modal-content {
+  max-width: 820px;
+}
+
+#modal_sr_dashboard header,
+#modal_wp_dashboard header {
+  background: var(--lc-surface2) !important;
+  color: var(--lc-white) !important;
+  border-radius: var(--lc-radius-lg) var(--lc-radius-lg) 0 0;
+  border-bottom: 1px solid var(--lc-border);
+}
+
+#modal_sr_dashboard .w3-table,
+#modal_wp_dashboard .w3-table {
+  font-size: 0.78rem;
+  color: var(--lc-text);
+}
+#modal_sr_dashboard .w3-striped tr:nth-child(even),
+#modal_wp_dashboard .w3-striped tr:nth-child(even) {
+  background: var(--lc-surface2) !important;
+}
+#modal_sr_dashboard thead .w3-indigo,
+#modal_wp_dashboard thead tr:first-child {
+  background: var(--lc-surface2) !important;
+  color: var(--lc-text-dim) !important;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.w3-tag.w3-red    { background: var(--lc-red) !important; }
+.w3-tag.w3-green  { background: var(--lc-accent) !important; }
+.w3-tag.w3-blue   { background: var(--lc-blue) !important; }
+.w3-tag.w3-round  { border-radius: 12px !important; font-size: 0.75rem; padding: 3px 10px; }
+
+/* Dashboard action buttons */
+.w3-button.w3-green.w3-round.w3-small  { background: var(--lc-accent) !important; }
+.w3-button.w3-blue.w3-round.w3-small   { background: var(--lc-blue) !important; }
+.w3-button.w3-orange.w3-round.w3-small { background: var(--lc-orange) !important; }
+.w3-button.w3-red.w3-round.w3-small    { background: var(--lc-red) !important; }
+
+/* ── Sidebar bottom links ──────────────────────────────────── */
+#mySidebar a.w3-bar-item.w3-button {
+  font-size: 0.78rem;
+  color: var(--lc-text-dim) !important;
+  padding: 8px 16px;
+  display: block;
+  border-top: 1px solid var(--lc-border);
+  text-decoration: none;
+  background: none !important;
+  transition: color 0.15s;
+}
+#mySidebar a.w3-bar-item.w3-button:hover { color: var(--lc-white) !important; }
+#versionnumber { font-size: 0.68rem; color: var(--lc-text-dim); padding: 8px 12px; }
+
+/* ── Pawn promotion ───────────────────────────────────────── */
+#promotion-dialog { display: none; }
+.ui-dialog {
+  background: var(--lc-surface) !important;
+  border: 1px solid var(--lc-border) !important;
+  padding: 0 !important;
+  width: 184px !important;
+  border-radius: var(--lc-radius) !important;
+}
+.ui-dialog-content { padding: 0 !important; width: 184px !important; }
+.ui-corner-all { border-radius: 0; }
+.ui-state-default { border: 0 !important; background: var(--lc-surface) !important; }
+#promote-to .ui-selecting { background: rgba(117,153,0,0.3) !important; }
+#promote-to .ui-selected { background: var(--lc-accent) !important; color: #fff; }
+#promote-to { list-style-type: none; margin: 0; padding: 0; width: 184px; height: 46px; }
+#promote-to li { margin: 0; padding: 0; width: 46px; height: 46px; cursor: pointer; float: left; }
+.ui-dialog .ui-dialog-content { padding: 0; }
+.no-close .ui-dialog-titlebar-close { display: none; }
+.noTitleStuff .ui-dialog-titlebar { display: none; }
+.promotion-piece { width: 46px; height: 46px; }
+.piece-name { display: none; }
+
+/* ── Tables ───────────────────────────────────────────────── */
+table { width: 100%; }
+td { font-size: 0.82rem; padding: 4px 6px; }
+.tdspacer1 { height: 12px; }
+.tdspacer2 { height: 24px; }
+.tdspacer3 { height: 36px; }
+.tdspacer4 { height: 60px; }
+
+/* ── Utility ──────────────────────────────────────────────── */
+.center  { margin-left: auto; margin-right: auto; }
+.maxwidth  { width: 100%; }
+.maxheight { height: 100%; }
+
+/* ── Progress bar (landscape sidebar) ────────────────────── */
+.landscapemode .w3-border {
+  margin: 4px 0 6px;
+}
+
+/* ── Slow-puzzle & streak results ─────────────────────────── */
+#slowest-puzzles-heading { color: var(--lc-white); font-size: 0.85rem; margin-top: 12px; }
+#slowest-puzzles-list { color: var(--lc-text); font-size: 0.8rem; }
+#slowest-puzzles-list li { padding: 2px 0; border-bottom: 1px solid var(--lc-border); }
+#streakResult { color: var(--lc-gold); font-weight: 600; font-size: 0.85rem; }
+
+/* ── Mobile — narrower than 600px ────────────────────────── */
+@media (max-width: 600px) {
+  :root { font-size: 13px; }
+
+  body { padding: 0; }
+
+  /* Header */
+  #title_header h3 { padding: 8px 12px; font-size: 0.8rem; }
+
+  /* Board full-bleed — allow aspect-ratio and flex shrink to govern size */
+  .chessboard,
+  #myBoard,
+  #blankBoard {
+      width: min(100vw, calc(100dvh - 148px)) !important;
+      max-width: min(100vw, calc(100dvh - 148px)) !important;
+      margin: 0 auto !important;
+      padding: 0 !important;
   }
 
-.highlight-square {
-    box-shadow: inset 0 0 3px 3px yellow;
+  #board-wrapper { padding: 0 !important; }
+
+  /* Tighter portrait controls */
+  .portraitmode {
+    padding: 5px 10px !important;
+    padding-bottom: max(8px, env(safe-area-inset-bottom, 8px)) !important;
+  }
+
+  /* Stacked action bar */
+  .w3-bar { gap: 5px; }
+
+  #btn_starttest_portrait,
+  #btn_restart_portrait,
+  #btn_pause_portrait {
+    flex: 1;
+    padding: 9px 10px !important;
+    font-size: 0.76rem !important;
+  }
+
+  /* Modal full-width */
+  .w3-modal-content { width: 96% !important; margin: 16px auto; }
+
+  /* Sidebar full-width on mobile */
+  #mySidebar { width: 100% !important; max-width: 320px !important; }
+
+  /* Timer bigger on mobile */
+  #timer-display { font-size: 2rem !important; }
+}
+
+/* ── Tablet / desktop ────────────────────────────────────── */
+@media (min-width: 601px) and (max-width: 960px) {
+  .chessboard { max-width: 480px; }
+}
+
+@media (min-width: 961px) {
+  /* Board size is handled by main .chessboard rule */
+}
+
+/* ── Touch improvements ───────────────────────────────────── */
+@media (hover: none) and (pointer: coarse) {
+  button { -webkit-tap-highlight-color: rgba(117,153,0,0.2); }
+  button:active:not(:disabled) {
+    transform: scale(0.97) !important;
+    transition: transform 0.08s !important;
+  }
+  /* iOS zoom prevention */
+  input, select, textarea { font-size: 16px !important; }
+}
+
+/* ── Safe-area for notched phones ────────────────────────── */
+@supports (padding: max(0px)) {
+  /* Only horizontal safe areas on mobile; bottom handled per-element */
+  body {
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+  }
+}
+
+/* ── cm-chessboard board colour integration ───────────────── */
+#myBoard {
+  --cm-chessboard-white-square-color: var(--board-light);
+  --cm-chessboard-black-square-color: var(--board-dark);
+}
+
+/* ── Woodpecker dashboard specific ───────────────────────── */
+#modal_wp_dashboard header { background: #3e2e28 !important; }
+#modal_wp_dashboard header h3 { color: #e8c99a; }
+#wp-current-info { background: var(--lc-surface2) !important; border-color: var(--lc-border) !important; border-radius: var(--lc-radius); font-size: 0.8rem; }
+#wp-flagged-section h4 { color: var(--lc-orange); font-size: 0.85rem; }
+#wp-flagged-list { font-size: 0.8rem; color: var(--lc-text); }
+#wp-flagged-list li { padding: 2px 0; border-bottom: 1px solid var(--lc-border); }
+
+/* ── SR graph container ───────────────────────────────────── */
+#sr-retention-graph {
+  background: var(--lc-surface2) !important;
+  border-radius: var(--lc-radius) !important;
+  border: 1px solid var(--lc-border) !important;
+}
+#sr-retention-graph em { color: var(--lc-text-dim); font-size: 0.8rem; }
+
+/* ── SR param inputs ──────────────────────────────────────── */
+#sr-params-row td { color: var(--lc-text); font-size: 0.8rem; padding: 4px; }
+#sr-params-row input { width: 70px; }
+#sr-params-row .w3-text-grey { color: var(--lc-text-dim) !important; font-size: 0.72rem; }
+
+/* ── Graph PGN/day selects in SR dashboard ────────────────── */
+#sr-graph-pgn-select,
+#sr-graph-days-select {
+  background: var(--lc-surface2);
+  color: var(--lc-text);
+  border: 1px solid var(--lc-border);
+  border-radius: var(--lc-radius);
+  padding: 4px 8px;
+  font-size: 0.8rem;
+  font-family: inherit;
+}
+
+/* ── Panel backgrounds for W3 containers ─────────────────── */
+.w3-panel.w3-pale-yellow { background: rgba(215,153,33,0.08) !important; border-color: var(--lc-gold) !important; color: var(--lc-text) !important; }
+
+/* ── Scrollbar styling ────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--lc-surface); }
+::-webkit-scrollbar-thumb { background: var(--lc-border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--lc-text-dim); }
+
+/* ── Focus ring (accessibility) ──────────────────────────── */
+button:focus-visible,
+select:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--lc-accent);
+  outline-offset: 2px;
+}
+
+/* ── Fill the safe-area zone above the header with the same colour ─
+ * Without this a dark gap from body background shows between the
+ * status bar and the header on iPhone (Dynamic Island devices).     */
+#title_header::before {
+  content: '';
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: env(safe-area-inset-top, 0px);
+  background: var(--lc-surface);
+  z-index: 1000;
+  pointer-events: none;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Brutal Mode
+   ══════════════════════════════════════════════════════════════ */
+
+#brutal-hud {
+    width: 100%;
+    text-align: center;
+    padding: 4px 0 2px;
+}
+
+#brutal-streak-display {
+    font-weight: 700;
+    color: var(--lc-gold);
+    font-variant-numeric: tabular-nums;
+    font-size: 1rem;
+}
+
+#brutal-lap-clock {
+    font-variant-numeric: tabular-nums;
+    color: var(--lc-text-dim);
+}
+
+#brutal-laps-list {
+    font-size: 0.72rem;
+    color: var(--lc-text-dim);
+    margin-top: 4px;
+    line-height: 1.6;
+}
+
+#brutal-laps-list div + div::before {
+    content: '';
+    display: block;
+    border-top: 1px solid var(--lc-border);
+    margin: 1px 0;
+}
+
+/* ── Brutal Mode cleared toast ────────────────────────────── */
+#brutal-cleared-toast.show {
+    transform: translateX(-50%) translateY(0%);
+}
+
+/* ── Brutal Mode hint button ──────────────────────────────── */
+#brutal-hint-btn {
+    background: var(--lc-surface2);
+    color: var(--lc-gold);
+    border: 1px solid var(--lc-gold);
+    border-radius: var(--lc-radius);
+    padding: 4px 12px;
+    font-size: 0.78rem;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s;
+}
+
+#brutal-hint-btn:hover {
+    background: rgba(215, 153, 33, 0.15);
 }

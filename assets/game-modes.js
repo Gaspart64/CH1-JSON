@@ -16,7 +16,9 @@ const GAME_MODES = {
     HASTE:      'haste',
     COUNTDOWN:  'countdown',
     SPEEDRUN:   'speedrun',
-    INFINITY:   'infinity'
+    INFINITY:   'infinity',
+    WOODPECKER: 'woodpecker',
+    BRUTAL: 'brutal'
 };
 
 // Game mode configurations
@@ -60,6 +62,19 @@ const MODE_CONFIGS = {
         name: 'Spaced Repetition',
         description: 'Puzzles you struggle with appear more often. Progress is saved across sessions.',
         hasTimer: false, hasLives: false, hasHints: false, hasLevels: false
+    },
+    [GAME_MODES.WOODPECKER]: {
+        name: 'Woodpecker',
+        description: 'Complete the full set. Each cycle must be faster than the last.',
+        hasTimer: true, hasLives: false, hasHints: false, hasLevels: false
+    },
+    [GAME_MODES.BRUTAL]: {
+        name: 'Brutal Mode',
+        description: 'Solve every puzzle in a row without a single mistake or 7-second timeout. Any failure resets your streak to zero.',
+        hasTimer: false,
+        hasLives: false,
+        hasHints: false,
+        hasLevels: false
     }
 };
 
@@ -85,47 +100,292 @@ let modeState = {
 let repetitionSetStartIndex = 0;
 let repetitionSetHadError   = false;
 
+// Woodpecker mode tracking
+let wpData = null;
+let wpCurrentPgn = null;
+const WP_STORAGE_PREFIX = 'wp_data_';
+
+// ── Brutal Mode state ─────────────────────────────────────────────────────
+let brutalStreakCount   = 0;    // consecutive correct puzzle solves since last reset
+let brutalNumPuzzles   = 0;    // total puzzles in loaded PGN (set on onStartTest)
+let brutalCleared      = false; // one-way latch: true once streak reaches brutalNumPuzzles
+let brutalLapStartTime = 0;    // Date.now() when current lap started
+let brutalLapTimes     = [];   // array of lap elapsed-ms values, oldest first
+let brutalMoveTimer    = null;  // setTimeout handle for per-move 7-second clock
+let brutalClockInterval = null; // setInterval handle for the running lap display
+
+const BRUTAL_TIMEOUT_MS   = 7000;
+const BRUTAL_HINT_DELAY_MS = 750;
+
+// ---------------------------------------------------------------------------
+// Helper: get the shared HUD container (works in both portrait & landscape)
+// ---------------------------------------------------------------------------
+
+/**
+ * Returns the #mode-hud element which lives inside #mode-hud-anchor in index.html.
+ * Falls back to the landscape sidebar container for backward compatibility.
+ */
+function getModeHudContainer() {
+    // If the landscape board panel is visible (i.e., display != 'none'),
+    // we are in landscape orientation. Use the dedicated anchor.
+    const boardBg = document.getElementById('board_background');
+    if (boardBg && window.getComputedStyle(boardBg).display !== 'none') {
+        const anchor = document.getElementById('mode-hud-landscape');
+        if (anchor) return anchor;
+    }
+    // Otherwise, we are in portrait. Fall back to the original container.
+    return document.getElementById('mode-hud');
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  BRUTAL MODE
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * Start (or restart) the 7-second per-move countdown.
+ * Called on every puzzle load and every correct move.
+ * When it fires: reset streak, then 750ms later show the hint button.
+ */
+function brutalStartMoveTimer() {
+    brutalClearMoveTimer();
+    brutalMoveTimer = setTimeout(() => {
+        brutalOnTooSlow();
+        setTimeout(() => brutalShowHintButton(), BRUTAL_HINT_DELAY_MS);
+    }, BRUTAL_TIMEOUT_MS);
+}
+
+/**
+ * Cancel the per-move countdown and hide the hint button.
+ * Called on puzzle load, wrong move, and mode reset.
+ */
+function brutalClearMoveTimer() {
+    if (brutalMoveTimer) {
+        clearTimeout(brutalMoveTimer);
+        brutalMoveTimer = null;
+    }
+    brutalHideHintButton();
+}
+
+/**
+ * Called when the 7-second move timer fires.
+ * Resets streak to zero. Hint button appears 750ms after this.
+ */
+function brutalOnTooSlow() {
+    if (currentGameMode !== GAME_MODES.BRUTAL) return;
+    brutalStreakCount = 0;
+    brutalUpdateStreakDisplay();
+    brutalUpdateProgressBar();
+}
+
+/**
+ * Make the Brutal-Mode-specific hint button visible.
+ * This is NOT the main #btn_hint_landscape / #btn_hint_portrait —
+ * those stay hidden. Only #brutal-hint-btn is used.
+ */
+function brutalShowHintButton() {
+    if (currentGameMode !== GAME_MODES.BRUTAL) return;
+    const btn = document.getElementById('brutal-hint-btn');
+    if (btn) btn.style.display = 'inline-block';
+}
+
+/** Hide the Brutal Mode hint button. */
+function brutalHideHintButton() {
+    const btn = document.getElementById('brutal-hint-btn');
+    if (btn) btn.style.display = 'none';
+}
+
+/**
+ * Called when the player clicks the Brutal Mode hint button.
+ * Delegates to the existing showHint() in chess-pgn-trainer.js,
+ * which sets error=true and counts the hint as an error.
+ * Streak is already 0 at this point (reset on timeout).
+ */
+function brutalDoHint() {
+    if (typeof showHint === 'function') showHint();
+    // Mirror the hint text to the brutal hint button label since the
+    // standard hint buttons are hidden in Brutal Mode
+    const moveText = typeof moveHistory !== 'undefined' && typeof game !== 'undefined'
+        ? moveHistory[game.history().length] : '?';
+    const btn = document.getElementById('brutal-hint-btn');
+    if (btn) btn.textContent = moveText;
+    // Don't hide the button — leave the move visible until next puzzle loads
+}
+
+/**
+ * Update the streak counter display in the HUD.
+ */
+function brutalUpdateStreakDisplay() {
+    const el = document.getElementById('brutal-streak-display');
+    if (el) el.textContent = brutalStreakCount + ' / ' + brutalNumPuzzles;
+}
+
+/**
+ * Update the progress bar to reflect the current streak as a percentage.
+ * On reset (streak=0): transition is disabled so the drop is instant.
+ * On clear: bar turns green and freezes at 100%.
+ */
+function brutalUpdateProgressBar() {
+    if (brutalNumPuzzles === 0) return;
+    const pct = brutalCleared ? 100 : Math.floor(100 * brutalStreakCount / brutalNumPuzzles);
+    const pctStr = pct + '%';
+    const isReset = (brutalStreakCount === 0 && !brutalCleared);
+
+    ['progressbar_landscape', 'progressbar_portrait'].forEach(id => {
+        const bar = document.getElementById(id);
+        if (!bar) return;
+        bar.style.transition = isReset ? 'none' : 'width 0.3s ease';
+        bar.style.width = pctStr;
+        bar.style.backgroundColor = brutalCleared ? '#63F706' : '';
+    });
+}
+
+/**
+ * Build the Brutal Mode HUD and inject it into the mode HUD container.
+ * Idempotent — does nothing if the HUD already exists.
+ */
+function brutalGetOrCreateHud() {
+    const container = getModeHudContainer();
+    let hud = document.getElementById('brutal-hud');
+
+    if (hud && hud.parentNode !== container) {
+        hud.remove();
+        hud = null;
+    }
+
+    if (!hud) {
+        hud = document.createElement('div');
+        hud.id = 'brutal-hud';
+        hud.style.cssText = 'width:100%; text-align:center; padding:4px 0 2px;';
+
+        hud.innerHTML = `
+            <div style="font-size:0.85rem; margin-bottom:3px;">
+                Streak: <span id="brutal-streak-display"
+                    style="font-weight:700; color:var(--lc-gold); font-variant-numeric:tabular-nums;">
+                    0 / 0
+                </span>
+            </div>
+            <div style="font-size:0.72rem; color:var(--lc-text-dim); margin-bottom:3px;">
+                Lap: <span id="brutal-lap-clock" style="font-variant-numeric:tabular-nums;">0:00</span>
+            </div>
+            <button id="brutal-hint-btn"
+                style="display:none; padding:4px 12px; font-size:0.78rem; cursor:pointer;
+                       background:var(--lc-surface2); color:var(--lc-gold);
+                       border:1px solid var(--lc-gold); border-radius:var(--lc-radius,4px);"
+                onclick="brutalDoHint()">
+                Show Hint
+            </button>
+            <div id="brutal-laps-list"
+                style="font-size:0.72rem; color:var(--lc-text-dim); margin-top:4px; line-height:1.6;">
+            </div>
+        `;
+
+        if (container) container.appendChild(hud);
+    }
+}
+
+/** Remove the Brutal Mode HUD entirely (called on reset). */
+function brutalRemoveHud() {
+    const hud = document.getElementById('brutal-hud');
+    if (hud) hud.remove();
+}
+
+/** Update the running lap clock display (called every 500ms). */
+function brutalTickLapClock() {
+    if (currentGameMode !== GAME_MODES.BRUTAL || !brutalLapStartTime) return;
+    const elapsed = Date.now() - brutalLapStartTime;
+    const s = Math.floor(elapsed / 1000);
+    const m = Math.floor(s / 60);
+    const ss = String(s % 60).padStart(2, '0');
+    const el = document.getElementById('brutal-lap-clock');
+    if (el) el.textContent = m + ':' + ss;
+}
+
+/** Start the 500ms interval that drives the lap clock display. */
+function brutalStartLapClock() {
+    if (brutalClockInterval) clearInterval(brutalClockInterval);
+    brutalClockInterval = setInterval(brutalTickLapClock, 500);
+}
+
+/** Stop the lap clock interval. */
+function brutalStopLapClock() {
+    if (brutalClockInterval) {
+        clearInterval(brutalClockInterval);
+        brutalClockInterval = null;
+    }
+}
+
+/**
+ * Rebuild the list of completed lap times in the HUD.
+ * Most recent lap is shown at the top.
+ */
+function brutalUpdateLapsList() {
+    const el = document.getElementById('brutal-laps-list');
+    if (!el || brutalLapTimes.length === 0) return;
+    el.innerHTML = brutalLapTimes.slice().reverse().map(ms => {
+        const s = Math.floor(ms / 1000);
+        const m = Math.floor(s / 60);
+        const ss = String(s % 60).padStart(2, '0');
+        return `<div>${m}:${ss}</div>`;
+    }).join('');
+}
+
+/**
+ * Handle a completed lap (puzzle index wrapped back to 0).
+ * Records the lap time, reshuffles the puzzle order (if randomize is on),
+ * and guarantees the first puzzle of the new lap is not the same FEN as
+ * the last puzzle of the completed lap.
+ */
+function brutalCompleteLap() {
+    const lapMs = Date.now() - brutalLapStartTime;
+    brutalLapTimes.push(lapMs);
+    if (brutalLapTimes.length > 5) brutalLapTimes.shift();
+    brutalLapStartTime = Date.now();
+    brutalUpdateLapsList();
+
+    if ($('#randomizeSet').is(':checked') && typeof puzzleset !== 'undefined' && puzzleset.length > 1) {
+        const lastFen = puzzleset[PuzzleOrder[PuzzleOrder.length - 1]]?.FEN;
+        let newOrder;
+        let attempts = 0;
+        do {
+            newOrder = shuffle([...Array(puzzleset.length).keys()]);
+            attempts++;
+        } while (attempts < 10 && lastFen && puzzleset[newOrder[0]]?.FEN === lastFen);
+        PuzzleOrder = newOrder;
+    }
+}
+
+/**
+ * Full reset of all Brutal Mode state.
+ * Called from resetModeState() when entering or leaving Brutal Mode.
+ */
+function brutalReset() {
+    brutalClearMoveTimer();
+    brutalStopLapClock();
+    brutalStreakCount   = 0;
+    brutalNumPuzzles   = 0;
+    brutalCleared      = false;
+    brutalLapTimes     = [];
+    brutalLapStartTime = 0;
+    brutalRemoveHud();
+    brutalUpdateProgressBar();
+}
+
 // ---------------------------------------------------------------------------
 // ═══════════════════════════════════════════════════════════════════════════
 //  SPACED REPETITION (SM-2) — Infinity Mode
 // ═══════════════════════════════════════════════════════════════════════════
-//
-//  Each puzzle has a "card" stored in localStorage under the key
-//  'sr_cards_<pgnFile>'.  A card looks like:
-//
-//    {
-//      index:       <number>   -- index into puzzleset[]
-//      interval:    <days>     -- current review interval (starts 1)
-//      easeFactor:  <float>    -- SM-2 ease factor (starts 2.5, min 1.3)
-//      repetitions: <number>   -- consecutive correct solves
-//      nextReview:  <ms>       -- Date.now() value when due next
-//      due:         <boolean>  -- convenience flag set at queue-build time
-//    }
-//
-//  The session queue (srQueue) is an ordered list of puzzle indices built
-//  fresh each time the user presses Start.  It is stored in PuzzleOrder so
-//  the rest of chess-pgn-trainer.js works without modification.
-//
-//  Per-puzzle error tracking uses srCurrentPuzzleHadError (reset each puzzle).
-//
-//  Within-session retry: failed puzzles are reinserted ~4 positions ahead in
-//  the live queue (srQueue), not immediately next and not at the very front.
-//  Cross-session: on clean solve the SM-2 card is updated and saved.
-//  If the session ends while a puzzle is still failing, its card already has
-//  nextReview in the past so it comes back first next session.
-// ---------------------------------------------------------------------------
 
 const SR_STORAGE_PREFIX  = 'sr_cards_';
-const SR_REINSERT_AFTER  = 4;   // reinsert failed card this many puzzles later
+let SR_INITIAL_EASE   = 2.5;
+let SR_MIN_EASE       = 1.3;
+let SR_REINSERT_AFTER  = 4;
+const SR_PARAMS_KEY = 'sr_params';
+const SR_HISTORY_KEY = 'sr_history';
 
-let srCards                 = {};   // puzzleIndex → SM-2 card, persisted to localStorage
-let srCurrentPgnFile        = '';   // key suffix for localStorage
-let srCurrentPuzzleHadError = false;// true if any wrong move on the current puzzle
-let srQueue                 = [];   // live ordered list of puzzle indices for this session
-// srQueue is the source of truth within a session; PuzzleOrder is kept in sync.
-// Failed puzzles are spliced back into srQueue at position (currentPos + SR_REINSERT_AFTER).
-// srPendingRetry tracks which puzzles are currently awaiting a retry in srQueue,
-// so we don't apply SM-2 until they're solved cleanly.
+let srCards                 = {};
+let srCurrentPgnFile        = '';
+let srCurrentPuzzleHadError = false;
+let srQueue                 = [];
 let srPendingRetry          = new Set();
 
 // ── Persistence ─────────────────────────────────────────────────────────────
@@ -141,11 +401,17 @@ function srLoadCards() {
 
 function srSaveCards() {
     localStorage.setItem(srGetStorageKey(), JSON.stringify(srCards));
+    if (window.ChessDB && typeof ChessDB.srSaveAllCards === 'function' && srCurrentPgnFile) {
+        ChessDB.srSaveAllCards(srCurrentPgnFile, srCards).catch(console.error);
+    }
 }
 
 function srClearCards() {
     localStorage.removeItem(srGetStorageKey());
     srCards = {};
+    if (window.ChessDB && typeof ChessDB.srClearCards === 'function' && srCurrentPgnFile) {
+        ChessDB.srClearCards(srCurrentPgnFile).catch(console.error);
+    }
 }
 
 // ── Card initialisation ──────────────────────────────────────────────────────
@@ -155,9 +421,9 @@ function srGetCard(puzzleIndex) {
         srCards[puzzleIndex] = {
             index:       puzzleIndex,
             interval:    1,
-            easeFactor:  2.5,
+            easeFactor:  SR_INITIAL_EASE,
             repetitions: 0,
-            nextReview:  Date.now(),  // new cards are immediately due
+            nextReview:  Date.now(),
             due:         true
         };
     }
@@ -165,22 +431,16 @@ function srGetCard(puzzleIndex) {
 }
 
 // ── SM-2 update ──────────────────────────────────────────────────────────────
-//  Only called on a CLEAN solve (no errors, or cleaned up after retry).
-//  quality 4 = first-time clean; quality 1 = eventually cleaned after errors.
-//  Failed cards pending retry keep nextReview in the past so they're overdue
-//  if the session ends before they're solved.
 
 function srApplySM2(card, quality) {
     card.easeFactor = Math.max(
-        1.3,
+        SR_MIN_EASE,
         card.easeFactor + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02))
     );
 
     const msPerDay = 24 * 60 * 60 * 1000;
 
     if (quality < 3) {
-        // Shouldn't happen in normal flow (we only call SM-2 on clean solve)
-        // but guard just in case.
         card.repetitions = 0;
         card.interval    = 1;
         card.nextReview  = Date.now() - 1;
@@ -197,8 +457,6 @@ function srApplySM2(card, quality) {
 }
 
 // ── Initial queue builder ────────────────────────────────────────────────────
-//  Builds the queue at session start from card history.
-//  Order: overdue (most overdue first) → new (never seen) → future (not yet due).
 
 function srBuildInitialQueue(totalPuzzles) {
     const now    = Date.now();
@@ -256,22 +514,18 @@ function srOnPuzzleComplete() {
     const wasInRetry   = srPendingRetry.has(puzzleIndex);
 
     if (srCurrentPuzzleHadError) {
-        // Failed this attempt.
-        // 1. Mark the card as overdue right now so it survives a session close.
+        srLogResult(0, 1);
+
         const card = srGetCard(puzzleIndex);
         card.nextReview = Date.now() - 1;
         card.due        = true;
         srSaveCards();
 
-        // 2. Add to pending retry set so we know it needs a clean solve.
         srPendingRetry.add(puzzleIndex);
 
-        // 3. Reinsert into srQueue ~SR_REINSERT_AFTER positions ahead.
-        //    We insert AFTER increment because increment hasn't been bumped yet
-        //    (caller does += 1 after this returns via srAdvance → no-op path).
         const insertAt = Math.min(
             increment + SR_REINSERT_AFTER,
-            srQueue.length   // append at end if queue is short
+            srQueue.length
         );
         srQueue.splice(insertAt, 0, puzzleIndex);
         PuzzleOrder = srQueue;
@@ -281,14 +535,13 @@ function srOnPuzzleComplete() {
         return;
     }
 
-    // Clean solve.
-    // Determine quality: penalised (1) if this was a retry, full (4) if first-time clean.
+    srLogResult(1, 0);
+
     const quality = wasInRetry ? 1 : 4;
     const card    = srGetCard(puzzleIndex);
     srApplySM2(card, quality);
     srSaveCards();
 
-    // Remove from pending retry — it's been mastered for this session.
     srPendingRetry.delete(puzzleIndex);
 
     srCurrentPuzzleHadError = false;
@@ -296,32 +549,26 @@ function srOnPuzzleComplete() {
 }
 
 // ── Queue advance ─────────────────────────────────────────────────────────────
-//  Called by shouldContinueToNextPuzzle after every puzzle.
-//  Returns true if there is a next puzzle to load, false if the session is done.
 
 function srAdvance() {
     const nextIncrement = increment + 1;
 
     if (nextIncrement < srQueue.length) {
-        // Queue still has items ahead — continue normally.
         return true;
     }
 
-    // Reached the end of the queue. Check if there's anything left to do.
     const now       = Date.now();
     const hasPending = srPendingRetry.size > 0;
     const hasDueOrNew = [...Array(puzzleset.length).keys()].some(i => {
-        if (srPendingRetry.has(i)) return false; // already counted
+        if (srPendingRetry.has(i)) return false;
         const card = srCards[i];
-        return !card || card.nextReview <= now;  // new or overdue
+        return !card || card.nextReview <= now;
     });
 
     if (!hasPending && !hasDueOrNew) {
-        // Nothing left due or pending — session is genuinely complete.
         return false;
     }
 
-    // There are still pending retries or due cards — rebuild queue and continue.
     const retryList = [...srPendingRetry];
     const baseQueue = srBuildInitialQueue(puzzleset.length);
     const retrySet  = new Set(retryList);
@@ -329,20 +576,25 @@ function srAdvance() {
 
     srQueue     = [...retryList, ...remainder];
     PuzzleOrder = srQueue;
-    increment   = -1;  // caller does += 1, lands on 0
+    increment   = -1;
     return true;
 }
 
 // ── Stats display ─────────────────────────────────────────────────────────────
 
 function srUpdateStatsDisplay() {
+    const container = getModeHudContainer();
     let statsDiv = document.getElementById('sr-stats');
+
+    if (statsDiv && statsDiv.parentNode !== container) {
+        statsDiv.remove();
+        statsDiv = null;
+    }
     if (!statsDiv) {
         statsDiv = document.createElement('div');
         statsDiv.id = 'sr-stats';
         statsDiv.className = 'w3-container w3-center w3-margin-bottom w3-small';
-        const landscapeDiv = document.querySelector('.landscapemode .w3-container.w3-center');
-        if (landscapeDiv) landscapeDiv.appendChild(statsDiv);
+        if (container) container.appendChild(statsDiv);
     }
 
     if (currentGameMode !== GAME_MODES.INFINITY) {
@@ -350,29 +602,24 @@ function srUpdateStatsDisplay() {
         return;
     }
 
-    const now    = Date.now();
-    let due      = srPendingRetry.size;  // currently failing this session
-    let learned  = 0;
+    const now = Date.now();
+    let due = srPendingRetry.size;
+    let learned = 0;
     let newCount = 0;
 
     for (let i = 0; i < puzzleset.length; i++) {
-        if (srPendingRetry.has(i)) continue;  // already counted above
+        if (srPendingRetry.has(i)) continue;
         const card = srCards[i];
-        if (!card) {
-            newCount++;
-        } else if (card.nextReview <= now) {
-            due++;      // overdue from a previous session
-        } else if (card.repetitions > 0) {
-            learned++;  // at least one clean solve, scheduled for future
-        } else {
-            newCount++; // seen but no clean solve yet, not currently pending
-        }
+        if (!card)                        { newCount++; }
+        else if (card.nextReview <= now)  { due++; }
+        else if (card.repetitions > 0)    { learned++; }
+        else                              { newCount++; }
     }
 
     statsDiv.innerHTML =
-        `<span style="color:#e53935;">⏰ Due: ${due}</span> &nbsp;|&nbsp; ` +
-        `<span style="color:#43a047;">✓ Learned: ${learned}</span> &nbsp;|&nbsp; ` +
-        `<span style="color:#1e88e5;">★ New: ${newCount}</span>`;
+        `<span style="color:#c14a4a;">⏰ Due: ${due}</span> &nbsp;|&nbsp; ` +
+        `<span style="color:#759900;">✓ Learned: ${learned}</span> &nbsp;|&nbsp; ` +
+        `<span style="color:#3692e7;">★ New: ${newCount}</span>`;
     statsDiv.style.display = 'block';
 }
 
@@ -385,8 +632,22 @@ function initializeGameModes() {
     if (select) {
         select.addEventListener('change', handleModeChange);
     }
+    srLoadParams();
+    document.getElementById('sr-initial-ease').value   = SR_INITIAL_EASE;
+    document.getElementById('sr-min-ease').value        = SR_MIN_EASE;
+    document.getElementById('sr-reinsert-after').value  = SR_REINSERT_AFTER;
     resetModeState();
 }
+
+// Relocate HUD on resize
+window.addEventListener('resize', () => {
+    // Throttled update
+    if (window._hudResizeTimeout) clearTimeout(window._hudResizeTimeout);
+    window._hudResizeTimeout = setTimeout(() => {
+        if (typeof updateModeUI === 'function') updateModeUI();
+        if (currentGameMode === GAME_MODES.BRUTAL) brutalGetOrCreateHud();
+    }, 100);
+});
 
 // ---------------------------------------------------------------------------
 // Mode switching
@@ -436,6 +697,22 @@ function resetModeState() {
     repetitionSetStartIndex = 0;
     repetitionSetHadError   = false;
 
+    // Always clean up Brutal Mode resources regardless of which mode we're entering
+    brutalReset();
+
+    if (currentGameMode === GAME_MODES.WOODPECKER) {
+        if (typeof puzzleset !== 'undefined' && puzzleset.length > 0) {
+            const pgnName = ($('#openPGN').val() || 'default').replace(/[^a-zA-Z0-9]/g, '_');
+            const resumeIndex = typeof wpCheckResume === 'function' ? wpCheckResume(pgnName, puzzleset.length) : 0;
+            if (typeof wpStartCycle === 'function') {
+                wpStartCycle(pgnName, puzzleset.length);
+            }
+            if (resumeIndex > 0) {
+                increment = resumeIndex - 1;
+            }
+        }
+    }
+
     updateModeUI();
 }
 
@@ -450,26 +727,48 @@ function updateModeUI() {
     updateLevelDisplay();
     toggleModeElements(MODE_CONFIGS[currentGameMode]);
     srUpdateStatsDisplay();
+    updateWpUI();
+    const srRow = document.getElementById('sr-params-row');
+    if (srRow) srRow.style.display = currentGameMode === GAME_MODES.INFINITY ? 'table-row' : 'none';
+
+    // Show or hide the Brutal Mode HUD
+    const brutalHud = document.getElementById('brutal-hud');
+    if (brutalHud) {
+        brutalHud.style.display = currentGameMode === GAME_MODES.BRUTAL ? 'block' : 'none';
+    }
 }
 
 function updateTimerDisplay() {
     const config = MODE_CONFIGS[currentGameMode];
+    const container = getModeHudContainer();
+
     let timerDiv = document.getElementById('mode-timer');
+
     if (config.hasTimer) {
+        // Recreate if missing or in the wrong container
+        if (timerDiv && timerDiv.parentNode !== container) {
+            timerDiv.remove();
+            timerDiv = null;
+        }
         if (!timerDiv) {
             timerDiv = document.createElement('div');
             timerDiv.id = 'mode-timer';
             timerDiv.className = 'w3-container w3-center w3-margin-bottom';
             const label = document.createElement('div');
-            label.textContent = 'Time: ';
-            label.className = 'w3-text-indigo';
+            label.className = 'mode-hud-label';
             const display = document.createElement('span');
             display.id = 'timer-display';
             display.className = 'w3-text-red w3-large';
             timerDiv.appendChild(label);
             timerDiv.appendChild(display);
-            const landscapeDiv = document.querySelector('.landscapemode .w3-container.w3-center');
-            if (landscapeDiv) landscapeDiv.appendChild(timerDiv);
+            if (container) container.appendChild(timerDiv);
+        }
+        const label = timerDiv.querySelector('.mode-hud-label');
+        if (label) {
+            if (currentGameMode === GAME_MODES.SPEEDRUN)       label.textContent = 'Elapsed';
+            else if (currentGameMode === GAME_MODES.HASTE)     label.textContent = 'Time';
+            else if (currentGameMode === GAME_MODES.COUNTDOWN) label.textContent = 'Time Left';
+            else                                                label.textContent = 'Time';
         }
         const display = document.getElementById('timer-display');
         if (display) display.textContent = formatTime(modeState.timeRemaining);
@@ -481,22 +780,28 @@ function updateTimerDisplay() {
 
 function updateLivesDisplay() {
     const config = MODE_CONFIGS[currentGameMode];
+    const container = getModeHudContainer();
+
     let livesDiv = document.getElementById('mode-lives');
+
     if (config.hasLives) {
+        if (livesDiv && livesDiv.parentNode !== container) {
+            livesDiv.remove();
+            livesDiv = null;
+        }
         if (!livesDiv) {
             livesDiv = document.createElement('div');
             livesDiv.id = 'mode-lives';
             livesDiv.className = 'w3-container w3-center w3-margin-bottom';
             const label = document.createElement('div');
-            label.textContent = 'Lives: ';
-            label.className = 'w3-text-indigo';
+            label.className = 'mode-hud-label';
+            label.textContent = 'Lives';
             const display = document.createElement('span');
             display.id = 'lives-display';
             display.className = 'w3-text-red w3-large';
             livesDiv.appendChild(label);
             livesDiv.appendChild(display);
-            const landscapeDiv = document.querySelector('.landscapemode .w3-container.w3-center');
-            if (landscapeDiv) landscapeDiv.appendChild(livesDiv);
+            if (container) container.appendChild(livesDiv);
         }
         const display = document.getElementById('lives-display');
         if (display) display.textContent = '❤️'.repeat(modeState.livesRemaining);
@@ -508,22 +813,28 @@ function updateLivesDisplay() {
 
 function updateHintsDisplay() {
     const config = MODE_CONFIGS[currentGameMode];
+    const container = getModeHudContainer();
+
     let hintsDiv = document.getElementById('mode-hints');
+
     if (config.hasHints) {
+        if (hintsDiv && hintsDiv.parentNode !== container) {
+            hintsDiv.remove();
+            hintsDiv = null;
+        }
         if (!hintsDiv) {
             hintsDiv = document.createElement('div');
             hintsDiv.id = 'mode-hints';
             hintsDiv.className = 'w3-container w3-center w3-margin-bottom';
             const label = document.createElement('div');
-            label.textContent = 'Hints: ';
-            label.className = 'w3-text-indigo';
+            label.className = 'mode-hud-label';
+            label.textContent = 'Hints';
             const display = document.createElement('span');
             display.id = 'hints-display';
             display.className = 'w3-text-blue w3-large';
             hintsDiv.appendChild(label);
             hintsDiv.appendChild(display);
-            const landscapeDiv = document.querySelector('.landscapemode .w3-container.w3-center');
-            if (landscapeDiv) landscapeDiv.appendChild(hintsDiv);
+            if (container) container.appendChild(hintsDiv);
         }
         const display = document.getElementById('hints-display');
         if (display) display.textContent = '💡'.repeat(modeState.hintsRemaining);
@@ -535,22 +846,28 @@ function updateHintsDisplay() {
 
 function updateLevelDisplay() {
     const config = MODE_CONFIGS[currentGameMode];
+    const container = getModeHudContainer();
+
     let levelDiv = document.getElementById('mode-level');
+
     if (config.hasLevels) {
+        if (levelDiv && levelDiv.parentNode !== container) {
+            levelDiv.remove();
+            levelDiv = null;
+        }
         if (!levelDiv) {
             levelDiv = document.createElement('div');
             levelDiv.id = 'mode-level';
             levelDiv.className = 'w3-container w3-center w3-margin-bottom';
             const label = document.createElement('div');
-            label.textContent = 'Level: ';
-            label.className = 'w3-text-indigo';
+            label.className = 'mode-hud-label';
+            label.textContent = 'Level';
             const display = document.createElement('span');
             display.id = 'level-display';
             display.className = 'w3-text-green w3-large';
             levelDiv.appendChild(label);
             levelDiv.appendChild(display);
-            const landscapeDiv = document.querySelector('.landscapemode .w3-container.w3-center');
-            if (landscapeDiv) landscapeDiv.appendChild(levelDiv);
+            if (container) container.appendChild(levelDiv);
         }
         const display = document.getElementById('level-display');
         if (display) {
@@ -573,6 +890,8 @@ function toggleModeElements(config) {
             button.style.display = 'none';
         }
     });
+    const srBtn = document.getElementById('btn_sr_dashboard');
+    if (srBtn) srBtn.style.display = currentGameMode === GAME_MODES.INFINITY ? 'block' : 'none';
 }
 
 // ---------------------------------------------------------------------------
@@ -600,6 +919,8 @@ function startModeTimer() {
 }
 
 function stopModeTimer() {
+    brutalClearMoveTimer();
+    brutalStopLapClock();
     if (modeState.modeTimer) {
         clearInterval(modeState.modeTimer);
         modeState.modeTimer = null;
@@ -619,8 +940,13 @@ function handleTimeUp() {
 // ---------------------------------------------------------------------------
 
 function handleCorrectMove() {
+    if (currentGameMode === GAME_MODES.BRUTAL) {
+        // Restart the per-move timer on every correct move
+        brutalStartMoveTimer();
+        return;
+    }
     if (currentGameMode === GAME_MODES.REPETITION) return;
-    if (currentGameMode === GAME_MODES.INFINITY)   return;  // handled at puzzle level
+    if (currentGameMode === GAME_MODES.INFINITY)   return;
 
     modeState.totalSolved++;
     if (currentGameMode === GAME_MODES.HASTE) {
@@ -634,8 +960,22 @@ function handleIncorrectMove() {
         repetitionSetHadError = true;
         return;
     }
+    if (currentGameMode === GAME_MODES.WOODPECKER) {
+        if (wpData && wpData.currentCycle && typeof getCurrentPuzzleIndex === 'function') {
+            const idx = getCurrentPuzzleIndex();
+            wpRecordMistake(idx);
+        }
+        return;
+    }
     if (currentGameMode === GAME_MODES.INFINITY) {
         srOnError();
+        return;
+    }
+    if (currentGameMode === GAME_MODES.BRUTAL) {
+        brutalStreakCount = 0;
+        brutalClearMoveTimer();
+        brutalUpdateStreakDisplay();
+        brutalUpdateProgressBar();
         return;
     }
     if (currentGameMode === GAME_MODES.THREE) {
@@ -663,11 +1003,46 @@ function handlePuzzleComplete() {
         srOnPuzzleComplete();
         return;
     }
+    if (currentGameMode === GAME_MODES.BRUTAL) {
+        brutalClearMoveTimer();
+
+        // `error` is a global in chess-pgn-trainer.js — true if any wrong move
+        // was made on this puzzle. Only increment streak on a clean solve.
+        if (typeof error !== 'undefined' && !error) {
+            brutalStreakCount++;
+        }
+
+        brutalUpdateStreakDisplay();
+        brutalUpdateProgressBar();
+
+        // First-time clear: latch the flag and freeze the bar green
+        if (!brutalCleared && brutalNumPuzzles > 0 && brutalStreakCount >= brutalNumPuzzles) {
+            brutalCleared = true;
+            brutalUpdateProgressBar();
+            // Show cleared indicator in the streak display itself, not the puzzle name
+            const streakEl = document.getElementById('brutal-streak-display');
+            if (streakEl) streakEl.innerHTML = '💀 <strong>CLEARED</strong>';
+
+            // Trigger the celebration toast
+            const toast = document.getElementById('brutal-cleared-toast');
+            if (toast) {
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            }
+        }
+        return;
+    }
 }
 
 function handleHintUsed() {
+    if (currentGameMode === GAME_MODES.BRUTAL) {
+        // Hint in Brutal Mode is triggered by brutalDoHint(), not this hook.
+        // brutalDoHint() calls showHint() directly. Nothing to do here.
+        return;
+    }
     if (currentGameMode === GAME_MODES.INFINITY) {
-        // Treat hint as an error for spaced repetition scoring
         srOnError();
     }
     if (MODE_CONFIGS[currentGameMode].hasHints) {
@@ -684,12 +1059,28 @@ function handleHintUsed() {
 
 // ---------------------------------------------------------------------------
 // Puzzle start notification
-// Called from loadPuzzle() in chess-pgn-trainer.js via the hook below.
 // ---------------------------------------------------------------------------
 
 function handlePuzzleStart() {
+    if (currentGameMode === GAME_MODES.BRUTAL) {
+        brutalClearMoveTimer();
+        brutalStartMoveTimer();
+        brutalGetOrCreateHud();
+        brutalUpdateStreakDisplay();
+        return;
+    }
     if (currentGameMode === GAME_MODES.INFINITY) {
         srOnPuzzleStart();
+    }
+
+    if (currentGameMode === GAME_MODES.WOODPECKER && typeof wpUpdateLastPuzzleIndex === 'function') {
+        const idx = typeof getCurrentPuzzleIndex === 'function'
+            ? getCurrentPuzzleIndex()
+            : (typeof PuzzleOrder !== 'undefined' && PuzzleOrder.length > 0 ? PuzzleOrder[increment] : increment);
+        if (typeof idx === 'number') {
+            wpUpdateLastPuzzleIndex(idx);
+            updateWpUI();
+        }
     }
 }
 
@@ -698,10 +1089,24 @@ function handlePuzzleStart() {
 // ---------------------------------------------------------------------------
 
 function shouldContinueToNextPuzzle() {
+    if (currentGameMode === GAME_MODES.BRUTAL) {
+        const nextIncrement = increment + 1;
+        if (nextIncrement >= puzzleset.length) {
+            // The puzzle index is about to wrap — record the lap,
+            // then reset increment to -1 so chess-pgn-trainer.js sets it to 0.
+            brutalCompleteLap();
+            increment = -1;
+        }
+        return true; // loop never ends
+    }
+
+    if (currentGameMode === GAME_MODES.WOODPECKER) {
+        return increment + 1 < puzzleset.length;
+    }
+
     if (currentGameMode === GAME_MODES.INFINITY) {
         const hasMore = srAdvance();
         if (!hasMore) {
-            // All due and pending puzzles solved — show completion message.
             setTimeout(() => {
                 alert('Session complete! All due puzzles have been solved. Come back tomorrow for your next review.');
             }, 50);
@@ -738,17 +1143,35 @@ function shouldContinueToNextPuzzle() {
         }
     }
 
+    if (typeof isMistakeReviewActive !== 'undefined' && isMistakeReviewActive) {
+        const total = (typeof PuzzleOrder !== 'undefined' && Array.isArray(PuzzleOrder))
+            ? PuzzleOrder.length
+            : puzzleset.length;
+        return increment + 1 < total;
+    }
+
     return increment + 1 < puzzleset.length;
 }
 
 // ---------------------------------------------------------------------------
-// Hook called by startTest() in chess-pgn-trainer.js
-// Allows Infinity mode to override PuzzleOrder before the first puzzle loads.
+// Hook called by startTest()
 // ---------------------------------------------------------------------------
 
 function onStartTest() {
     if (currentGameMode === GAME_MODES.INFINITY) {
         srInitSession();
+    }
+    if (currentGameMode === GAME_MODES.BRUTAL) {
+        brutalStreakCount   = 0;
+        brutalNumPuzzles   = puzzleset.length;
+        brutalCleared      = false;
+        brutalLapTimes     = [];
+        brutalLapStartTime = Date.now();
+        modeState.isActive = true;
+        brutalGetOrCreateHud();
+        brutalUpdateStreakDisplay();
+        brutalUpdateProgressBar();
+        brutalStartLapClock();
     }
 }
 
@@ -779,6 +1202,15 @@ function getCurrentGameMode() { return currentGameMode; }
 function getModeState()       { return modeState; }
 function isHintAvailable()    { return !MODE_CONFIGS[currentGameMode].hasHints || modeState.hintsRemaining > 0; }
 
+function getCurrentPuzzleIndex() {
+    if (typeof PuzzleOrder !== 'undefined' && Array.isArray(PuzzleOrder) &&
+        typeof increment !== 'undefined') {
+        const idx = PuzzleOrder[increment];
+        if (typeof idx === 'number') return idx;
+    }
+    return typeof increment === 'number' ? increment : 0;
+}
+
 // ---------------------------------------------------------------------------
 // Module export
 // ---------------------------------------------------------------------------
@@ -793,6 +1225,380 @@ if (typeof module !== 'undefined' && module.exports) {
         handlePuzzleComplete, handlePuzzleStart, handleHintUsed,
         isHintAvailable, shouldContinueToNextPuzzle,
         onStartTest, resetModeState, updateModeUI,
-        srClearCards
+        srClearCards,
+        brutalReset,
+        brutalDoHint,
+        brutalUpdateProgressBar,
+        brutalUpdateStreakDisplay
     };
+}
+
+// ── SR Parameter Management ──────────────────────────────────────────────────
+
+function srLoadParams() {
+    const raw = localStorage.getItem(SR_PARAMS_KEY);
+    if (!raw) return;
+    const p = JSON.parse(raw);
+    if (p.initialEase)   SR_INITIAL_EASE   = p.initialEase;
+    if (p.minEase)       SR_MIN_EASE       = p.minEase;
+    if (p.reinsertAfter) SR_REINSERT_AFTER = p.reinsertAfter;
+}
+
+function srSaveParams() {
+    localStorage.setItem(SR_PARAMS_KEY, JSON.stringify({
+        initialEase: SR_INITIAL_EASE, minEase: SR_MIN_EASE, reinsertAfter: SR_REINSERT_AFTER
+    }));
+}
+
+function srUpdateParam(param, value) {
+    const v = parseFloat(value);
+    if (isNaN(v)) return;
+    if (param === 'initialEase')   SR_INITIAL_EASE   = Math.max(1.3, Math.min(3.5, v));
+    if (param === 'minEase')       SR_MIN_EASE       = Math.max(1.0, Math.min(2.0, v));
+    if (param === 'reinsertAfter') SR_REINSERT_AFTER = Math.max(1,   Math.min(10, Math.round(v)));
+    srSaveParams();
+}
+
+// ── SR Dashboard & Export/Import ──────────────────────────────────────────────
+
+function showSRDashboard() {
+    const tbody = document.getElementById('sr-dashboard-tbody');
+    const summary = document.getElementById('sr-dashboard-summary');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    const now = Date.now(), msPerDay = 86400000;
+    let totalNew = 0, totalDue = 0, totalLearned = 0;
+
+    for (let i = 0; i < puzzleset.length; i++) {
+        const card = srCards[i];
+        const name = (puzzleset[i] && puzzleset[i].Event) || `Puzzle ${i + 1}`;
+        let reps = '—', interval = '—', ease = '—', nextReview = 'New', status = '★ New';
+
+        if (card) {
+            reps = card.repetitions;
+            interval = `${card.interval}d`;
+            ease = card.easeFactor.toFixed(2);
+            const daysUntil = Math.round((card.nextReview - now) / msPerDay);
+            if (daysUntil <= 0) { nextReview = 'Due now'; status = '⏰ Due'; totalDue++; }
+            else if (daysUntil === 1) { nextReview = 'Tomorrow'; status = '✓'; totalLearned++; }
+            else { nextReview = `In ${daysUntil}d`; status = '✓'; totalLearned++; }
+        } else { totalNew++; }
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${i+1}</td><td>${name}</td><td>${reps}</td>
+                        <td>${interval}</td><td>${ease}</td><td>${nextReview}</td><td>${status}</td>`;
+        tbody.appendChild(tr);
+    }
+
+    summary.innerHTML =
+        `<span class="w3-tag w3-red w3-round">⏰ Due: ${totalDue}</span> &nbsp;` +
+        `<span class="w3-tag w3-green w3-round">✓ Learned: ${totalLearned}</span> &nbsp;` +
+        `<span class="w3-tag w3-blue w3-round">★ New: ${totalNew}</span>`;
+
+    const graphDiv = document.getElementById('sr-retention-graph');
+    if (graphDiv) graphDiv.innerHTML = srBuildSparkline();
+
+    document.getElementById('modal_sr_dashboard').style.display = 'block';
+}
+
+function srExportJSON() {
+    const data = { exportDate: new Date().toISOString(), pgnFile: srCurrentPgnFile, cards: srCards };
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }));
+    a.download = `sr-backup-${srCurrentPgnFile}-${new Date().toJSON().slice(0,10)}.json`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+}
+
+function srExportCSV() {
+    const now = Date.now(), msPerDay = 86400000;
+    const rows = [['Index','Puzzle','Repetitions','Interval (days)','Ease Factor','Next Review','Days Until Review']];
+    for (let i = 0; i < puzzleset.length; i++) {
+        const card = srCards[i];
+        const name = (puzzleset[i] && puzzleset[i].Event) || `Puzzle ${i+1}`;
+        if (card) {
+            rows.push([i+1, name, card.repetitions, card.interval, card.easeFactor.toFixed(2),
+                       new Date(card.nextReview).toLocaleDateString(),
+                       Math.round((card.nextReview - now) / msPerDay)]);
+        } else {
+            rows.push([i+1, name, 0, '—', '—', 'New', '—']);
+        }
+    }
+    const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+    a.download = `sr-data-${srCurrentPgnFile}-${new Date().toJSON().slice(0,10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+}
+
+function srImportJSON() { document.getElementById('sr-import-input').click(); }
+
+function srHandleImport(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        try {
+            const data = JSON.parse(e.target.result);
+            if (data.cards) {
+                srCards = data.cards;
+                srSaveCards();
+                alert('SR data imported. Restart session to apply.');
+                showSRDashboard();
+            } else { alert('Invalid SR backup file.'); }
+        } catch (err) { alert('Parse error: ' + err.message); }
+    };
+    reader.readAsText(file);
+    input.value = '';
+}
+
+function srBuildSparkline() {
+    const raw = localStorage.getItem(SR_HISTORY_KEY);
+    const history = raw ? JSON.parse(raw) : {};
+    const days = [];
+    for (let i = 6; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        const key = d.toJSON().slice(0, 10);
+        days.push({ label: key.slice(5), ...(history[key] || { correct: 0, incorrect: 0 }) });
+    }
+    const W = 280, H = 80, pad = 20;
+    const maxVal = Math.max(1, ...days.map(d => d.correct + d.incorrect));
+    const barW = (W - pad * 2) / days.length;
+    let svg = `<svg width="${W}" height="${H + 20}" xmlns="http://www.w3.org/2000/svg" style="font-family:sans-serif;font-size:10px">`;
+    days.forEach((d, i) => {
+        const x = pad + i * barW;
+        const cH = (d.correct / maxVal) * H;
+        const eH = (d.incorrect / maxVal) * H;
+        const tH = cH + eH;
+        if (eH > 0) svg += `<rect x="${x+1}" y="${H-tH}" width="${barW-2}" height="${eH}" fill="#c14a4a" opacity="0.8"/>`;
+        if (cH > 0) svg += `<rect x="${x+1}" y="${H-tH+eH}" width="${barW-2}" height="${cH}" fill="#759900" opacity="0.8"/>`;
+        svg += `<text x="${x+barW/2}" y="${H+14}" text-anchor="middle" fill="#7c7c7c">${d.label}</text>`;
+    });
+    svg += `<line x1="${pad}" y1="${H}" x2="${W-pad}" y2="${H}" stroke="#4a4846" stroke-width="1"/>`;
+    svg += `</svg>`;
+    return svg;
+}
+
+function srLogResult(correct, incorrect) {
+    const today = new Date().toJSON().slice(0, 10);
+    const raw = localStorage.getItem(SR_HISTORY_KEY);
+    const history = raw ? JSON.parse(raw) : {};
+    if (!history[today]) history[today] = { correct: 0, incorrect: 0 };
+    history[today].correct   += correct;
+    history[today].incorrect += incorrect;
+    localStorage.setItem(SR_HISTORY_KEY, JSON.stringify(history));
+
+    if (window.ChessDB && typeof ChessDB.srLogDay === 'function') {
+        const pgnKey = srCurrentPgnFile || 'legacy';
+        ChessDB.srLogDay(pgnKey, today, correct, incorrect).catch(console.error);
+    }
+}
+
+// ---------------------------------------------------------------------------
+// WOODPECKER METHOD MODE
+// ---------------------------------------------------------------------------
+
+function wpStorageKey(pgnName) { return WP_STORAGE_PREFIX + pgnName; }
+
+function wpLoad(pgnName) {
+    wpCurrentPgn = pgnName;
+    const raw = localStorage.getItem(wpStorageKey(pgnName));
+    wpData = raw ? JSON.parse(raw) : { cycleHistory: [], currentCycle: null };
+    return wpData;
+}
+
+function wpSave() {
+    if (!wpCurrentPgn) return;
+    localStorage.setItem(wpStorageKey(wpCurrentPgn), JSON.stringify(wpData));
+    if (window.ChessDB) {
+        const pgnKey = wpCurrentPgn;
+        try {
+            if (wpData && wpData.currentCycle && typeof ChessDB.wpSaveCurrent === 'function') {
+                ChessDB.wpSaveCurrent(pgnKey, wpData.currentCycle).catch(console.error);
+            }
+            if (wpData && Array.isArray(wpData.cycleHistory) && typeof ChessDB.wpSaveCompletedCycle === 'function') {
+                wpData.cycleHistory.forEach(cycle => {
+                    ChessDB.wpSaveCompletedCycle(pgnKey, cycle).catch(console.error);
+                });
+            }
+        } catch (e) { console.error('[Woodpecker] Failed to mirror data to IndexedDB', e); }
+    }
+}
+
+function wpGetLastCycleMs() {
+    if (!wpData || wpData.cycleHistory.length === 0) return null;
+    return wpData.cycleHistory[wpData.cycleHistory.length - 1].totalMs;
+}
+
+function wpGetCycleNumber() {
+    if (!wpData) return 1;
+    return wpData.cycleHistory.length + 1;
+}
+
+function wpStartCycle(pgnName, puzzleCount) {
+    wpLoad(pgnName);
+    if (!wpData.currentCycle) {
+        wpData.currentCycle = {
+            cycleNumber: wpGetCycleNumber(),
+            startedAt: Date.now(),
+            puzzleCount: puzzleCount,
+            mistakesThisCycle: [],
+            lastPuzzleIndex: 0
+        };
+        wpSave();
+    }
+    updateWpUI();
+}
+
+function wpRecordMistake(puzzleIndex) {
+    if (!wpData || !wpData.currentCycle) return;
+    if (!wpData.currentCycle.mistakesThisCycle.includes(puzzleIndex)) {
+        wpData.currentCycle.mistakesThisCycle.push(puzzleIndex);
+        wpSave();
+    }
+}
+
+function wpUpdateLastPuzzleIndex(index) {
+    if (!wpData || !wpData.currentCycle) return;
+    wpData.currentCycle.lastPuzzleIndex = index;
+    wpSave();
+}
+
+function wpCompleteCycle() {
+    if (!wpData || !wpData.currentCycle) return null;
+    const elapsed = Date.now() - wpData.currentCycle.startedAt;
+    const completedCycle = {
+        cycleNumber: wpData.currentCycle.cycleNumber,
+        totalMs: elapsed,
+        puzzleCount: wpData.currentCycle.puzzleCount,
+        mistakeCount: wpData.currentCycle.mistakesThisCycle.length,
+        completedAt: new Date().toISOString().split('T')[0],
+        mistakeIndexes: wpData.currentCycle.mistakesThisCycle
+    };
+    wpData.cycleHistory.push(completedCycle);
+    wpData.currentCycle = null;
+    wpSave();
+
+    if (window.ChessDB && typeof ChessDB.wpSaveCompletedCycle === 'function') {
+        const pgnKey = wpCurrentPgn;
+        ChessDB.wpSaveCompletedCycle(pgnKey, completedCycle)
+            .then(() => { if (typeof ChessDB.wpClearCurrent === 'function') return ChessDB.wpClearCurrent(pgnKey); })
+            .catch(console.error);
+    }
+    return completedCycle;
+}
+
+function wpCheckResume(pgnName, puzzleCount) {
+    wpLoad(pgnName);
+    if (wpData.currentCycle) {
+        const elapsed = msToHMS(Date.now() - wpData.currentCycle.startedAt);
+        const confirmed = confirm(
+            `You have an in-progress Cycle ${wpData.currentCycle.cycleNumber} ` +
+            `(elapsed: ${elapsed}, at puzzle ${wpData.currentCycle.lastPuzzleIndex + 1}/${puzzleCount}). Resume it?`
+        );
+        if (confirmed) return wpData.currentCycle.lastPuzzleIndex;
+        else { wpData.currentCycle = null; wpSave(); }
+    }
+    return 0;
+}
+
+function msToHMS(ms) {
+    const s = Math.floor(ms / 1000);
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const sec = s % 60;
+    return [h, m, sec].map(v => String(v).padStart(2, '0')).join(':');
+}
+
+function updateWpUI() {
+    const isWp = currentGameMode === GAME_MODES.WOODPECKER;
+    const container = getModeHudContainer();
+    let display = document.getElementById('wp-status-display');
+
+    if (isWp) {
+        if (display && display.parentNode !== container) {
+            display.remove();
+            display = null;
+        }
+        if (!display) {
+            display = document.createElement('div');
+            display.id = 'wp-status-display';
+            display.className = 'w3-container w3-center w3-small w3-padding w3-margin-bottom';
+            display.innerHTML = `
+                <div>🪵 Cycle <strong id="wp-cycle-number">1</strong></div>
+                <div id="wp-prev-time-row" style="display:none;">
+                    Target: <strong id="wp-target-time">--:--:--</strong>
+                </div>
+                <div>Mistakes: <strong id="wp-mistake-count">0</strong></div>
+            `;
+            if (container) container.appendChild(display);
+        }
+        
+        if (wpData) {
+            const cycleEl = document.getElementById('wp-cycle-number');
+            if (cycleEl) cycleEl.textContent = wpGetCycleNumber();
+
+            const lastMs = wpGetLastCycleMs();
+            const prevRow = document.getElementById('wp-prev-time-row');
+            const targetEl = document.getElementById('wp-target-time');
+            if (lastMs && prevRow && targetEl) {
+                prevRow.style.display = 'block';
+                targetEl.textContent = msToHMS(lastMs);
+            }
+
+            const mistakeEl = document.getElementById('wp-mistake-count');
+            if (mistakeEl && wpData.currentCycle) {
+                mistakeEl.textContent = wpData.currentCycle.mistakesThisCycle.length;
+            }
+        }
+        display.style.display = 'block';
+    } else if (display) {
+        display.style.display = 'none';
+    }
+}
+
+function wpBuildCycleChart(history) {
+    if (!history || history.length === 0) return '';
+    const W = 300, H = 80, pad = 4;
+    const maxMs = Math.max(...history.map(c => c.totalMs));
+    const barW = Math.floor((W - pad * (history.length + 1)) / history.length);
+
+    const bars = history.map((c, i) => {
+        const barH = Math.round((c.totalMs / maxMs) * (H - 20));
+        const x = pad + i * (barW + pad);
+        const y = H - barH - 16;
+        const color = i === 0 ? '#888' : c.totalMs < history[i - 1].totalMs ? '#759900' : '#c14a4a';
+        return `
+            <rect x="${x}" y="${y}" width="${barW}" height="${barH}" fill="${color}" rx="2"/>
+            <text x="${x + barW / 2}" y="${H - 2}" text-anchor="middle"
+                  font-size="9" fill="#7c7c7c">${c.cycleNumber}</text>
+        `;
+    }).join('');
+
+    return `<svg width="${W}" height="${H}" style="display:block;margin:auto;">
+        ${bars}
+        <text x="${W/2}" y="${H}" text-anchor="middle" font-size="9" fill="#7c7c7c">Cycle</text>
+    </svg>`;
+}
+
+function wpPopulateFlaggedList(mistakeIndexes) {
+    const section = document.getElementById('wp-flagged-section');
+    const list = document.getElementById('wp-flagged-list');
+    if (!section || !list || !mistakeIndexes || mistakeIndexes.length === 0) {
+        if (section) section.style.display = 'none';
+        return;
+    }
+    section.style.display = 'block';
+    list.innerHTML = mistakeIndexes.map(idx => {
+        let name = `Puzzle ${idx + 1}`;
+        if (typeof puzzleset !== 'undefined' && puzzleset[idx]) {
+            const puzzle = puzzleset[idx];
+            if (puzzle && puzzle.Event) {
+                name = puzzle.Event.replace(/<br\s*\/?>/gi, ' ').replace(/<\/?[^>]+(>|$)/g, '');
+            }
+        }
+        return `<li>${name}</li>`;
+    }).join('');
 }

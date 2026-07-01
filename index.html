@@ -3,12 +3,25 @@
 
 <head>
         <title>Chess JSON Trainer</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-16">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
         <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+        <link rel="manifest" href="./manifest.json">
+        <meta name="theme-color" content="#3f51b5">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <meta name="apple-mobile-web-app-title" content="JSON Trainer">
+        <link rel="apple-touch-icon" href="img/icon-192.png">
 
         <!-- Needed external libraries -->
 
-        <!-- CSS Scheme for application overall (everything except the chessboard itself) -->
+        <!-- Google Fonts (Noto Sans — same as Lichess) -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+        <!-- App styles -->
         <link rel="stylesheet" href="./assets/pagestyle.css">
 
         <!-- W3 Responsive Web Design -->
@@ -17,28 +30,23 @@
         <!-- Support functions for the w3 template -->
         <script src="./assets/w3.js"></script>
 
-        <!-- JQuery (required for chessboard.js) -->
+        <!-- JQuery (used for UI interactions, settings dialogs, and promotion popup) -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"
                 integrity="sha384-NXgwF8Kv9SSAr+jemKKcbvQsz+teULH/a5UNJvZc6kP47hZgl62M1vGnw6gHQhb1"
                 crossorigin="anonymous"></script>
 
         <!-- JQuery UI (needed for showing the pawn promotion dialog) -->
         <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css"
-                integrity="sha384-vIQIPaHJRqkO8xhnLxSZ0rHF6LyiWXbLF3grsa9pv9yDFyOPGrE1teHOuRNMJoZs" crossorigin="anonymous">
+                integrity="sha384-vIQIPaHJRqkO8xhnLxSZ0rHF6LyiWXbLF3grsa9pv9yDFyOPGrE1teHOuRNMJoZs"
+                crossorigin="anonymous">
 
-        <!-- <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script> -->
         <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"
                 integrity="sha384-EZJUCwX9EfOmrML5/1WejmhFx/azi54nnVfOndPu+VTQKOHabXXC9eS7VFdkLz0V"
                 crossorigin="anonymous"></script>
 
-        <!-- Chessboard.css -->
-        <link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css"
-                integrity="sha384-q94+BZtLrkL1/ohfjR8c6L+A6qzNH9R2hBLwyoAfu3i/WCvQjzL2RQJ3uNHDISdU" crossorigin="anonymous">
-
-        <!-- Chessboard.js -->
-        <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"
-                integrity="sha384-8Vi8VHwn3vjQ9eUHUxex3JSN/NFqUg3QbPyX8kWyb93+8AC/pPWTzj+nHtbC5bxD"
-                crossorigin="anonymous"></script>
+        <!-- cm-chessboard CSS -->
+        <link rel="stylesheet" href="./assets/cm-chessboard/assets/chessboard.css">
+        <link rel="stylesheet" href="./assets/cm-chessboard/assets/extensions/markers/markers.css">
 
         <!-- chess.js -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.2/chess.js"
@@ -46,9 +54,7 @@
                 crossorigin="anonymous"></script>
 
         <!-- PGN Parser library -->
-        <script src="https://cdn.jsdelivr.net/npm/@mliebelt/pgn-parser"
-                
-                crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@mliebelt/pgn-parser" crossorigin="anonymous"></script>
 
         <!-- Color Picker library -->
         <script type="text/javascript" src="./assets/jquery.wheelcolorpicker.js"></script>
@@ -58,7 +64,7 @@
         <script src="./assets/json-parser.js"></script>
 </head>
 
-<body onload='initalize();' onresize="resizeBoards(); ">
+<body>
         <div class="w3-sidebar w3-bar-block w3-collapse w3-card w3-animate-right light-mode"
                 style="width:275px;right: 0px; padding-left: 8px;" id="mySidebar">
                 <button onclick="w3_close()" class="w3-bar-item w3-button w3-large w3-hide-large w3-hover-none"
@@ -68,40 +74,41 @@
                         <h3>Chess JSON Trainer</h3>
                 </div>
                 <p>
-    <button type="button" id="openPGN_button"
-            class="w3-button w3-round-large w3-indigo w3-hover-blue">
-        Open JSON / PGN File
-    </button>
-    <input type="file" id="pgn_file_input"
-           accept=".pgn,.json,text/plain,application/json,application/octet-stream"
-           style="display:none"
-           onchange="handlePGNFileUpload(event)">
+                        <button type="button" id="openPGN_button"
+                                class="w3-button w3-round-large w3-indigo w3-hover-blue">Open JSON / PGN File</button>
+                        <input type="file" id="pgn_file_input"
+                                accept=".pgn,.json,text/plain,application/json,application/octet-stream"
+                                style="display:none"
+                                onchange="handlePGNFileUpload(event)">
 
-    <!-- Two-level puzzle browser -->
-    <select id="folderSelect" onchange="onFolderChange()">
-        <option value="">— Select a collection —</option>
-    </select>
+                        <!-- Two-level puzzle browser -->
+                        <select id="folderSelect" onchange="onFolderChange()">
+                            <option value="">— Select a collection —</option>
+                        </select>
 
-    <select id="fileSelect" style="display:none"
-            onchange="$('#openPGN').val(this.value); loadPGNFile()">
-        <option value="">— Select a file —</option>
-    </select>
+                        <select id="fileSelect" style="display:none"
+                                onchange="$('#openPGN').val(this.value); loadPGNFile()">
+                            <option value="">— Select a file —</option>
+                        </select>
 
-    <!-- Hidden: keeps existing code that reads $('#openPGN').val() working -->
-    <input type="hidden" id="openPGN">
-    
-    <select id="game-mode-select-manual" onchange="if(typeof setGameMode === 'function') setGameMode(this.value)">
-        <option value="standard">Standard Mode</option>
-        <option value="repetition">Repetition Mode</option>
-        <option value="three">Three Mode</option>
-        <option value="haste">Haste Mode</option>
-        <option value="countdown">Countdown Mode</option>
-        <option value="speedrun">Speedrun Mode</option>
-        <option value="infinity">Infinity Mode</option>
-    </select>
+                        <!-- Hidden: keeps existing code that reads $('#openPGN').val() working -->
+                        <input type="hidden" id="openPGN">
 
-    <button id="btn_reset" class="w3-button w3-round-large w3-indigo w3-hover-blue">Reset</button>
-</p>
+                        <select id="game-mode-select-manual"
+                                onchange="if(typeof setGameMode === 'function') setGameMode(this.value)">
+                                <option value="standard">Standard Mode</option>
+                                <option value="repetition">Repetition Mode</option>
+                                <option value="three">Three Mode</option>
+                                <option value="haste">Haste Mode</option>
+                                <option value="countdown">Countdown Mode</option>
+                                <option value="speedrun">Speedrun Mode</option>
+                                <option value="infinity">Spaced Repetition Mode</option>
+                                <option value="woodpecker">🪵 Woodpecker</option>
+                                <option value="brutal">💀 Brutal Mode</option>
+                        </select>
+
+                        <button id="btn_reset" class="w3-button w3-round-large w3-indigo w3-hover-blue">Reset</button>
+                </p>
 
                 <input class="w3-check" type="checkbox" id="playbothsides" onchange="confirmOnlyOneOption();"><label
                         for="playbothsides"> Play both
@@ -109,42 +116,56 @@
                 <input class="w3-check" type="checkbox" id="playoppositeside" onchange="confirmOnlyOneOption();"><label
                         for="playoppositeside"> Play
                         opposite side</label><br>
-                <input class="w3-check" type="checkbox" id="randomizeSet"><label for="randomizeSet"> Randomize</label><br>
+                <input class="w3-check" type="checkbox" id="randomizeSet"><label for="randomizeSet">
+                        Randomize</label><br>
                 <input class="w3-check" type="checkbox" id="flipped"><label for="flipped"> Flipped</label><br>
                 <input class="w3-check" type="checkbox" id="analysisboard"><label for="analysisboard"> Analysis
                         Board</label><br>
                 <p></p>
 
-                <!-- Layout when screen is in Landscape mode (like tablet or normal desktop) 
-                                Basically, these will show up in the sidebar which will be displayed when in landscape
-                                Otherwise, in Portrait, these will be below the board since they may be needed during a run.
-                                -->
                 <div class="landscapemode">
                         <div class="w3-container w3-center">
                                 <div>Puzzle <span id="puzzleNumber_landscape" class="puzzlenumbers"></span> of <span
                                                 id="puzzleNumbertotal_landscape" class="puzzlenumbers"></span>
                                 </div>
 
-                                <div class="w3-border">
-                                        <div id="progressbar_landscape" class="w3-indigo" style="height:24px;width:0%"></div>
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                        <div class="w3-border" style="flex: 1;">
+                                                <div id="progressbar_landscape" class="w3-indigo"
+                                                        style="height:24px;width:0%">
+                                                </div>
+                                        </div>
+                                        <button id="btn_analyze_landscape" title="Analyse on Lichess"
+                                                onclick="openAnalysis()" style="flex-shrink: 0; background: rgba(0,0,0,0.15); border: none;
+                                                       border-radius: 6px; width: 32px; height: 24px; font-size: 15px;
+                                                       line-height: 24px; text-align: center; cursor: pointer;
+                                                       transition: background 0.2s;">
+                                                🔍
+                                        </button>
                                 </div>
+
+                                <div id="mode-hud-landscape" style="margin: 4px 0;"></div>
 
                                 <div class="w3-container w3-center">
                                         Name: <br> <span id="puzzlename_landscape" style="font-weight: bold;"></span>
                                 </div>
                                 <p></p>
 
-                                <div class="w3-bar">
-                                        <button id="btn_hint_landscape" class="w3-button w3-round-large w3-indigo w3-hover-blue"
-                                                disabled="true" style="display: none">Hint</button>
+                                <div class="w3-bar" style="min-height: 38px;">
+                                        <button id="btn_hint_landscape"
+                                                class="w3-button w3-round-large w3-indigo w3-hover-blue" disabled="true"
+                                                style="visibility: hidden;">Hint</button>
                                 </div>
 
                                 <div class="w3-bar">
-                                        <button id="btn_starttest_landscape" class="w3-button w3-round-large w3-indigo w3-hover-blue"
+                                        <button id="btn_starttest_landscape"
+                                                class="w3-button w3-round-large w3-indigo w3-hover-blue"
                                                 disabled="true">Start</button>
-                                        <button id="btn_pause_landscape" class="w3-button w3-round-large w3-indigo w3-hover-blue"
+                                        <button id="btn_pause_landscape"
+                                                class="w3-button w3-round-large w3-indigo w3-hover-blue"
                                                 style="display: none">Pause</button>
-                                        <button id="btn_restart_landscape" class="w3-button w3-round-large w3-indigo w3-hover-blue"
+                                        <button id="btn_restart_landscape"
+                                                class="w3-button w3-round-large w3-indigo w3-hover-blue"
                                                 style="display: none">Restart</button>
                                 </div>
                         </div>
@@ -152,8 +173,8 @@
 
                 <div class="w3-container w3-center">
                         <div class="w3-bar">
-                                <button id="btn_showresults" class="w3-button w3-round-large w3-indigo w3-hover-blue" disabled="true"
-                                        style="display: none">Show Results</button>
+                                <button id="btn_showresults" class="w3-button w3-round-large w3-indigo w3-hover-blue"
+                                        disabled="true" style="display: none">Show Results</button>
                         </div>
                 </div>
 
@@ -162,6 +183,8 @@
                 </div>
 
                 <div style="position: absolute;bottom: 0; left:0; padding-left: 8px; padding-bottom: 8px;">
+                        <a id="btn_sr_dashboard" class="w3-bar-item w3-button" onclick="showSRDashboard();"
+                                style="display:none;">📊 SR Dashboard</a>
                         <a class="w3-bar-item w3-button" onclick="showSettings();">Settings &#x26ED;</a>
                         <a href="https://github.com/rodpolako/Chess-PGN-Trainer" class="w3-bar-item w3-button"
                                 target="_blank">Github Page <img id='img_logo' src="./img/github-mark.svg" height="12px"
@@ -169,26 +192,36 @@
                 </div>
         </div>
 
-        <div class="w3-main">
+        <div class="w3-main" style="display: flex; flex-direction: column; height: 100dvh; overflow: hidden;">
 
-                <div class="w3-container w3-indigo portraitmode light-mode" id="title_header">
+                <div class="w3-container w3-center portraitmode light-mode" id="title_header" style="flex-shrink: 0;">
                         <div>
-                                <h3><button class="w3-button w3-large w3-hide-large" onclick="w3_open()"
-                                                style="float: right; padding-top: 4px;">&#9776;</button><span id='Title'>Chess JSON Trainer</span></h3>
+                                <h3>
+                                    <span id='Title'>Chess JSON Trainer</span>
+                                    <button class="w3-button w3-large w3-hide-large" onclick="w3_open()"
+                                            style="padding: 0; min-height: auto; min-width: auto;">&#9776;</button>
+                                </h3>
                         </div>
                 </div>
 
-                <div class="w3-container w3-center" style="border: 4px; display: flexbox;">
+                <div class="w3-container w3-center"
+                        style="border: 4px; display: flex; flex-direction: column; flex-grow: 1; justify-content: flex-start; min-height: 0; padding: 0;">
 
                         <!-- Resume Game Modal -->
-                        <div id="resume-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999;">
-                                <div style="background:#fff; border-radius:10px; padding:32px 36px; max-width:380px; width:90%; text-align:center; box-shadow:0 8px 32px rgba(0,0,0,0.3); position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);">
+                        <div id="resume-modal"
+                                style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999;">
+                                <div
+                                        style="background:#fff; border-radius:10px; padding:32px 36px; max-width:380px; width:90%; text-align:center; box-shadow:0 8px 32px rgba(0,0,0,0.3); position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);">
                                         <div style="font-size:2.5em; margin-bottom:12px;">♟️</div>
                                         <h2 style="margin:0 0 8px 0; font-size:1.4em; color:#333;">Resume Game?</h2>
-                                        <p style="color:#666; margin:0 0 24px 0; font-size:0.95em;">You have a game in progress. Would you like to continue where you left off?</p>
+                                        <p style="color:#666; margin:0 0 24px 0; font-size:0.95em;">You have a game in
+                                                progress. Would you like to continue where you left off?</p>
                                         <div style="display:flex; gap:12px; justify-content:center;">
-                                                <button onclick="handleResumeChoice(true)" style="background:#3d6b9e; color:#fff; border:none; border-radius:6px; padding:10px 28px; font-size:1em; cursor:pointer;">Resume</button>
-                                                <button onclick="handleResumeChoice(false)" style="background:#e0e0e0; color:#333; border:none; border-radius:6px; padding:10px 28px; font-size:1em; cursor:pointer;">Start New</button>
+                                                <button onclick="handleResumeChoice(true)"
+                                                        style="background:#3d6b9e; color:#fff; border:none; border-radius:6px; padding:10px 28px; font-size:1em; cursor:pointer;">Resume</button>
+                                                <button onclick="handleResumeChoice(false)"
+                                                        style="background:#e0e0e0; color:#333; border:none; border-radius:6px; padding:10px 28px; font-size:1em; cursor:pointer;">Start
+                                                        New</button>
                                         </div>
                                 </div>
                         </div>
@@ -215,173 +248,173 @@
                                 </div>
                         </div>
 
-                        <!-- Resume Game Modal -->
-                        <div id="resume-modal" class="w3-modal" style="z-index: 1000;">
-                                <div class="w3-modal-content light-mode" style="width: 300px; margin-top: 100px;">
-                                        <header class="w3-container w3-indigo">
-                                                <h3>Resume Game?</h3>
-                                        </header>
-                                        <div class="w3-container w3-center" style="padding: 16px;">
-                                                <p>A saved game was found. Would you like to resume or start a new game?</p>
-                                                <div class="w3-bar">
-                                                        <button onclick="handleResumeChoice(true)" class="w3-button w3-round-large w3-indigo w3-hover-blue">Resume</button>
-                                                        <button onclick="handleResumeChoice(false)" class="w3-button w3-round-large w3-red w3-hover-orange">Start New</button>
-                                                </div>
-                                        </div>
-                                </div>
-                        </div>
-
                         <!-- Main board window -->
-                        <div class="w3-container w3-center" style="padding:4px; display: flexbox;">
+                        <div class="w3-container w3-center"
+                                style="padding:4px; display: flex; flex-direction: column; flex-grow: 1; min-height: 0;">
 
                                 <!-- The boards -->
-                                <div id="blankBoard" class="chessboard" style="max-width: 100%; display: none; margin: 0 auto;"></div>
-                                <div id="myBoard" class="chessboard" style="max-width: 100%; display: block; margin: 0 auto;"></div>
+                                <div id="blankBoard"
+                                        style="max-width: 100%; aspect-ratio: 1/1; display: none; margin: 0 auto; background: #eee; border-radius: 4px;">
+                                </div>
+                                <div id="myBoard"
+                                        style="max-width: 100%; aspect-ratio: 1/1; display: block; margin: 0 auto;"></div>
 
                                 <!-- The move indicator -->
-                                <div id="moveturn" style="text-align: center;"></div>
+                                <div id="moveturn" style="text-align: center; margin-top: 4px; font-weight: 500;"></div>
 
                                 <!-- Pawn promotion screen -->
                                 <div id="promotion-dialog" style="display: none;">
                                         <ol id="promote-to">
                                                 <li class="ui-state-default"><span class="piece-name">q</span><img
-                                                                class="promotion-piece-q promotion-piece" /></li>
+                                                                class="promotion-piece promotion-piece-q" src=""></li>
                                                 <li class="ui-state-default"><span class="piece-name">r</span><img
-                                                                class="promotion-piece-r promotion-piece" /></li>
+                                                                class="promotion-piece promotion-piece-r" src=""></li>
                                                 <li class="ui-state-default"><span class="piece-name">n</span><img
-                                                                class="promotion-piece-n promotion-piece" /></li>
+                                                                class="promotion-piece promotion-piece-n" src=""></li>
                                                 <li class="ui-state-default"><span class="piece-name">b</span><img
-                                                                class="promotion-piece-b promotion-piece" /></li>
+                                                                class="promotion-piece promotion-piece-b" src=""></li>
                                         </ol>
-                                </div>
-
-                                <!-- Settings screen -->
-                                <div id="settings-dialog" class="w3-modal">
-                                        <div class="w3-modal-content light-mode" style="width: 300px">
-
-                                                <header class="w3-container w3-indigo">
-                                                        <span onclick="document.getElementById('settings-dialog').style.display='none'"
-                                                                class="w3-button w3-display-topright">&times;</span>
-                                                        <h3>Settings</h3>
-                                                </header>
-
-                                                <table style="width: 100%;margin: 4px;">
-                                                        <tr>
-                                                                <td colspan="2" style="text-align: left;"><label for="Light-Color">Square Color</label>
-                                                                </td>
-                                                        </tr>
-                                                        <tr>
-                                                                <td>Light</td>
-                                                                <td>Dark</td>
-                                                        </tr>
-                                                        <tr>
-                                                                <td><input id='Light-Color' class="light-mode-control" type="text" maxlength="7"
-                                                                                size="7" data-wheelcolorpicker onchange="changecolor();" /></td>
-
-                                                                <td><input id='Dark-Color' class="light-mode-control" type="text" maxlength="7" size="7"
-                                                                                data-wheelcolorpicker onchange="changecolor();" />
-                                                                </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                                <td>&nbsp;</td>
-                                                        </tr>
-
-                                                        <tr>
-                                                                <td style="text-align: left; width: 150px;"><label for="piece-select">Piece
-                                                                                Style</label> </td>
-
-                                                                <td>
-                                                                        <select name="pieces" class="light-mode-control" id="piece-select"
-                                                                                onchange="changePieces();">
-
-                                                                        </select>
-                                                                </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                                <td>&nbsp;</td>
-                                                        </tr>
-
-                                                        <tr>
-                                                                <td>Dark mode</td>
-                                                                <td><label class="switch">
-                                                                                <input type="checkbox" id="chk_darkmode" onchange="toggleDarkMode();">
-                                                                                <span class="slider round"></span>
-                                                                        </label></td>
-                                                        </tr>
-
-                                                        <tr>
-                                                                <td>Auto copy results to clipboard</td>
-                                                                <td><label class="switch">
-                                                                                <input type="checkbox" id="chk_clipboard"
-                                                                                        onchange="toggleSetting('#chk_clipboard','copy2clipboard');">
-                                                                                <span class="slider round"></span>
-                                                                        </label></td>
-                                                        </tr>
-
-                                                        <tr>
-                                                                <td>Add headers to CSV file</td>
-                                                                <td><label class="switch">
-                                                                                <input type="checkbox" id="chk_csvheaders"
-                                                                                        onchange="toggleSetting('#chk_csvheaders','csvheaders');">
-                                                                                <span class="slider round"></span>
-                                                                        </label></td>
-                                                        </tr>
-
-                                                </table>
-
-                                                <a class="w3-bar-item w3-button" onclick="resetSettings();">Reset</a>
-                                                <input type="hidden" autofocus="true" />
-                                        </div>
                                 </div>
                         </div>
 
-
-                        <!-- Layout when screen is in Portrait mode (like cell phone)-->
-                        <div class="portraitmode">
+                        <div class="w3-container w3-center portraitmode light-mode" style="flex-shrink: 0;">
                                 <div>Puzzle <span id="puzzleNumber_portrait" class="puzzlenumbers"></span> of <span
                                                 id="puzzleNumbertotal_portrait" class="puzzlenumbers"></span>
                                 </div>
 
-                                <div class="w3-border">
-                                        <div id="progressbar_portrait" class="w3-indigo" style="height:24px;width:0%"></div>
+                                <div style="display: flex; align-items: center; gap: 6px; margin: 4px 0;">
+                                        <div class="w3-border" style="flex: 1;">
+                                                <div id="progressbar_portrait" class="w3-indigo"
+                                                        style="height:24px;width:0%">
+                                                </div>
+                                        </div>
+                                        <button id="btn_analyze_portrait" title="Analyse on Lichess"
+                                                onclick="openAnalysis()" style="flex-shrink: 0; background: rgba(0,0,0,0.15); border: none;
+                                                       border-radius: 6px; width: 32px; height: 24px; font-size: 15px;
+                                                       line-height: 24px; text-align: center; cursor: pointer;
+                                                       transition: background 0.2s;">
+                                                🔍
+                                        </button>
                                 </div>
 
-                                <div class="w3-container w3-center">
+                                <div id="mode-hud" style="margin: 4px 0;"></div>
+
+                                <div class="w3-container w3-center puzzletitle"
+                                        style="height: auto !important; min-height: 40px;">
                                         Name: <br> <span id="puzzlename_portrait" style="font-weight: bold;"></span>
                                 </div>
                                 <p></p>
 
-                                <div class="w3-bar">
-                                        <button id="btn_hint_portrait" class="w3-button w3-round-large w3-indigo w3-hover-blue"
-                                                disabled="true" style="display: none">Hint</button>
+                                <div class="w3-bar" style="min-height: 38px;">
+                                        <button id="btn_hint_portrait"
+                                                class="w3-button w3-round-large w3-indigo w3-hover-blue" disabled="true"
+                                                style="visibility: hidden;">Hint</button>
                                 </div>
 
                                 <div class="w3-bar">
-                                        <button id="btn_starttest_portrait" class="w3-button w3-round-large w3-indigo w3-hover-blue"
+                                        <button id="btn_starttest_portrait"
+                                                class="w3-button w3-round-large w3-indigo w3-hover-blue"
                                                 disabled="true">Start</button>
-                                        <button id="btn_pause_portrait" class="w3-button w3-round-large w3-indigo w3-hover-blue"
+                                        <button id="btn_pause_portrait"
+                                                class="w3-button w3-round-large w3-indigo w3-hover-blue"
                                                 style="display: none">Pause</button>
-                                        <button id="btn_restart_portrait" class="w3-button w3-round-large w3-indigo w3-hover-blue"
+                                        <button id="btn_restart_portrait"
+                                                class="w3-button w3-round-large w3-indigo w3-hover-blue"
                                                 style="display: none">Restart</button>
                                 </div>
                         </div>
                 </div>
         </div>
+
+        <!-- Settings Modal -->
+        <div id="settings-dialog" class="w3-modal">
+                <div class="w3-modal-content w3-card-4 light-mode" style="max-width: 400px;">
+                        <header class="w3-container w3-indigo">
+                                <span onclick="document.getElementById('settings-dialog').style.display='none'"
+                                        class="w3-button w3-display-topright">&times;</span>
+                                <h3>Settings</h3>
+                        </header>
+                        <div class="w3-container" style="padding: 16px;">
+                                <p>
+                                        <label>Light Squares</label>
+                                        <input type="text" id="Light-Color" class="w3-input w3-border"
+                                                data-wheelcolorpicker onchange="changecolor()">
+                                </p>
+                                <p>
+                                        <label>Dark Squares</label>
+                                        <input type="text" id="Dark-Color" class="w3-input w3-border"
+                                                data-wheelcolorpicker onchange="changecolor()">
+                                </p>
+                                <p>
+                                        <label>Piece Theme</label>
+                                        <select id="piece-select" class="w3-select w3-border" onchange="changePieces()">
+                                        </select>
+                                </p>
+                                <p>
+                                        <input class="w3-check" type="checkbox" id="chk_darkmode"
+                                                onchange="toggleDarkMode()"><label for="chk_darkmode"> Dark
+                                                Mode</label>
+                                </p>
+                                <p>
+                                        <input class="w3-check" type="checkbox" id="chk_clipboard"
+                                                onchange="toggleSetting('#chk_clipboard', 'copy2clipboard')"><label
+                                                for="chk_clipboard"> Auto-copy results to clipboard</label>
+                                </p>
+                                <p>
+                                        <input class="w3-check" type="checkbox" id="chk_csvheaders"
+                                                onchange="toggleSetting('#chk_csvheaders', 'csvheaders')"><label
+                                                for="chk_csvheaders"> Include CSV headers</label>
+                                </p>
+                                <button onclick="resetSettings()"
+                                        class="w3-button w3-round-large w3-red w3-hover-orange">Reset to
+                                        Defaults</button>
+                        </div>
+                </div>
         </div>
 
-        <!-- Custom code for this project (needs to be here AFTER elements are built & labelled)-->
-        <script src="./assets/storage.js"></script>
+        <!-- SR Dashboard Modal -->
+        <div id="modal_sr_dashboard" class="w3-modal" style="display:none">
+                <div class="w3-modal-content w3-card-4" style="max-width:720px">
+                        <header class="w3-container w3-indigo">
+                                <span onclick="document.getElementById('modal_sr_dashboard').style.display='none'"
+                                        class="w3-button w3-display-topright">✕</span>
+                                <h3>📊 Spaced Repetition Dashboard</h3>
+                        </header>
+                        <div class="w3-container w3-padding">
+                                <div id="sr-retention-graph" class="w3-center w3-margin-bottom"
+                                        style="overflow-x:auto; background:#fafafa; border-radius:6px; padding:12px;">
+                                        <em style="color:#aaa">Loading graph…</em>
+                                </div>
+                                <div style="max-height:360px; overflow-y:auto">
+                                        <table class="w3-table w3-striped w3-bordered w3-small">
+                                                <thead>
+                                                        <tr class="w3-indigo">
+                                                                <th>#</th>
+                                                                <th>Puzzle</th>
+                                                                <th>Reps</th>
+                                                                <th>Interval</th>
+                                                                <th>Ease</th>
+                                                                <th>Next Review</th>
+                                                                <th>Status</th>
+                                                        </tr>
+                                                </thead>
+                                                <tbody id="sr-dashboard-tbody"></tbody>
+                                        </table>
+                                </div>
+                        </div>
+                </div>
+        </div>
+
         <script src="./assets/pgn-upload-handler.js"></script>
-        <script src="./assets/game-modes.js"></script>
-        <script src="./assets/chess-pgn-trainer.js"></script>
-        <script src="./assets/piece-list.js"></script>
+        <script type="module" src="./assets/app.js"></script>
+
+        <!-- Service Worker Registration -->
         <script>
                 if ('serviceWorker' in navigator) {
-                        window.addEventListener('load', () => {
-                                navigator.serviceWorker.register('./service-worker.js');
-                        });
+                        window.addEventListener('load', () =>
+                                navigator.serviceWorker.register('./service-worker.js')
+                                        .catch(err => console.warn('SW registration failed:', err))
+                        );
                 }
         </script>
 </body>

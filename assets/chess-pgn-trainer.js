@@ -8,7 +8,7 @@
 /* eslint semi: ["error"] */
 
 /* eslint no-undef: "error"*/
-/* global Chess, Chessboard, PgnParser, FileReader */
+/* global Chess, PgnParser, FileReader */
 /* global $, document, localStorage, alert, navigator, window */
 /* global w3_close, showresults */
 
@@ -31,12 +31,11 @@ Features for this version:
 // Board & Overall configuration-related variables
 const version = '1.8.2';
 let board;
-let blankBoard;
+// blankBoard element is used for pause overlay (no longer a Chessboard instance)
 let pieceThemePath;
 let game;
 let config;
 let PieceList;
-let AnalysisLink = false;
 
 // Game & Performance variables
 let moveCfg;
@@ -63,6 +62,14 @@ let PauseStartDateTime;
 let PauseendDateTime;
 let startDateTime = new Date();
 let pauseDateTimeTotal = 0;
+let puzzleStartTime = null;
+let puzzleTimes = [];  // { puzzleIndex, name, timeMs, hadError }
+let currentStreak = 0;
+let bestStreak = 0;
+let mistakeList = [];  // puzzle indices where error === true at completion
+let isMistakeReviewActive = false;
+let persistentMistakeList = []; // Persists across review sessions
+let persistentSlowestPuzzles = []; // Persists across review sessions
 
 
 
@@ -73,76 +80,21 @@ let pauseDateTimeTotal = 0;
 // Version number of the app
 $('#versionnumber').text(`version ${version}`);
 
-let squareClickCount = 0;
-let sourceSquare = "";
-let targetSquare = "";
-
 // Collection of checkboxes used in the app
-let checkboxlist = ['#playbothsides', '#playoppositeside', '#randomizeSet', '#flipped', '#analysisboard'];
+let checkboxlist = ['#playbothsides', '#playoppositeside', '#randomizeSet', '#flipped'];
 
 // Collection of text elements
 let messagelist = ['#messagecomplete', '#puzzlename_landscape', '#puzzlename_portrait', '#errors', '#errorRate', '#elapsedTime', '#avgTime'];
 
-// Assign default configuration of the board
-// Assign default theme for the pieces for both the board and the promotion popup window
+// cm-chessboard: assetsUrl points to the cm-chessboard assets folder you downloaded.
+// See MIGRATION.md for setup instructions.
+const CM_ASSETS_URL = './assets/cm-chessboard/assets/';
 
-//pieceThemePath = 'https://github.com/lichess-org/lila/raw/refs/heads/master/public/piece/alpha/{piece}.svg'
+// pieceThemePath is kept for the promotion dialog image population (getPieces).
+// cm-chessboard uses its own SVG sprite for rendering pieces on the board.
 pieceThemePath = 'img/chesspieces/staunty/{piece}.svg';
 
 promotionDialog = $('#promotion-dialog');
-
-        // Initial Board Configuration
-        config = {
-                draggable: true,
-                pieceTheme: pieceThemePath,
-                onDragStart: dragStart,
-                onDrop: dropPiece,
-                onSnapEnd: snapEnd,
-                position: 'start',
-        };
-
-        // Click-to-move implementation
-        $(document).on('click', '#myBoard [class*="square-"]', function() {
-                if (pauseflag) return;
-
-                // Only allow clicking if it's the player's turn
-                if (!$('#playbothsides').is(':checked')) {
-                        if (!$('#playoppositeside').is(':checked') && game.history().length % 2 !== 0) return;
-                        if ($('#playoppositeside').is(':checked') && (game.history().length % 2 === 0 || game.history().length === 0)) return;
-                }
-
-                if (game.history().length === moveHistory.length) return;
-
-                // Extract square from class (e.g., "square-a2")
-                const squareClass = $(this).attr('class').split(' ').find(c => c.startsWith('square-') && c.length === 9);
-                if (!squareClass) return;
-                const square = squareClass.split('-')[1];
-
-                squareClickCount++;
-
-                if (squareClickCount === 1) {
-                        sourceSquare = square;
-                        // highlight the square
-                        $(this).addClass('highlight-square');
-                } else {
-                        targetSquare = square;
-                        squareClickCount = 0;
-                        $('#myBoard [class*="square-"]').removeClass('highlight-square');
-
-                        const move = dropPiece(sourceSquare, targetSquare);
-                        if (move === 'snapback') {
-                                // If the new square has a piece of the same color, treat it as the new source
-                                const piece = game.get(targetSquare);
-                                if (piece && piece.color === game.turn()) {
-                                        sourceSquare = targetSquare;
-                                        squareClickCount = 1;
-                                        $('#myBoard .square-' + sourceSquare).addClass('highlight-square');
-                                } else {
-                                        squareClickCount = 0;
-                                }
-                        }
-                }
-        });
 
 
 
@@ -153,29 +105,24 @@ promotionDialog = $('#promotion-dialog');
 /**
  * Save current game progress to resume later
  */
-let saveTimeout = null;
 function saveCurrentGameProgress() {
         if (!puzzleset || puzzleset.length === 0 || setcomplete) {
                 return;
         }
 
-        // Debounce saving to prevent sluggishness
-        if (saveTimeout) clearTimeout(saveTimeout);
-        saveTimeout = setTimeout(() => {
-                const gameState = {
-                        increment: increment,
-                        PuzzleOrder: PuzzleOrder,
-                        puzzleset: puzzleset,
-                        errorcount: errorcount,
-                        pauseDateTimeTotal: pauseDateTimeTotal,
-                        startDateTime: startDateTime.getTime(),
-                        lastSelectedPgnFile: $('#openPGN').val(),
-                        gameMode: typeof getCurrentGameMode === 'function' ? getCurrentGameMode() : 'standard',
-                        timestamp: new Date().getTime()
-                };
+        const gameState = {
+                increment: increment,
+                PuzzleOrder: PuzzleOrder,
+                puzzleset: puzzleset,
+                errorcount: errorcount,
+                pauseDateTimeTotal: pauseDateTimeTotal,
+                startDateTime: startDateTime.getTime(),
+                lastSelectedPgnFile: $('#openPGN').val(),
+                gameMode: typeof getCurrentGameMode === 'function' ? getCurrentGameMode() : 'standard',
+                timestamp: new Date().getTime()
+        };
 
-                saveGameState(gameState);
-        }, 500);
+        saveGameState(gameState);
 }
 
 /**
@@ -217,8 +164,8 @@ function resumeSavedGame() {
                 ['#btn_starttest_landscape', '#btn_starttest_portrait',
                         '#btn_restart_landscape', '#btn_restart_portrait', '#btn_showresults'], 'none');
         setDisplayAndDisabled(
-                ['#btn_pause_landscape', '#btn_pause_portrait',
-                        '#btn_hint_landscape', '#btn_hint_portrait'], 'block', false);
+                ['#btn_pause_landscape', '#btn_pause_portrait'], 'block', false);
+        setHintButtonVisibility(true, false);
         setCheckboxSelectability(false);
 
         return true;
@@ -305,22 +252,10 @@ function changePieces() {
         // Build the path to the piece theme using the object properties
         pieceThemePath = 'img/chesspieces/' + pieceObject.DirectoryName + '/{piece}.' + pieceObject.Type;
 
-        config = {
-                draggable: true,
-                pieceTheme: pieceThemePath,
-                onDragStart: dragStart,
-                onDrop: dropPiece,
-                onSnapEnd: snapEnd,
-                position: 'start',
-        };
-
-        // Update the board with the new pieces
-        Chessboard('myBoard', config);
-
-        // Set the colors after the piece change
+        // cm-chessboard uses SVG sprites — piece theme path is kept only for
+        // the jQuery UI promotion popup images (getPieces).
+        // Board re-creation on piece change is handled by resetGame().
         changecolor();
-
-        // Reset the game
         resetGame();
 }
 
@@ -331,8 +266,12 @@ function changePieces() {
  * @param {string} dark - The RGB color value for the dark squares (such as a1) 
  */
 function setBoardColor(light, dark) {
-        $(".white-1e1d7").css({ "backgroundColor": '#' + light, "color": '#' + dark });
-        $(".black-3c85d").css({ "backgroundColor": '#' + dark, "color": '#' + light });
+        // cm-chessboard uses CSS custom properties on the board element for square colours.
+        const boardEl = document.getElementById('myBoard');
+        if (boardEl) {
+                boardEl.style.setProperty('--cm-chessboard-white-square-color', '#' + light);
+                boardEl.style.setProperty('--cm-chessboard-black-square-color', '#' + dark);
+        }
 }
 
 /**
@@ -393,8 +332,7 @@ function toggleDarkMode() {
  * Resize both boards to available space
  */
 function resizeBoards() { // eslint-disable-line no-unused-vars
-        board.resize();
-        blankBoard.resize();
+        // cm-chessboard is SVG-based and resizes automatically — no manual resize needed.
         changecolor();
 }
 
@@ -405,7 +343,7 @@ function resizeBoards() { // eslint-disable-line no-unused-vars
  *                                                        Setting to false sets the pieces instantly.
  */
 function updateBoard(animate) {
-        board.position(game.fen(), animate);
+        board.setPosition(game.fen(), animate);
 }
 
 
@@ -437,8 +375,7 @@ function initalize() {
 
         loadSettings();
         addPieceSetNames();
-        changePieces();
-        resetGame();
+        changePieces(); // changePieces() calls resetGame() internally — don't call it again
 
         // Try to resume a saved game
         setTimeout(() => {
@@ -478,7 +415,7 @@ function loadSettings() {
         // Set defaults if running for the first time
 
         // Default keys and values
-        var defaults = { light: 'DEE3E6', dark: '769457', pieceIndex: '0', darkmode: '0', copy2clipboard: '1', csvheaders: '1' };
+        var defaults = { light: 'DEE3E6', dark: '769457', pieceIndex: '0', darkmode: '1', copy2clipboard: '1', csvheaders: '1' };
 
         // Load defaults if any keys are missing
         for (const [key, value] of Object.entries(defaults)) {
@@ -582,6 +519,21 @@ function setDisplayAndDisabled(listofElements, visible, disabled) {
 }
 
 /**
+ * Show or hide hint buttons using visibility instead of display,
+ * so their reserved layout space is always maintained and the board never shifts.
+ * @param {boolean} visible - true to show, false to hide
+ * @param {boolean} disabled - true to disable the button
+ */
+function setHintButtonVisibility(visible, disabled) {
+    ['#btn_hint_landscape', '#btn_hint_portrait'].forEach(sel => {
+        const btn = document.querySelector(sel);
+        if (!btn) return;
+        btn.style.visibility = visible ? 'visible' : 'hidden';
+        if (disabled !== undefined) btn.disabled = disabled;
+    });
+}
+
+/**
  * Toggle the local file value for a specific setting based on checkbox status
  *
  * @param {string} elementname - The name of the checkbox (pre-pend with a #)
@@ -623,8 +575,21 @@ function checkAndPlayNext() {
                 // play next move if the "Play both sides" box is unchecked
                 if (!$('#playbothsides').is(':checked')) {
                         // Play the opponent's next move from the PGN
-                        game.move(moveHistory[game.history().length]);
+                        const opponentMove = game.move(moveHistory[game.history().length]);
+                        // Highlight the opponent's move
+                        if (opponentMove) {
+                                board.addMarker(MARKER_TYPE.lastMove, opponentMove.from);
+                                board.addMarker(MARKER_TYPE.lastMove, opponentMove.to);
+                        }
+
+                        // In Brutal Mode, each opponent move also resets the 7-second player timer
+                        if (typeof getCurrentGameMode === 'function' && getCurrentGameMode() === 'brutal') {
+                                if (typeof brutalStartMoveTimer === 'function') brutalStartMoveTimer();
+                        }
                 }
+                // Board sync is handled by handleMoveInput after the move
+                // animation promise resolves — do not call updateBoard here.
+
         } else { // wrong move
 
                 if (error === false) { // Add one to the error count for any given puzzle
@@ -640,9 +605,6 @@ function checkAndPlayNext() {
                 // Undo that move from the game
                 game.undo();
 
-                // Maybe flash the square in red to indicate an error?
-
-
                 // Snap the bad piece back
                 return 'snapback';
         }
@@ -650,6 +612,27 @@ function checkAndPlayNext() {
         // Check if all the expected moves have been played
         if (game.history().length === moveHistory.length) {
                 puzzlecomplete = true;
+
+                // Record puzzle solve time
+                if (puzzleStartTime !== null) {
+                        puzzleTimes.push({
+                                puzzleIndex: PuzzleOrder[increment],
+                                name: puzzleset[PuzzleOrder[increment]].Event || `Puzzle ${increment + 1}`,
+                                timeMs: Date.now() - puzzleStartTime,
+                                hadError: error
+                        });
+                        puzzleStartTime = null;
+                }
+
+                // Update streak tracking
+                if (!error) {
+                        currentStreak++;
+                        if (currentStreak > bestStreak) bestStreak = currentStreak;
+                } else {
+                        currentStreak = 0;
+                        mistakeList.push(PuzzleOrder[increment]);
+                }
+                updateStreakDisplay();
 
                 // Notify game mode that a puzzle is complete
                 if (typeof handlePuzzleComplete === 'function') {
@@ -661,49 +644,56 @@ function checkAndPlayNext() {
                 // longer than puzzleset.length due to reinserted retries.
                 const isInfinityMode = typeof getCurrentGameMode === 'function' &&
                         getCurrentGameMode() === 'infinity';
-                if (!isInfinityMode && increment + 1 === puzzleset.length) {
+                const isBrutalMode = typeof getCurrentGameMode === 'function' &&
+                        getCurrentGameMode() === 'brutal';
+                if (!isInfinityMode && !isBrutalMode && increment + 1 === PuzzleOrder.length) {
                         setcomplete = true;
                 }
 
                 // Check if we should continue to next puzzle based on current game mode
-                const shouldContinue = typeof shouldContinueToNextPuzzle === 'function' ? 
-                        shouldContinueToNextPuzzle() : (increment < puzzleset.length - 1);
+                const shouldContinue = typeof shouldContinueToNextPuzzle === 'function' ?
+                        shouldContinueToNextPuzzle() : (increment < PuzzleOrder.length - 1);
 
-                // Are there more puzzles to go?  If yes, load the next one in the sequence
+                // Are there more puzzles to go?  If yes, load the next one in the sequence.
+                // Deferred with setTimeout so cm-chessboard finishes processing the current
+                // validateMoveInput event before we call disableMoveInput/enableMoveInput
+                // for the next puzzle — otherwise cm-chessboard's state machine deadlocks.
                 if (shouldContinue) {
                         increment += 1;
-                        loadPuzzle(puzzleset[PuzzleOrder[increment]]);
+                        setTimeout(() => loadPuzzle(puzzleset[PuzzleOrder[increment]]), 0);
                 } else if (isInfinityMode) {
                         // SR session complete — trigger end-of-session UI
                         setcomplete = true;
                 }
         }
 
-        // Stop once all the puzzles in the set are done
+        // Stop once all the puzzles in the set are done.
+        // Deferred so cm-chessboard finishes the current move event first.
         if (setcomplete && puzzlecomplete) {
-                // Clear saved progress as the set is finished
-                clearSavedGameState();
+                setTimeout(() => {
+                        // Clear saved progress as the set is finished
+                        clearSavedGameState();
 
-                // Stop any mode-specific timers
-                if (typeof stopModeTimer === 'function') {
-                        stopModeTimer();
-                }
+                        // Stop any mode-specific timers
+                        if (typeof stopModeTimer === 'function') {
+                                stopModeTimer();
+                        }
 
-                // Show the stats
-                generateStats();
-                showStats();
+                        // Show the stats
+                        generateStats();
+                        showStats();
 
-                // Hide & disable the "Start" and "Pause" buttons
-                setDisplayAndDisabled(
-                        ['#btn_starttest_landscape', '#btn_starttest_portrait',
-                                '#btn_pause_landscape', '#btn_pause_portrait'], 'none', true);
+                        // Hide & disable the "Start" and "Pause" buttons
+                        setDisplayAndDisabled(
+                                ['#btn_starttest_landscape', '#btn_starttest_portrait',
+                                        '#btn_pause_landscape', '#btn_pause_portrait'], 'none', true);
 
-                // Show "Restart" button
-                setDisplayAndDisabled(['#btn_restart_landscape', '#btn_restart_portrait'], 'block', false);
+                        // Show "Restart" button
+                        setDisplayAndDisabled(['#btn_restart_landscape', '#btn_restart_portrait'], 'block', false);
 
-                // Clear the move indicator
-                $('#moveturn').text('');
-
+                        // Clear the move indicator
+                        $('#moveturn').text('');
+                }, 0);
         }
 }
 
@@ -752,50 +742,58 @@ function pauseGame() {
         // Start a new counter (to then subtract from overall total)
         //$(window).trigger('resize');
         switch (pauseflag) {
-        case false:
-                $('#btn_pause_landscape').text('Resume');
-                $('#btn_pause_portrait').text('Resume');
-                pauseflag = true;
-                PauseStartDateTime = new Date();
+                case false:
+                        $('#btn_pause_landscape').text('Resume');
+                        $('#btn_pause_portrait').text('Resume');
+                        pauseflag = true;
+                        PauseStartDateTime = new Date();
 
-                // hide the board
-                $('#myBoard').css('display', 'none');
-                $('#blankBoard').css('display', 'block');
+                        // hide the board
+                        $('#myBoard').css('display', 'none');
+                        $('#blankBoard').css('display', 'block');
 
-                // Remove focus on the pause/resume button
-                $('#btn_pause_landscape').blur();
-                $('#btn_pause_portrait').blur();
+                        // Remove focus on the pause/resume button
+                        $('#btn_pause_landscape').blur();
+                        $('#btn_pause_portrait').blur();
 
-                // Disable the Hint, Reset and Open PGN buttons while paused
-                $('#btn_reset').prop('disabled', true);
-                $('#openPGN_button').prop('disabled', true);
-                $('#btn_hint_landscape').prop('disabled', true);
-                $('#btn_hint_portrait').prop('disabled', true);
-                break;
+                        // Disable the Hint, Reset and Open PGN buttons while paused
+                        $('#btn_reset').prop('disabled', true);
+                        $('#openPGN_button').prop('disabled', true);
+                        $('#btn_hint_landscape').prop('disabled', true);
+                        $('#btn_hint_portrait').prop('disabled', true);
 
-        case true:
-                $('#btn_pause_landscape').text('Pause');
-                $('#btn_pause_portrait').text('Pause');
-                pauseflag = false;
-                PauseendDateTime = new Date();
+                        // Suspend Brutal Mode move timer during pause
+                        if (typeof brutalClearMoveTimer === 'function') brutalClearMoveTimer();
+                        break;
 
-                // Keep running total of paused time
-                pauseDateTimeTotal += (PauseendDateTime - PauseStartDateTime);
+                case true:
+                        $('#btn_pause_landscape').text('Pause');
+                        $('#btn_pause_portrait').text('Pause');
+                        pauseflag = false;
+                        PauseendDateTime = new Date();
 
-                // show the board
-                $('#myBoard').css('display', 'block');
-                $('#blankBoard').css('display', 'none');
+                        // Keep running total of paused time
+                        pauseDateTimeTotal += (PauseendDateTime - PauseStartDateTime);
 
-                // Remove focus on the pause/resume button 
-                $('#btn_pause_landscape').blur();
-                $('#btn_pause_portrait').blur();
+                        // show the board
+                        $('#myBoard').css('display', 'block');
+                        $('#blankBoard').css('display', 'none');
 
-                // Re-enable the Hint, Reset and Open PGN buttons
-                $('#btn_reset').prop('disabled', false);
-                $('#openPGN_button').prop('disabled', false);
-                $('#btn_hint_landscape').prop('disabled', false);
-                $('#btn_hint_portrait').prop('disabled', false);
-                break;
+                        // Remove focus on the pause/resume button 
+                        $('#btn_pause_landscape').blur();
+                        $('#btn_pause_portrait').blur();
+
+                        // Re-enable the Hint, Reset and Open PGN buttons
+                        $('#btn_reset').prop('disabled', false);
+                        $('#openPGN_button').prop('disabled', false);
+                        $('#btn_hint_landscape').prop('disabled', false);
+                        $('#btn_hint_portrait').prop('disabled', false);
+
+                        // Resume Brutal Mode move timer on unpause
+                        if (typeof getCurrentGameMode === 'function' && getCurrentGameMode() === 'brutal') {
+                            if (typeof brutalStartMoveTimer === 'function') brutalStartMoveTimer();
+                        }
+                        break;
         }
         $(window).trigger('resize');
         changecolor();
@@ -820,7 +818,6 @@ function resetGame() {
         pauseDateTimeTotal = 0;
         error = false;
         setcomplete = false;
-        AnalysisLink = false;
 
 
 
@@ -828,14 +825,42 @@ function resetGame() {
         pauseflag = false;
         increment = 0;
         PuzzleOrder = [];
+        puzzleStartTime = null;
+        puzzleTimes = [];
+        currentStreak = 0;
+        bestStreak = 0;
+        mistakeList = [];
+        isMistakeReviewActive = false;
 
 
-        // Create the boards
-        board = new Chessboard('myBoard', config);
-        blankBoard = new Chessboard('blankBoard', { showNotation: false });
+        // Destroy existing board cleanly before recreating
+        if (board) {
+                board.destroy();
+                board = null;
+        }
+        // Clear the DOM element — cm-chessboard appends SVG children and
+        // destroy() may not remove them, causing multiple boards on screen.
+        const boardEl = document.getElementById('myBoard');
+        if (boardEl) boardEl.innerHTML = '';
 
-        // Resize the board to the current available space
-        $(window).trigger('resize');
+        // Create the cm-chessboard instance with move input enabled
+        board = new Chessboard(document.getElementById('myBoard'), {
+                position: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+                assetsUrl: CM_ASSETS_URL,
+                style: {
+                        cssClass: 'default',
+                        showCoordinates: true,
+                        pieces: { file: 'pieces/staunty.svg' },
+                        animationDuration: 0  // disable animation to prevent race with setPosition
+                },
+                extensions: [
+                        { class: Markers },
+                        { class: PromotionDialog }
+                ]
+        });
+
+        // Move input is enabled per-puzzle in loadPuzzle(), not here,
+        // because it must be set after the position and orientation are established.
 
         // Set the counters back to zero
         $('#puzzleNumber_landscape').text('0');
@@ -850,8 +875,8 @@ function resetGame() {
                         '#btn_restart_landscape', '#btn_restart_portrait'], 'none', false);
 
         // Hide & disable the "Hint" and the "Show Results" buttons
-        setDisplayAndDisabled(
-                ['#btn_hint_landscape', '#btn_hint_portrait', '#btn_showresults'], 'none', true);
+        setDisplayAndDisabled(['#btn_showresults'], 'none', true);
+        setHintButtonVisibility(false, true);
 
         // Show the full board (in case the reset happened during a pause)
         $('#myBoard').css('display', 'block');
@@ -941,14 +966,17 @@ function startTest() {
 
         // Show & enable the "Hint" and "Pause" buttons
         setDisplayAndDisabled(
-                ['#btn_pause_landscape', '#btn_pause_portrait',
-                        '#btn_hint_landscape', '#btn_hint_portrait'], 'block', false);
+                ['#btn_pause_landscape', '#btn_pause_portrait'], 'block', false);
+        setHintButtonVisibility(true, false);
 
         // Disable changing options
         setCheckboxSelectability(false);
 
         // Clear any messages
         clearMessages();
+
+        // Any prior mistake review session is no longer active
+        isMistakeReviewActive = false;
 
         // Load first puzzle and start counting for errors (for now...)
         errorcount = 0;
@@ -989,7 +1017,9 @@ function startTest() {
         }
 
         // Now just need to send the desired puzzle to the board.
-        loadPuzzle(puzzleset[PuzzleOrder[increment]]);
+        if (increment >= 0 && typeof PuzzleOrder[increment] !== 'undefined') {
+                loadPuzzle(puzzleset[PuzzleOrder[increment]]);
+        }
 }
 
 /**
@@ -1026,6 +1056,10 @@ function shuffle(array) {
  * @param {int} total_value - The total number of puzzles (denominator)
  */
 function updateProgressBar(partial_value, total_value) {
+        // In Brutal Mode, the progress bar is managed by brutalUpdateProgressBar()
+        if (typeof getCurrentGameMode === 'function' && getCurrentGameMode() === 'brutal') {
+                return;
+        }
         // Do the math
         const progress = Math.round((partial_value / total_value) * 100);
 
@@ -1044,6 +1078,13 @@ function updateProgressBar(partial_value, total_value) {
  * @param {object} PGNPuzzle - The object representing a specific position and move sequence
  */
 function loadPuzzle(PGNPuzzle) {
+        // Clear any markers left over from the previous puzzle immediately.
+        board.removeMarkers();
+        // Force clear any stuck promotion dialog overlay
+        $('.promotion-dialog-group').empty();
+        // Start puzzle timer
+        puzzleStartTime = Date.now();
+
         // Save progress when a new puzzle is loaded
         saveCurrentGameProgress();
 
@@ -1081,29 +1122,22 @@ function loadPuzzle(PGNPuzzle) {
 
         // Ensure the orientation is set to match the puzzle
         // Default is white
-        board.orientation('white');
+        let boardOrientation = COLOR.white;
 
         // Flip the board if Black to play
         if (game.turn() === 'b') {
-                board.orientation('black');
+                boardOrientation = COLOR.black;
         }
 
         // Flip board if "Flipped" checkbox is checked
         if ($('#flipped').is(':checked')) {
-                board.flip();
+                boardOrientation = (boardOrientation === COLOR.white) ? COLOR.black : COLOR.white;
         }
 
-        if ($('#analysisboard').is(':checked')) { AnalysisLink = true; } else { AnalysisLink = false; }
+        board.setOrientation(boardOrientation);
 
-        // Output a link to a lichess analysis board for this puzzle if there is one (can extract FEN from there if needed)
-        if (PGNPuzzle.FEN) {
-                var lichessURL = '<A HREF="https://lichess.org/analysis/' + PGNPuzzle.FEN.replace(/ /g, "_") + '" target="_blank">Analysis</A>';
-
-                if (AnalysisLink) {
-                        PGNPuzzle.Event = PGNPuzzle.Event + "<br><center>" + lichessURL;
-                }
-
-        }
+        // Store the FEN so openAnalysis() can use it at any time
+        window._currentAnalysisFEN = PGNPuzzle.FEN || null;
 
         // Update the screen with the value of the PGN Event tag (if any)
         $('#puzzlename_landscape').html(PGNPuzzle.Event);
@@ -1112,149 +1146,168 @@ function loadPuzzle(PGNPuzzle) {
 
         // Play the first move if player is playing second and not both sides
         if ($('#playoppositeside').is(':checked') && !$('#playbothsides').is(':checked')) {
-                game.move(moveHistory[0]);
+                const initialMove = game.move(moveHistory[0]);
                 updateBoard(true);
+                // Highlight the computer's initial move
+                if (initialMove) {
+                        board.addMarker(MARKER_TYPE.lastMove, initialMove.from);
+                        board.addMarker(MARKER_TYPE.lastMove, initialMove.to);
+                }
         }
 
         // Update the status of the game in memory with the new data
         indicateMove();
 
         changecolor();
+
+        // Enable move input for this puzzle.
+        // Disable first in case it's already active from the previous puzzle.
+        board.disableMoveInput();
+        board.enableMoveInput(handleMoveInput);
 }
 
 
 
 // -----------------------
-// Chessboard JS functions
+// cm-chessboard move input
 // -----------------------
 
 /**
- * Handle the start of moving a piece on the board
- *
- * @param {*} source - The source square from where the piece started
- * @param {*} piece - A chess.js game piece
- * @param {*} position - The position of the board
- * @param {*} orientation - The board orientation
- * @returns {boolean}
+ * Determines whether the current player is allowed to interact with a square.
+ * Replaces the old dragStart() side-to-move guard logic.
  */
-function dragStart(source, piece, position, orientation) {
-    // Existing checks
-    if ((game.turn() === 'w' && piece.search(/^b/) !== -1) ||
-        (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
-        return false;
-    }
+function isMoveAllowed() {
+        if (pauseflag) return false;
+        if (game.history().length === moveHistory.length) return false;
 
-    if (pauseflag) {
-        return false;
-    }
-
-    
-        // Prevent piece dragging if it's not the correct side's turn or move
         if (!$('#playbothsides').is(':checked')) {
-            if (!$('#playoppositeside').is(':checked') && game.history().length % 2 !== 0) {
-                return false;
-            }
-
-            if ($('#playoppositeside').is(':checked') && (game.history().length % 2 === 0 || game.history().length === 0)) {
-                return false;
-            }
+                if (!$('#playoppositeside').is(':checked') && game.history().length % 2 !== 0) {
+                        return false;
+                }
+                if ($('#playoppositeside').is(':checked') && (game.history().length % 2 === 0 || game.history().length === 0)) {
+                        return false;
+                }
         }
-
-        if (game.history().length === moveHistory.length) {
-            return false;
-        }
-    
-
-    return true;
+        return true;
 }
 
-
 /**
- * Handle the end of moving a piece on the board
+ * Single unified move input handler for cm-chessboard.
+ * Replaces dragStart(), dropPiece(), and snapEnd().
  *
- * @param {*} source - The source square from where the piece started
- * @param {*} target - The target square to where the piece ended
- * @returns {string}
+ * @param {object} event - cm-chessboard input event
  */
-function dropPiece(source, target) {
-        let move;
+function handleMoveInput(event) {
+        switch (event.type) {
 
-        // is it a promotion?
-        const source_rank = source.substring(2, 1);
-        const target_rank = target.substring(2, 1);
-        const piece = game.get(source).type;
+                case INPUT_EVENT_TYPE.moveInputStarted: {
+                        // User clicked a piece — check if move is allowed first.
+                        if (!isMoveAllowed()) return false;
 
-        // First attempt at move
-        // see if the move is legal
-        moveCfg = {
-                from: source,
-                promotion: 'q',
-                to: target,
-        };
+                        // Clear previous highlights and dots at the start of a new move input
+                        board.removeMarkers();
 
-        move = game.move(moveCfg);
+                        // Show legal move destinations as dots, and highlight the
+                        // selected piece square with a frame — same as Lichess/Chess.com.
+                        const legalMoves = game.moves({ square: event.square, verbose: true });
+                        if (legalMoves.length === 0) return false;
 
-        if (move === null) {
-                return 'snapback';
-        }
+                        // Highlight the selected piece square
+                        board.addMarker(MARKER_TYPE.frame, event.square);
 
-        game.undo(); // move is ok, now we can go ahead and check for promotion
+                        // Add a dot on each legal target square
+                        legalMoves.forEach(move => {
+                                board.addMarker(MARKER_TYPE.dot, move.to);
+                        });
 
-        if (piece === 'p' && ((source_rank === '7' && target_rank === '8') || (source_rank === '2' && target_rank === '1'))) {
-                //promoting = true;
+                        return true;
+                }
 
-                // Get the correct color pieces for the promotion popup
-                getPieces();
+                case INPUT_EVENT_TYPE.validateMoveInput: {
+                        // User completed a move gesture — validate and execute it.
+                        const source = event.squareFrom;
+                        const target = event.squareTo;
 
-                // Show the select piece promotion dialog screen
-                promotionDialog.dialog({
-                        close: onDialogClose,
-                        closeOnEscape: false,
-                        dialogClass: 'noTitleStuff',
-                        draggable: false,
-                        height: 50,
-                        modal: true,
-                        resizable: true,
-                        width: 184,
-                }).dialog('widget').position({
-                        of: $('#myBoard'),
-                        // my: 'center center',
-                        // at: 'center center',   //Maybe add code to position near the pawn being promoted?
-                });
-                // the actual move is made after the piece to promote to
-                // has been selected, in the stop event of the promotion piece selectable
+                        // Test legality with a queen promotion placeholder
+                        const testMove = game.move({ from: source, to: target, promotion: 'q' });
+                        if (testMove === null) {
+                                return false; // illegal — cm-chessboard snaps piece back
+                        }
+                        game.undo();
 
-                return;
-        }
+                        // Check for pawn promotion
+                        const piece = game.get(source);
+                        const isPromotion = piece && piece.type === 'p' &&
+                                ((piece.color === 'w' && target[1] === '8') ||
+                                        (piece.color === 'b' && target[1] === '1'));
 
-        // No promotion, go ahead and move
-        makeMove(game, moveCfg);
+                        if (isPromotion) {
+                                // Use cm-chessboard's built-in PromotionDialog extension
+                                board.showPromotionDialog(target, piece.color === 'w' ? COLOR.white : COLOR.black,
+                                        (result) => {
+                                                if (!result || result.type === PROMOTION_DIALOG_RESULT_TYPE.canceled) {
+                                                        // User cancelled — reset the board position
+                                                        board.setPosition(game.fen(), false);
+                                                        board.disableMoveInput();
+                                                        board.enableMoveInput(handleMoveInput);
+                                                        return;
+                                                }
+                                                const promotionPiece = result.piece.charAt(1); // e.g. 'wq' → 'q'
+                                                moveCfg = { from: source, to: target, promotion: promotionPiece };
+                                                makeMove(game, moveCfg);
+                                                board.setPosition(game.fen(), true);
+                                                checkAndPlayNext();
+                                                indicateMove();
+                                                board.disableMoveInput();
+                                                board.enableMoveInput(handleMoveInput);
+                                                $('#btn_hint_landscape').text('Hint');
+                                                $('#btn_hint_portrait').text('Hint');
+                                        });
+                                return true; // accept the move visually while dialog shows
+                        }
 
-        // Check if the move played is the expected one and play the next one if it was
-        checkAndPlayNext();
+                        // Normal (non-promotion) move.
+                        moveCfg = { from: source, to: target, promotion: 'q' };
+                        makeMove(game, moveCfg);
 
-        // Indicate the player to move
-        indicateMove();
+                        const result = checkAndPlayNext();
+                        indicateMove();
 
-        // Clear the move indicator if everything is done
-        if (setcomplete && puzzlecomplete) {
-                $('#moveturn').text('');
-        }
+                        if (setcomplete && puzzlecomplete) {
+                                $('#moveturn').text('');
+                        }
 
-        // Clear the hint if used
-        $('#btn_hint_landscape').text('Hint');
-        $('#btn_hint_portrait').text('Hint');
-}
+                        $('#btn_hint_landscape').text('Hint');
+                        $('#btn_hint_portrait').text('Hint');
 
-/**
- * Update the board position after the piece snap for castling, en passant, pawn promotion
- */
-function snapEnd() {
-        // Update instantly if the puzzle is done
-        if (game.history().length === moveHistory.length) {
-                updateBoard(false);
-        } else {
-                updateBoard(true);
+                        if (result === 'snapback') {
+                                // Wrong move — reject so cm-chessboard snaps piece back.
+                                return false;
+                        }
+
+                        // Only sync board position if the puzzle isn't complete.
+                        // If puzzlecomplete, loadPuzzle() is about to be called via
+                        // setTimeout and will set the correct position itself.
+                        if (!puzzlecomplete) {
+                                board.setPosition(game.fen(), false);
+                        }
+
+                        return true;
+                }
+
+                case INPUT_EVENT_TYPE.moveInputCanceled:
+                case INPUT_EVENT_TYPE.moveInputFinished:
+                        // Clear all temporary dot and frame markers when the move is completed or cancelled.
+                        board.removeMarkers();
+                        // Re-add the highlight for the actual last move made.
+                        // This ensures the computer's response (or the player's own move) stays visible.
+                        const history = game.history({ verbose: true });
+                        if (history.length > 0) {
+                                const lastMove = history[history.length - 1];
+                                board.addMarker(MARKER_TYPE.lastMove, lastMove.from);
+                                board.addMarker(MARKER_TYPE.lastMove, lastMove.to);
+                        }
+                        break;
         }
 }
 
@@ -1302,66 +1355,68 @@ function onDialogClose() {
  * Feed the PGN file provided by the user here to the PGN Parser and update/enable the controls
  */
 function loadPGNFile() { // eslint-disable-line no-unused-vars
-    resetGame();
-    
-    const selectedFile = document.getElementById('openPGN').value;
-    
-    if (selectedFile) {
-        if (selectedFile === 'uploaded' || selectedFile === 'uploaded_json') {
-            try {
-                const isJson = selectedFile === 'uploaded_json';
-                if (isJson) parseJSON(window.uploadedPGNContent);
-                else        parsePGN(window.uploadedPGNContent.trim());
+        resetGame();
 
-                $('#puzzleNumber_landscape').text('1');
-                $('#puzzleNumber_portrait').text('1');
+        const selectedFile = document.getElementById('openPGN').value;
 
-                $('#puzzleNumbertotal_landscape').text(puzzleset.length);
-                $('#puzzleNumbertotal_portrait').text(puzzleset.length);
+        if (selectedFile) {
+                if (selectedFile === 'uploaded' || selectedFile === 'uploaded_json') {
+                        try {
+                                const isJson = selectedFile === 'uploaded_json';
+                                if (isJson) parseJSON(window.uploadedPGNContent);
+                                else        parsePGN(window.uploadedPGNContent.trim());
 
-                setDisplayAndDisabled(['#btn_starttest_landscape', '#btn_starttest_portrait'], 'block', false);
-            }
-            catch (err) {
-                alert('There is an issue with the file. Error message is as follows:\n\n' + err
-                    + '\n\nPuzzles loaded successfully before error: ' + puzzleset.length);
-                resetGame();
-            }
-        } else {
-            fetch(selectedFile)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.text();
-                })
-                .then(PGNFile => {
-                    try {
-                        const isJson = selectedFile.endsWith('.json') || selectedFile === 'uploaded_json';
-                        if (isJson) parseJSON(PGNFile);
-                        else        parsePGN(PGNFile.trim());
+                                $('#puzzleNumber_landscape').text('1');
+                                $('#puzzleNumber_portrait').text('1');
 
-                        $('#puzzleNumber_landscape').text('1');
-                        $('#puzzleNumber_portrait').text('1');
+                                $('#puzzleNumbertotal_landscape').text(puzzleset.length);
+                                $('#puzzleNumbertotal_portrait').text(puzzleset.length);
 
-                        $('#puzzleNumbertotal_landscape').text(puzzleset.length);
-                        $('#puzzleNumbertotal_portrait').text(puzzleset.length);
+                                setDisplayAndDisabled(['#btn_starttest_landscape', '#btn_starttest_portrait'], 'block', false);
+                        }
+                        catch (err) {
+                                alert('There is an issue with the file. Error message is as follows:\n\n' + err
+                                        + '\n\nPuzzles loaded successfully before error: ' + puzzleset.length);
+                                resetGame();
+                        }
+                        setCheckboxSelectability(true);
+                        return;
+                }
 
-                        setDisplayAndDisabled(['#btn_starttest_landscape', '#btn_starttest_portrait'], 'block', false);
-                    }
-                    catch (err) {
-                        alert('There is an issue with the file. Error message is as follows:\n\n' + err
-                            + '\n\nPuzzles loaded successfully before error: ' + (puzzleset ? puzzleset.length : 0));
-                        resetGame();
-                    }
-                })
-                .catch(error => {
-                    alert('Error loading file: ' + error);
-                    resetGame();
-                });
+                fetch(selectedFile)
+                        .then(response => {
+                                if (!response.ok) {
+                                        throw new Error('Network response was not ok');
+                                }
+                                return response.text();
+                        })
+                        .then(PGNFile => {
+                                try {
+                                        const isJson = selectedFile.endsWith('.json') || selectedFile === 'uploaded_json';
+                                        if (isJson) parseJSON(PGNFile);
+                                        else        parsePGN(PGNFile.trim());
+
+                                        $('#puzzleNumber_landscape').text('1');
+                                        $('#puzzleNumber_portrait').text('1');
+
+                                        $('#puzzleNumbertotal_landscape').text(puzzleset.length);
+                                        $('#puzzleNumbertotal_portrait').text(puzzleset.length);
+
+                                        setDisplayAndDisabled(['#btn_starttest_landscape', '#btn_starttest_portrait'], 'block', false);
+                                }
+                                catch (err) {
+                                        alert('There is an issue with the file. Error message is as follows:\n\n' + err
+                                                + '\n\nPuzzles loaded successfully before error: ' + puzzleset.length);
+                                        resetGame();
+                                }
+                        })
+                        .catch(error => {
+                                alert('Error loading file: ' + error);
+                                resetGame();
+                        });
+
+                setCheckboxSelectability(true);
         }
-
-        setCheckboxSelectability(true);
-    }
 }
 
 /**
@@ -1385,7 +1440,6 @@ function parsePGN(PGNData) {
                         if (tags.PGNTrainerOppositeSide === '1') { $("#playoppositeside").prop("checked", true); }
                         if (tags.PGNTrainerRandomize === '1') { $("#randomizeSet").prop("checked", true); }
                         if (tags.PGNTrainerFlipped === '1') { $("#flipped").prop("checked", true); }
-                        if (tags.PGNTrainerAnalysisLink === '1') { $("#analysisboard").prop("checked", true); }
 
                         // Make sure that both "Play both sides" and "Play opposite side" are not selected (if yes, clear both)
                         confirmOnlyOneOption();
@@ -1492,6 +1546,26 @@ function generateStats() {
         stats.avgtime = AvgTimehhmmss;
         stats.errorrate = ErrorRate;
 
+        // Add slowest puzzles if available
+        if (puzzleTimes.length > 0) {
+                const sorted = [...puzzleTimes].sort((a, b) => b.timeMs - a.timeMs);
+                stats.slowestPuzzles = sorted.slice(0, 5).map(p => ({
+                        puzzleIndex: p.puzzleIndex,
+                        name: p.name,
+                        time: new Date(p.timeMs).toISOString().slice(14, 19),
+                        hadError: p.hadError
+                }));
+        }
+
+        // Add best streak
+        stats.bestStreak = bestStreak;
+
+        // Persist mistakes and slowest puzzles if this was a full set
+        // This allows users to switch between review modes after completing one.
+        if (!isMistakeReviewActive) {
+                persistentMistakeList = [...mistakeList];
+                persistentSlowestPuzzles = [...stats.slowestPuzzles];
+        }
 }
 
 /**
@@ -1509,7 +1583,7 @@ function showStats() {
         setDisplayAndDisabled(['#btn_showresults'], 'block', false);
 
         // Hide & disable the "hint" button
-        setDisplayAndDisabled(['#btn_hint_landscape', '#btn_hint_portrait'], 'none', true);
+        setHintButtonVisibility(false, true);
 
         // Update the results modal with the details
         $('#messagecomplete').html('<h2>Set Complete</h2>');
@@ -1517,6 +1591,114 @@ function showStats() {
         $('#avgTime').text(`Average time/puzzle (hh:mm:ss): ${stats.avgtime}`);
         $('#errors').text(`Number of errors: ${stats.errors}`);
         $('#errorRate').text(`Error Rate: ${ErrorRate1Dec.toFixed(1)}%`);
+
+        // Display best streak if >= 2
+        if (stats.bestStreak && stats.bestStreak >= 2) {
+                const streakEl = document.getElementById('streakResult');
+                if (streakEl) {
+                        streakEl.textContent = 'Best Streak: ' + stats.bestStreak;
+                        streakEl.style.display = 'block';
+                }
+        }
+
+        // Display slowest puzzles if available
+        if (stats.slowestPuzzles && stats.slowestPuzzles.length > 0) {
+                const listEl = document.getElementById('slowest-puzzles-list');
+                if (listEl) {
+                        listEl.innerHTML = '';
+                        stats.slowestPuzzles.forEach(p => {
+                                const li = document.createElement('li');
+                                const errorMark = p.hadError ? ' [ERROR]' : '';
+                                li.textContent = p.name + ' - ' + p.time + errorMark;
+                                listEl.appendChild(li);
+                        });
+                        const headingEl = document.getElementById('slowest-puzzles-heading');
+                        if (headingEl) headingEl.style.display = 'block';
+                        if (listEl) listEl.style.display = 'block';
+                }
+        }
+
+        // If we are currently in a review, use the persistent list from the original set
+        const displayList = isMistakeReviewActive ? persistentMistakeList : mistakeList;
+        // Prioritize persistent list if it exists (from the original full set)
+        const slowestToReview = persistentSlowestPuzzles.length > 0 ? persistentSlowestPuzzles : (stats.slowestPuzzles || []);
+
+        // Display mistake review button
+        const btn = document.getElementById('btn_review_mistakes');
+        if (btn) {
+                if (displayList.length > 0) {
+                        btn.textContent = `Review ${displayList.length} Mistake${displayList.length > 1 ? 's' : ''}`;
+                        btn.style.display = 'block';
+                } else {
+                        btn.style.display = 'none';
+                }
+        }
+
+        // Display slowest review button
+        const btnSlow = document.getElementById('btn_review_slowest');
+        if (btnSlow) {
+                if (slowestToReview.length > 0) {
+                        btnSlow.textContent = `Review ${slowestToReview.length} Slowest Puzzle${slowestToReview.length > 1 ? 's' : ''}`;
+                        btnSlow.style.display = 'block';
+                } else {
+                        btnSlow.style.display = 'none';
+                }
+        }
+
+        // Display "Download mistakes.pgn" button — same condition as Review Mistakes
+        const btnDownloadMistakes = document.getElementById('btn_download_mistakes_pgn');
+        if (btnDownloadMistakes) {
+                btnDownloadMistakes.style.display = displayList.length > 0 ? 'block' : 'none';
+        }
+
+        // Display "Download slowest.pgn" button — same condition as Review Slowest
+        const btnDownloadSlowest = document.getElementById('btn_download_slowest_pgn');
+        if (btnDownloadSlowest) {
+                btnDownloadSlowest.style.display = slowestToReview.length > 0 ? 'block' : 'none';
+        }
+
+        // Handle Woodpecker mode results
+        if (typeof getCurrentGameMode === 'function' && getCurrentGameMode() === 'woodpecker') {
+                if (typeof wpCompleteCycle === 'function') {
+                        const cycle = wpCompleteCycle();
+                        if (cycle && typeof wpData !== 'undefined' && wpData) {
+                                const history = wpData.cycleHistory;
+                                const lastMs = history.length >= 2 ? history[history.length - 2].totalMs : null;
+                                const improvement = lastMs ? lastMs - cycle.totalMs : null;
+                                const faster = improvement > 0;
+
+                                const chartSvg = typeof wpBuildCycleChart === 'function' ? wpBuildCycleChart(history) : '';
+
+                                const extraHtml = `
+                                        <div style="padding: 12px 0;">
+                                                <div style="font-size:1.3rem; font-weight:bold; text-align:center; margin-bottom:8px;">
+                                                        🪵 Cycle ${cycle.cycleNumber} Complete
+                                                </div>
+                                                <div>Time: <strong>${typeof msToHMS === 'function' ? msToHMS(cycle.totalMs) : 'N/A'}</strong></div>
+                                                <div>Mistakes: <strong>${cycle.mistakeCount}</strong> / ${cycle.puzzleCount}</div>
+                                                ${improvement !== null
+                                                ? `<div style="color:${faster ? 'green' : 'red'}">
+                                                            ${faster ? '\u25b2 ' : '\u25bc '}${typeof msToHMS === 'function' ? msToHMS(Math.abs(improvement)) : 'N/A'} vs last cycle
+                                                           </div>`
+                                                : ''}
+                                                <div style="margin-top:12px;">${chartSvg}</div>
+                                                ${cycle.mistakeCount > 0
+                                                ? `<div style="margin-top:10px; font-size:0.9rem;">
+                                                            ⚠️ ${cycle.mistakeCount} puzzle(s) flagged for review — see list below.
+                                                           </div>`
+                                                : '<div style="color:green; margin-top:8px;">✅ Perfect cycle!</div>'}
+                                        </div>
+                                `;
+
+                                const slot = document.getElementById('wp-results-slot');
+                                if (slot) slot.innerHTML = extraHtml;
+
+                                if (typeof wpPopulateFlaggedList === 'function') {
+                                        wpPopulateFlaggedList(cycle.mistakeIndexes);
+                                }
+                        }
+                }
+        }
 
         // Display the modal
         showresults();
@@ -1539,13 +1721,16 @@ function showStats() {
 $(() => {
 
         // Buttons
-        $('#openPGN_button').click(() => {
-                $('#openPGN').click();
+        document.getElementById('openPGN_button').addEventListener('click', function () {
+                const fileInput = document.getElementById('pgn_file_input');
+                if (fileInput) {
+                        fileInput.click();
+                }
         });
 
-        $('#btn_reset').on('click', resetGame);
+        document.getElementById('btn_reset').addEventListener('click', resetGame, false);
 
-        $('#btn_showresults').on('click', showresults);
+        document.getElementById('btn_showresults').addEventListener('click', showresults, false);
 
         $('#btn_hint_landscape').on('click', showHint);
         $('#btn_hint_portrait').on('click', showHint);
@@ -1582,3 +1767,202 @@ $(() => {
                 },
         });
 });
+
+/**
+ * Update the streak display on the screen
+ */
+function updateStreakDisplay() {
+        let el = document.getElementById('streak-display');
+        if (!el) {
+                el = document.createElement('div');
+                el.id = 'streak-display';
+                el.className = 'w3-container w3-center w3-margin-bottom w3-small';
+                const pb = document.getElementById('progressbar_landscape');
+                if (pb && pb.parentNode) pb.parentNode.insertBefore(el, pb.nextSibling);
+        }
+        if (currentStreak >= 2) {
+                el.innerHTML = 'Streak: <strong>' + currentStreak + '</strong> &nbsp;|&nbsp; Best: <strong>' + bestStreak + '</strong>';
+                el.style.display = 'block';
+        } else if (bestStreak > 0) {
+                el.innerHTML = 'Best streak this session: <strong>' + bestStreak + '</strong>';
+                el.style.display = 'block';
+        } else {
+                el.style.display = 'none';
+        }
+}
+
+/**
+ * Start a mistake review session with only puzzles that had errors
+ */
+function startMistakeReview() {
+        const saved = isMistakeReviewActive ? [...persistentMistakeList] : [...mistakeList];
+        if (!saved.length) return;
+
+        // Preserve the original puzzleset before resetGame() clears it
+        const originalPuzzleset = puzzleset;
+
+        document.getElementById('resmodal').style.display = 'none';
+        if (typeof setGameMode === 'function') setGameMode('standard');
+
+        // Full UI/game reset, then restore the original puzzleset so we can
+        // replay only the mistaken indices from that set.
+        resetGame();
+        puzzleset = originalPuzzleset;
+        isMistakeReviewActive = true;
+
+        PuzzleOrder = saved;
+        increment = 0;
+        setDisplayAndDisabled(
+                ['#btn_starttest_landscape', '#btn_starttest_portrait',
+                        '#btn_restart_landscape', '#btn_restart_portrait',
+                        '#btn_showresults', '#btn_review_mistakes', '#btn_review_slowest'], 'none');
+        setDisplayAndDisabled(
+                ['#btn_pause_landscape', '#btn_pause_portrait'], 'block', false);
+        setHintButtonVisibility(true, false);
+        setCheckboxSelectability(false);
+        clearMessages();
+        errorcount = 0;
+        mistakeList = [];
+        startDateTime = new Date();
+        pauseDateTimeTotal = 0;
+        loadPuzzle(puzzleset[PuzzleOrder[0]]);
+}
+
+/**
+ * Start a review session with the top 5 slowest puzzles from the last session
+ */
+function startSlowestReview() {
+        const slowestEntries = (persistentSlowestPuzzles && persistentSlowestPuzzles.length > 0)
+                ? persistentSlowestPuzzles
+                : (stats && stats.slowestPuzzles ? stats.slowestPuzzles : []);
+
+        if (!slowestEntries || slowestEntries.length === 0) return;
+
+        // Get the puzzle indices from stats.slowestPuzzles (which now includes puzzleIndex)
+        const slowestIndices = slowestEntries.map(p => p.puzzleIndex);
+
+        if (!slowestIndices.length) return;
+
+        // Preserve the original puzzleset before resetGame() clears it
+        const originalPuzzleset = puzzleset;
+
+        document.getElementById('resmodal').style.display = 'none';
+        if (typeof setGameMode === 'function') setGameMode('standard');
+
+        resetGame();
+        puzzleset = originalPuzzleset;
+        isMistakeReviewActive = true;
+
+        PuzzleOrder = slowestIndices;
+        increment = 0;
+        setDisplayAndDisabled(
+                ['#btn_starttest_landscape', '#btn_starttest_portrait',
+                        '#btn_restart_landscape', '#btn_restart_portrait',
+                        '#btn_showresults', '#btn_review_mistakes', '#btn_review_slowest'], 'none');
+        setDisplayAndDisabled(
+                ['#btn_pause_landscape', '#btn_pause_portrait'], 'block', false);
+        setHintButtonVisibility(true, false);
+        setCheckboxSelectability(false);
+        clearMessages();
+        errorcount = 0;
+        mistakeList = [];
+        startDateTime = new Date();
+        pauseDateTimeTotal = 0;
+        loadPuzzle(puzzleset[PuzzleOrder[0]]);
+}
+
+/**
+ * Build a PGN string from a list of puzzle indices, in the order given.
+ * Reuses each puzzle's original FEN and movetext so the file can be
+ * re-loaded straight back into the trainer for targeted follow-up.
+ *
+ * @param {number[]} indices - indices into the global puzzleset array
+ * @returns {string}
+ */
+function buildPGNFromIndices(indices) {
+        let output = '';
+
+        indices.forEach((idx) => {
+                const puzzle = puzzleset[idx];
+                if (!puzzle) return;
+
+                // puzzle.Event may have "<br><br>White: ... Black: ..." appended
+                // for on-screen display — strip HTML before writing it as a tag.
+                let eventName = puzzle.Event || `Puzzle ${idx + 1}`;
+                eventName = eventName.replace(/<br\s*\/?>/gi, ' — ').replace(/<\/?[^>]+(>|$)/g, '').trim();
+                eventName = eventName.replace(/"/g, "'"); // PGN tag values can't contain quotes
+
+                const white = (puzzle.White || '').replace(/"/g, "'");
+                const black = (puzzle.Black || '').replace(/"/g, "'");
+
+                output += `[Event "${eventName}"]\n`;
+                output += `[Site ""]\n`;
+                output += `[Date "????.??.??"]\n`;
+                output += `[Round "?"]\n`;
+                output += `[White "${white}"]\n`;
+                output += `[Black "${black}"]\n`;
+                output += `[Result "*"]\n`;
+                output += `[SetUp "1"]\n`;
+                output += `[FEN "${puzzle.FEN}"]\n`;
+                output += `\n`;
+                output += `${(puzzle.PGN || '').trim()}\n\n`;
+        });
+
+        return output;
+}
+
+/**
+ * Trigger a browser download of a text blob — same data-URI approach
+ * already used by outputStats2CSV().
+ */
+function downloadTextFile(content, filename) {
+        const hiddenElement = document.createElement('a');
+        hiddenElement.href = 'data:application/x-chess-pgn;charset=utf-8,' + encodeURIComponent(content);
+        hiddenElement.target = '_blank';
+        hiddenElement.download = filename;
+        hiddenElement.click();
+}
+
+/** Download mistakes.pgn — only the puzzles that had an error this session. */
+function downloadMistakesPGN() { // eslint-disable-line no-unused-vars
+        const list = isMistakeReviewActive ? persistentMistakeList : mistakeList;
+        if (!list || list.length === 0) return;
+        downloadTextFile(buildPGNFromIndices(list), 'mistakes.pgn');
+}
+
+/** Download slowest.pgn — the top 5 slowest-solved puzzles this session. */
+function downloadSlowestPGN() { // eslint-disable-line no-unused-vars
+        const entries = (persistentSlowestPuzzles && persistentSlowestPuzzles.length > 0)
+                ? persistentSlowestPuzzles
+                : (stats && stats.slowestPuzzles ? stats.slowestPuzzles : []);
+        if (!entries || entries.length === 0) return;
+        downloadTextFile(buildPGNFromIndices(entries.map(p => p.puzzleIndex)), 'slowest.pgn');
+}
+
+/**
+ * openAnalysis()
+ * Opens the currently displayed puzzle position in Lichess's analysis board.
+ * The FEN is stored in window._currentAnalysisFEN each time loadPuzzle() runs.
+ * Uses the Lichess URL format: https://lichess.org/analysis/6k1/P1r2ppq/7p/8/3Q4/8/5PPP/6K1_w_-_-_0_1
+ */
+function openAnalysis() {
+        let fen = window._currentAnalysisFEN;
+
+        // Fallback: ask chess.js for the live FEN if the stored one is missing
+        if (!fen && typeof game !== 'undefined' && game && game.fen) {
+                fen = game.fen();
+        }
+
+        if (!fen) {
+                alert('No position available to analyse yet.');
+                return;
+        }
+
+        // Convert standard FEN to Lichess URL format
+        // Standard FEN: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        // Lichess format: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR_w_KQkq_-_0_1"
+        // Replace all spaces with underscores (no encoding needed)
+        const lichessFen = fen.replace(/ /g, '_');
+        const url = 'https://lichess.org/analysis/' + lichessFen;
+        window.open(url, '_blank', 'noopener,noreferrer');
+}
