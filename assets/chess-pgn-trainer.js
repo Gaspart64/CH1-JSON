@@ -102,7 +102,7 @@ promotionDialog = $('#promotion-dialog');
         };
 
         // Click-to-move implementation
-        $(document).on('click', '#myBoard .square-55d63', function() {
+        $(document).on('click', '#myBoard [class*="square-"]', function() {
                 if (pauseflag) return;
 
                 // Only allow clicking if it's the player's turn
@@ -113,7 +113,11 @@ promotionDialog = $('#promotion-dialog');
 
                 if (game.history().length === moveHistory.length) return;
 
-                const square = $(this).data('square');
+                // Extract square from class (e.g., "square-a2")
+                const squareClass = $(this).attr('class').split(' ').find(c => c.startsWith('square-') && c.length === 9);
+                if (!squareClass) return;
+                const square = squareClass.split('-')[1];
+
                 squareClickCount++;
 
                 if (squareClickCount === 1) {
@@ -123,12 +127,19 @@ promotionDialog = $('#promotion-dialog');
                 } else {
                         targetSquare = square;
                         squareClickCount = 0;
-                        $('#myBoard .square-55d63').removeClass('highlight-square');
+                        $('#myBoard [class*="square-"]').removeClass('highlight-square');
 
                         const move = dropPiece(sourceSquare, targetSquare);
                         if (move === 'snapback') {
-                                // reset click count if move was invalid
-                                squareClickCount = 0;
+                                // If the new square has a piece of the same color, treat it as the new source
+                                const piece = game.get(targetSquare);
+                                if (piece && piece.color === game.turn()) {
+                                        sourceSquare = targetSquare;
+                                        squareClickCount = 1;
+                                        $('#myBoard .square-' + sourceSquare).addClass('highlight-square');
+                                } else {
+                                        squareClickCount = 0;
+                                }
                         }
                 }
         });
