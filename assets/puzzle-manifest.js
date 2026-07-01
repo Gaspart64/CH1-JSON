@@ -22,14 +22,14 @@
 const PUZZLE_MANIFEST = [
     // ── Placeholder entries — replace with real folder/file names ──
     {
-        label: "Collection 01",
+        label: "Module 01",
         files: [
             { label: "Exercise 01", path: "./Puzzles/Mod-01/Exe-01.json" },
             { label: "Exercise 02", path: "./Puzzles/Mod-01/Exe-02.json" },
         ]
     },
     {
-        label: "Collection 02",
+        label: "Module 02",
         files: [
             { label: "Exercise 10", path: "./Puzzles/Col02/Exe-10.json" },
         ]
