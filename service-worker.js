@@ -1,4 +1,4 @@
-const CACHE_NAME = 'chess-json-trainer-v1';
+const CACHE_NAME = 'chess-json-trainer-v1.1';
 const PRECACHE = [
     './',
     './index.html',
@@ -25,22 +25,51 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('activate', event => {
-    event.waitUntil(self.clients.claim());
+    event.waitUntil(
+        caches.keys().then(cacheNames => {
+            return Promise.all(
+                cacheNames.map(cacheName => {
+                    if (cacheName !== CACHE_NAME) {
+                        return caches.delete(cacheName);
+                    }
+                })
+            );
+        }).then(() => self.clients.claim())
+    );
 });
 
 self.addEventListener('fetch', event => {
-    const isDynamic = event.request.url.includes('/Puzzles/') ||
-                      event.request.url.endsWith('.pgn') ||
-                      event.request.url.endsWith('.json');
+    // Only cache GET requests
+    if (event.request.method !== 'GET') return;
+
+    const url = new URL(event.request.url);
+    const isDynamic = url.pathname.includes('/Puzzles/') ||
+                      url.pathname.endsWith('.pgn') ||
+                      url.pathname.endsWith('.json');
 
     if (isDynamic) {
+        // Network-first strategy for puzzles
         event.respondWith(
-            fetch(event.request).catch(() => caches.match(event.request))
+            fetch(event.request)
+                .then(response => {
+                    const resClone = response.clone();
+                    caches.open(CACHE_NAME).then(cache => {
+                        cache.put(event.request, resClone);
+                    });
+                    return response;
+                })
+                .catch(() => caches.match(event.request))
         );
     } else {
+        // Cache-first strategy for assets
         event.respondWith(
             caches.match(event.request).then(response => {
-                return response || fetch(event.request);
+                return response || fetch(event.request).then(fetchRes => {
+                    return caches.open(CACHE_NAME).then(cache => {
+                        cache.put(event.request, fetchRes.clone());
+                        return fetchRes;
+                    });
+                });
             })
         );
     }

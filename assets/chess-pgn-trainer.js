@@ -73,6 +73,10 @@ let pauseDateTimeTotal = 0;
 // Version number of the app
 $('#versionnumber').text(`version ${version}`);
 
+let squareClickCount = 0;
+let sourceSquare = "";
+let targetSquare = "";
+
 // Collection of checkboxes used in the app
 let checkboxlist = ['#playbothsides', '#playoppositeside', '#randomizeSet', '#flipped', '#analysisboard'];
 
@@ -87,15 +91,47 @@ pieceThemePath = 'img/chesspieces/staunty/{piece}.svg';
 
 promotionDialog = $('#promotion-dialog');
 
-// Initial Board Configuration
-config = {
-        draggable: true,
-        pieceTheme: pieceThemePath,
-        onDragStart: dragStart,
-        onDrop: dropPiece,
-        onSnapEnd: snapEnd,
-        position: 'start',
-};
+        // Initial Board Configuration
+        config = {
+                draggable: true,
+                pieceTheme: pieceThemePath,
+                onDragStart: dragStart,
+                onDrop: dropPiece,
+                onSnapEnd: snapEnd,
+                position: 'start',
+        };
+
+        // Click-to-move implementation
+        $(document).on('click', '#myBoard .square-55d63', function() {
+                if (pauseflag) return;
+
+                // Only allow clicking if it's the player's turn
+                if (!$('#playbothsides').is(':checked')) {
+                        if (!$('#playoppositeside').is(':checked') && game.history().length % 2 !== 0) return;
+                        if ($('#playoppositeside').is(':checked') && (game.history().length % 2 === 0 || game.history().length === 0)) return;
+                }
+
+                if (game.history().length === moveHistory.length) return;
+
+                const square = $(this).data('square');
+                squareClickCount++;
+
+                if (squareClickCount === 1) {
+                        sourceSquare = square;
+                        // highlight the square
+                        $(this).addClass('highlight-square');
+                } else {
+                        targetSquare = square;
+                        squareClickCount = 0;
+                        $('#myBoard .square-55d63').removeClass('highlight-square');
+
+                        const move = dropPiece(sourceSquare, targetSquare);
+                        if (move === 'snapback') {
+                                // reset click count if move was invalid
+                                squareClickCount = 0;
+                        }
+                }
+        });
 
 
 
@@ -106,24 +142,29 @@ config = {
 /**
  * Save current game progress to resume later
  */
+let saveTimeout = null;
 function saveCurrentGameProgress() {
         if (!puzzleset || puzzleset.length === 0 || setcomplete) {
                 return;
         }
 
-        const gameState = {
-                increment: increment,
-                PuzzleOrder: PuzzleOrder,
-                puzzleset: puzzleset,
-                errorcount: errorcount,
-                pauseDateTimeTotal: pauseDateTimeTotal,
-                startDateTime: startDateTime.getTime(),
-                lastSelectedPgnFile: $('#openPGN').val(),
-                gameMode: typeof getCurrentGameMode === 'function' ? getCurrentGameMode() : 'standard',
-                timestamp: new Date().getTime()
-        };
+        // Debounce saving to prevent sluggishness
+        if (saveTimeout) clearTimeout(saveTimeout);
+        saveTimeout = setTimeout(() => {
+                const gameState = {
+                        increment: increment,
+                        PuzzleOrder: PuzzleOrder,
+                        puzzleset: puzzleset,
+                        errorcount: errorcount,
+                        pauseDateTimeTotal: pauseDateTimeTotal,
+                        startDateTime: startDateTime.getTime(),
+                        lastSelectedPgnFile: $('#openPGN').val(),
+                        gameMode: typeof getCurrentGameMode === 'function' ? getCurrentGameMode() : 'standard',
+                        timestamp: new Date().getTime()
+                };
 
-        saveGameState(gameState);
+                saveGameState(gameState);
+        }, 500);
 }
 
 /**
