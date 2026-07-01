@@ -83,12 +83,12 @@
     </select>
 
     <select id="fileSelect" style="display:none"
-            onchange="document.getElementById('openPGN').value=this.value; loadPGNFile()">
+            onchange="$('#openPGN').val(this.value); loadPGNFile()">
         <option value="">— Select a file —</option>
     </select>
 
     <!-- Hidden: keeps existing code that reads $('#openPGN').val() working -->
-    <select id="openPGN" style="display:none"></select>
+    <input type="hidden" id="openPGN">
     
     <select id="game-mode-select-manual" onchange="if(typeof setGameMode === 'function') setGameMode(this.value)">
         <option value="standard">Standard Mode</option>

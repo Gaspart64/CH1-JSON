@@ -93,7 +93,19 @@ function parseJSON(jsonText) {
             return;
         }
 
-        const sanList = parseMoveString(p.moves[0].move);
+        let moveStr = "";
+        if (typeof p.moves === 'string') {
+            moveStr = p.moves;
+        } else if (Array.isArray(p.moves) && p.moves[0]) {
+            moveStr = typeof p.moves[0] === 'string' ? p.moves[0] : p.moves[0].move;
+        }
+
+        if (!moveStr) {
+            console.warn(`[parseJSON] Puzzle ${i}: missing "moves" — skipped`);
+            return;
+        }
+
+        const sanList = parseMoveString(moveStr);
         if (sanList.length === 0) {
             console.warn(`[parseJSON] Puzzle ${i}: move string produced no tokens — skipped`);
             return;
@@ -111,18 +123,24 @@ function parseJSON(jsonText) {
         const parsedMoves = [];
         let valid = true;
         for (const san of sanList) {
-            const result = tempGame.move(san);
-            if (!result) {
-                console.warn(`[parseJSON] Puzzle ${i}: illegal move "${san}" in "${p.moves[0].move}" — skipped`);
+            try {
+                const result = tempGame.move(san);
+                if (!result) {
+                    console.warn(`[parseJSON] Puzzle ${i}: illegal move "${san}" in "${moveStr}" — skipped`);
+                    valid = false;
+                    break;
+                }
+                // Store in the same shape parsePGN() produces
+                parsedMoves.push({ notation: { notation: result.san } });
+            } catch (err) {
+                console.warn(`[parseJSON] Puzzle ${i}: error processing move "${san}" — skipped`);
                 valid = false;
                 break;
             }
-            // Store in the same shape parsePGN() produces
-            parsedMoves.push({ notation: { notation: result.san } });
         }
         if (!valid) return;
 
-        const eventName   = (p.event && p.event.en) ? p.event.en : `Puzzle ${i + 1}`;
+        const eventName   = (p.event && p.event.en) ? p.event.en : (p.title || `Puzzle ${i + 1}`);
         const gameResult  = p.game_terminator || '*';
         const moveText    = sanList.join(' ') + ' ' + gameResult; // for PGN export
 

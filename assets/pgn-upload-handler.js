@@ -31,9 +31,7 @@ function handlePGNFileUpload(event) {
             const uploadVal = ext === 'json' ? 'uploaded_json' : 'uploaded';
 
             // Update hidden #openPGN so downstream code has a value
-            const hiddenDropdown = document.getElementById('openPGN');
-            hiddenDropdown.innerHTML =
-                `<option value="${uploadVal}" selected>📤 ${file.name}</option>`;
+            $('#openPGN').val(uploadVal);
 
             if (ext === 'json') parseJSON(content);
             else parsePGN(content.trim());
