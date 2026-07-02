@@ -456,9 +456,15 @@ function initalize() {
                                 window.suggestedNextSet = nextSet.path;
                                 if (modalContent) {
                                         const lastLabel = getSetLabel(lastCompleted);
+                                        // nextSet.label already includes the folder name in my helper, 
+                                        // but let's make it explicitly clear.
                                         modalContent.textContent = `You finished ${lastLabel}. Would you like to solve ${nextSet.label}?`;
                                 }
-                                if (modal) modal.style.display = 'block';
+                                if (modal) {
+                                    const modalTitle = modal.querySelector('h2');
+                                    if (modalTitle) modalTitle.textContent = "Next Puzzles?";
+                                    modal.style.display = 'block';
+                                }
                         }
                 }
         }, 500);
