@@ -168,7 +168,5 @@ function onFolderChange() {
     fileSel.style.display = 'block';
     fileSel.value = '';
 
-    // Clear stale value so SR keying starts fresh
-    document.getElementById('openPGN').value = '';
-    resetGame();
+    // Do NOT clear openPGN or resetGame here, wait for file selection
 }

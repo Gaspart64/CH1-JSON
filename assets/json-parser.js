@@ -144,7 +144,7 @@ function parseJSON(jsonText) {
         const gameResult  = p.game_terminator || '*';
         const moveText    = sanList.join(' ') + ' ' + gameResult; // for PGN export
 
-        puzzleset.push({
+        const puzzleObj = {
             Event:  eventName,
             Series: eventName,
             White:  (p.white && p.white !== '?' && p.white !== '2') ? p.white : '',
@@ -152,7 +152,10 @@ function parseJSON(jsonText) {
             FEN:    p.fen,
             Moves:  parsedMoves,
             PGN:    moveText,
-        });
+        };
+        
+        puzzleset.push(puzzleObj);
+        console.log(`[parseJSON] Loaded puzzle: ${eventName}`);
     });
 
     console.log(`[parseJSON] ${puzzleset.length} / ${raw.length} puzzles loaded`);

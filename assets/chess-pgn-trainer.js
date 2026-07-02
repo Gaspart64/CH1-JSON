@@ -898,6 +898,8 @@ function resetGame() {
         blankBoard = null;
         game = new Chess();
         moveHistory = [];
+        // Note: We don't clear puzzleset here if we're in the middle of loading one
+        // but for safety, let's keep it as is and ensure loadPGNFile handles it.
         puzzleset = [];
         errorcount = 0;
         pauseDateTimeTotal = 0;
@@ -1440,9 +1442,14 @@ function onDialogClose() {
  * Feed the PGN file provided by the user here to the PGN Parser and update/enable the controls
  */
 function loadPGNFile() { // eslint-disable-line no-unused-vars
-        resetGame();
-
         const selectedFile = document.getElementById('openPGN').value;
+        if (!selectedFile) return;
+
+        resetGame();
+        // Restore the value because resetGame() might clear it if not careful
+        document.getElementById('openPGN').value = selectedFile;
+
+        console.log('Attempting to load:', selectedFile);
 
         if (selectedFile) {
                 if (selectedFile === 'uploaded' || selectedFile === 'uploaded_json') {
