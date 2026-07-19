@@ -1,4 +1,4 @@
-const CACHE_NAME = 'chess-json-trainer-v1.2.0';
+const CACHE_NAME = 'chess-json-trainer-v1.2.2';
 
 const PRECACHE = [
     './', './index.html',
@@ -40,17 +40,24 @@ self.addEventListener('activate', e => {
 
 self.addEventListener('fetch', e => {
     const url = new URL(e.request.url);
-    const isData = url.pathname.endsWith('.pgn') || url.pathname.endsWith('.json');
-    
-    if (isData) {
-        // Network-first for data files so content updates propagate
+    const ext = url.pathname.split('.').pop().toLowerCase();
+
+    // Network-first for HTML and JS so code changes are always picked up immediately
+    const isCodeFile = ext === 'html' || ext === 'js';
+    // Network-first for data files so puzzle content updates propagate
+    const isData = ext === 'pgn' || ext === 'json';
+
+    if (isCodeFile || isData) {
         e.respondWith(
             fetch(e.request)
-                .then(r => { caches.open(CACHE_NAME).then(c => c.put(e.request, r.clone())); return r; })
+                .then(r => {
+                    caches.open(CACHE_NAME).then(c => c.put(e.request, r.clone()));
+                    return r;
+                })
                 .catch(() => caches.match(e.request))
         );
     } else {
-        // Cache-first for all other assets
+        // Cache-first for static assets (images, fonts, CSS, SVGs)
         e.respondWith(
             caches.match(e.request).then(cached => cached ||
                 fetch(e.request).then(r => {
