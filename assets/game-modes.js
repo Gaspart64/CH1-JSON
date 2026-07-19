@@ -633,9 +633,12 @@ function initializeGameModes() {
         select.addEventListener('change', handleModeChange);
     }
     srLoadParams();
-    document.getElementById('sr-initial-ease').value   = SR_INITIAL_EASE;
-    document.getElementById('sr-min-ease').value        = SR_MIN_EASE;
-    document.getElementById('sr-reinsert-after').value  = SR_REINSERT_AFTER;
+    const srInitialEaseEl   = document.getElementById('sr-initial-ease');
+    const srMinEaseEl       = document.getElementById('sr-min-ease');
+    const srReinsertAfterEl = document.getElementById('sr-reinsert-after');
+    if (srInitialEaseEl)   srInitialEaseEl.value   = SR_INITIAL_EASE;
+    if (srMinEaseEl)       srMinEaseEl.value        = SR_MIN_EASE;
+    if (srReinsertAfterEl) srReinsertAfterEl.value  = SR_REINSERT_AFTER;
     resetModeState();
 }
 
