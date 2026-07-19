@@ -60,7 +60,6 @@
         <script type="text/javascript" src="./assets/jquery.wheelcolorpicker.js"></script>
         <link type="text/css" rel="stylesheet" href="./assets/wheelcolorpicker.css" />
 
-        <script src="./assets/puzzle-manifest.js"></script>
         <script src="./assets/json-parser.js"></script>
 </head>
 
@@ -241,6 +240,19 @@
                                                         <div id="avgTime"></div>
                                                 </div>
                                                 </p>
+                                                <div id="next-set-prompt" style="display:none; padding:16px 8px 8px; border-top:1px solid #e0e0e0; text-align:center;">
+                                                        <p id="next-set-message" style="margin:0 0 14px 0; font-size:0.97em; color:#444;"></p>
+                                                        <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+                                                                <button id="btn-next-set"
+                                                                        style="background:#3d6b9e; color:#fff; border:none; border-radius:6px; padding:10px 22px; font-size:0.95em; cursor:pointer;">
+                                                                        Next Set ➜
+                                                                </button>
+                                                                <button id="btn-repeat-set"
+                                                                        style="background:#e0e0e0; color:#333; border:none; border-radius:6px; padding:10px 22px; font-size:0.95em; cursor:pointer;">
+                                                                        🔁 Repeat Set
+                                                                </button>
+                                                        </div>
+                                                </div>
                                                 <a class="w3-bar-item w3-button" onclick="outputStats2Clipboard();">Copy results to
                                                         clipboard</a>
                                                 <a class="w3-bar-item w3-button" onclick="outputStats2CSV();">Download to CSV</a>
