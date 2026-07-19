@@ -409,6 +409,18 @@ function getSetLabel(path) {
 }
 
 /**
+ * Load a puzzle set by path, sync the UI, and auto-start the test.
+ * Used by the "Next Set" and "Repeat Set" buttons in the results modal.
+ */
+function loadAndStartSet(path) {
+        document.getElementById('resmodal').style.display = 'none';
+        $('#openPGN').val(path);
+        loadPGNFile();
+        syncBrowserToPath(path);
+        setTimeout(() => startTest(), 600);
+}
+
+/**
  * Sync the two-level browser dropdowns to a specific path
  */
 function syncBrowserToPath(path) {
@@ -796,6 +808,12 @@ function clearMessages() {
         for (var messageelement of messagelist) {
                 $(messageelement).text('');
         }
+
+        // Reset the next-set prompt so it's fresh for the next completion
+        const _prompt = document.getElementById('next-set-prompt');
+        const _btnNext = document.getElementById('btn-next-set');
+        if (_prompt) _prompt.style.display = 'none';
+        if (_btnNext) _btnNext.style.display = '';
 }
 
 /**
@@ -1684,7 +1702,28 @@ function showStats() {
         setHintButtonVisibility(false, true);
 
         // Update the results modal with the details
-        $('#messagecomplete').html('<h2>Set Complete</h2>');
+        const _completedPath = lastCompletedSet || $('#openPGN').val();
+        const _completedLabel = _completedPath ? getSetLabel(_completedPath) : '';
+        $('#messagecomplete').html(`<h2>Set Complete</h2>${_completedLabel ? `<p style="color:#666; margin:0 0 4px 0; font-size:0.95em;">${_completedLabel}</p>` : ''}`);
+
+        // Populate the next-set / repeat-set prompt
+        const _nextSet = _completedPath ? getNextPuzzleSet(_completedPath) : null;
+        const _prompt = document.getElementById('next-set-prompt');
+        const _msg = document.getElementById('next-set-message');
+        const _btnNext = document.getElementById('btn-next-set');
+        const _btnRepeat = document.getElementById('btn-repeat-set');
+        if (_prompt && _msg && _btnNext && _btnRepeat) {
+                if (_nextSet) {
+                        _msg.textContent = `You finished ${_completedLabel}. Would you like to solve ${_nextSet.label}?`;
+                        _btnNext.textContent = `Next Set: ${_nextSet.label} ➜`;
+                        _btnNext.onclick = () => loadAndStartSet(_nextSet.path);
+                } else {
+                        _msg.textContent = `You finished ${_completedLabel}. Would you like to repeat it?`;
+                        _btnNext.style.display = 'none';
+                }
+                _btnRepeat.onclick = _completedPath ? () => loadAndStartSet(_completedPath) : null;
+                _prompt.style.display = 'block';
+        }
         $('#elapsedTime').text(`Elapsed time (hh:mm:ss): ${stats.totaltime}`);
         $('#avgTime').text(`Average time/puzzle (hh:mm:ss): ${stats.avgtime}`);
         $('#errors').text(`Number of errors: ${stats.errors}`);
