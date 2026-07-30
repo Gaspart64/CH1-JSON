@@ -489,6 +489,10 @@ function initalize() {
         if (typeof initPuzzleBrowser === 'function') {
                 initPuzzleBrowser();
         }
+
+        // Start hourly notification checker
+        checkHourlyNotification(); // Run once immediately
+        setInterval(checkHourlyNotification, 60000); // Then every minute
 }
 
 /**
@@ -512,7 +516,7 @@ function loadSettings() {
         // Set defaults if running for the first time
 
         // Default keys and values
-        var defaults = { light: 'DEE3E6', dark: '769457', pieceIndex: '0', darkmode: '1', copy2clipboard: '1', csvheaders: '1' };
+        var defaults = { light: 'DEE3E6', dark: '769457', pieceIndex: '0', darkmode: '1', copy2clipboard: '1', csvheaders: '1', notifications: '0' };
 
         // Load defaults if any keys are missing
         for (const [key, value] of Object.entries(defaults)) {
@@ -531,6 +535,9 @@ function loadSettings() {
 
         // CSV Headers setting
         if (readItem('csvheaders') == "1") { $("#chk_csvheaders").prop("checked", true); }
+
+        // Notifications setting
+        if (readItem('notifications') == "1") { $("#chk_notifications").prop("checked", true); }
 
 }
 
@@ -644,6 +651,67 @@ function toggleSetting(elementname, dataname) { // eslint-disable-line no-unused
         // Set to "1" (aka "True" or "On") if checked
         if ($(elementname).is(':checked')) { saveItem(dataname, '1'); }
 
+}
+
+/**
+ * Toggle the hourly notification setting
+ */
+function toggleNotifications() { // eslint-disable-line no-unused-vars
+    const isChecked = $('#chk_notifications').is(':checked');
+    saveItem('notifications', isChecked ? '1' : '0');
+    
+    if (isChecked) {
+        if (!("Notification" in window)) {
+            alert("This browser does not support desktop notifications");
+            $('#chk_notifications').prop('checked', false);
+            saveItem('notifications', '0');
+            return;
+        }
+        
+        if (Notification.permission !== "granted") {
+            Notification.requestPermission().then(permission => {
+                if (permission !== "granted") {
+                    $('#chk_notifications').prop('checked', false);
+                    saveItem('notifications', '0');
+                } else {
+                    // Test notification
+                    new Notification("Chess JSON Trainer", {
+                        body: "Hourly puzzle reminders enabled!",
+                        icon: "./img/icon-192.png"
+                    });
+                }
+            });
+        }
+    }
+}
+
+/**
+ * Check if it's time to show an hourly notification
+ */
+function checkHourlyNotification() {
+    if (readItem('notifications') !== '1') return;
+    if (Notification.permission !== "granted") return;
+
+    const now = new Date();
+    const hour = now.getHours();
+    
+    // Check if hour is between 9 am (9) and 2 am (2)
+    // Range: 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 0, 1, 2
+    const isWithinRange = (hour >= 9 || hour <= 2);
+    
+    if (isWithinRange) {
+        const lastNotifiedHour = readItem('lastNotificationHour');
+        const currentHourKey = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}-${hour}`;
+        
+        if (lastNotifiedHour !== currentHourKey) {
+            new Notification("Time for Puzzles!", {
+                body: "It's time to solve your hourly set of chess puzzles!",
+                icon: "./img/icon-192.png",
+                tag: "puzzle-reminder"
+            });
+            saveItem('lastNotificationHour', currentHourKey);
+        }
+    }
 }
 
 
