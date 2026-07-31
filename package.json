@@ -1,0 +1,27 @@
+{
+  "name": "ch1-json",
+  "version": "1.0.0",
+  "description": "Online tool that opens chess JSON and PGN files and allows the user to practice the moves. This tool is adapted to read puzzle data from custom JSON files instead of PGN files, featuring a two-level collection browser. Once the set is complete, the player sees how many errors they made as well as how long the set took to complete.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gaspart64/CH1-JSON.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Gaspart64/CH1-JSON/issues"
+  },
+  "homepage": "https://github.com/Gaspart64/CH1-JSON#readme",
+  "dependencies": {
+    "body-parser": "^2.3.0",
+    "express": "^5.2.1",
+    "node-cron": "^4.6.0",
+    "web-push": "^3.6.7"
+  }
+}

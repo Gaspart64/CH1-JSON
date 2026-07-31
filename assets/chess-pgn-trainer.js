@@ -516,7 +516,7 @@ function loadSettings() {
         // Set defaults if running for the first time
 
         // Default keys and values
-        var defaults = { light: 'DEE3E6', dark: '769457', pieceIndex: '0', darkmode: '1', copy2clipboard: '1', csvheaders: '1', notifications: '0' };
+        var defaults = { light: 'DEE3E6', dark: '769457', pieceIndex: '0', darkmode: '1', copy2clipboard: '1', csvheaders: '1', notifications: '0', notificationStart: '9', notificationEnd: '2' };
 
         // Load defaults if any keys are missing
         for (const [key, value] of Object.entries(defaults)) {
@@ -537,7 +537,25 @@ function loadSettings() {
         if (readItem('csvheaders') == "1") { $("#chk_csvheaders").prop("checked", true); }
 
         // Notifications setting
-        if (readItem('notifications') == "1") { $("#chk_notifications").prop("checked", true); }
+        if (readItem('notifications') == "1") { 
+            $("#chk_notifications").prop("checked", true); 
+            $("#notification-settings").show();
+        }
+        
+        // Populate hour selects
+        const startSelect = document.getElementById('notification-start');
+        const endSelect = document.getElementById('notification-end');
+        if (startSelect && endSelect) {
+            for (let i = 0; i < 24; i++) {
+                const label = i === 0 ? '12 AM' : i < 12 ? i + ' AM' : i === 12 ? '12 PM' : (i - 12) + ' PM';
+                const optStart = new Option(label, i);
+                const optEnd = new Option(label, i);
+                startSelect.add(optStart);
+                endSelect.add(optEnd);
+            }
+            startSelect.value = readItem('notificationStart');
+            endSelect.value = readItem('notificationEnd');
+        }
 
 }
 
@@ -661,10 +679,12 @@ function toggleNotifications() { // eslint-disable-line no-unused-vars
     saveItem('notifications', isChecked ? '1' : '0');
     
     if (isChecked) {
-        if (!("Notification" in window)) {
-            alert("This browser does not support desktop notifications");
+        $("#notification-settings").show();
+        if (!("Notification" in window) || !("serviceWorker" in navigator)) {
+            alert("This browser does not support notifications. If you are on iOS, please 'Add to Home Screen' first.");
             $('#chk_notifications').prop('checked', false);
             saveItem('notifications', '0');
+            $("#notification-settings").hide();
             return;
         }
         
@@ -673,14 +693,89 @@ function toggleNotifications() { // eslint-disable-line no-unused-vars
                 if (permission !== "granted") {
                     $('#chk_notifications').prop('checked', false);
                     saveItem('notifications', '0');
+                    $("#notification-settings").hide();
                 } else {
-                    // Test notification
-                    new Notification("Chess JSON Trainer", {
-                        body: "Hourly puzzle reminders enabled!",
-                        icon: "./img/icon-192.png"
-                    });
+                    subscribeToPush();
                 }
             });
+        } else {
+            subscribeToPush();
+        }
+    } else {
+        $("#notification-settings").hide();
+        updateNotificationConfig(); // Sync disabled state to server
+    }
+}
+
+async function subscribeToPush() {
+    try {
+        const registration = await navigator.serviceWorker.ready;
+        const response = await fetch('/vapidPublicKey');
+        const vapidPublicKey = await response.text();
+        const convertedVapidKey = urlBase64ToUint8Array(vapidPublicKey);
+
+        const subscription = await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: convertedVapidKey
+        });
+
+        await sendSubscriptionToServer(subscription);
+        
+        new Notification("Chess JSON Trainer", {
+            body: "Hourly puzzle reminders enabled!",
+            icon: "./img/icon-192.png"
+        });
+    } catch (error) {
+        console.error("Push subscription failed:", error);
+    }
+}
+
+async function sendSubscriptionToServer(subscription) {
+    const config = {
+        enabled: readItem('notifications'),
+        startHour: readItem('notificationStart'),
+        endHour: readItem('notificationEnd')
+    };
+
+    await fetch('/subscribe', {
+        method: 'POST',
+        body: JSON.stringify({ subscription, config }),
+        headers: {
+            'content-type': 'application/json'
+        }
+    });
+}
+
+function urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding)
+        .replace(/-/g, '+')
+        .replace(/_/g, '/');
+
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+
+    for (let i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+}
+
+/**
+ * Update notification hour settings
+ */
+async function updateNotificationConfig() { // eslint-disable-line no-unused-vars
+    const start = document.getElementById('notification-start').value;
+    const end = document.getElementById('notification-end').value;
+    saveItem('notificationStart', start);
+    saveItem('notificationEnd', end);
+    
+    // Sync with server if subscribed
+    if (navigator.serviceWorker) {
+        const registration = await navigator.serviceWorker.ready;
+        const subscription = await registration.pushManager.getSubscription();
+        if (subscription) {
+            await sendSubscriptionToServer(subscription);
         }
     }
 }
@@ -695,9 +790,16 @@ function checkHourlyNotification() {
     const now = new Date();
     const hour = now.getHours();
     
-    // Check if hour is between 9 am (9) and 2 am (2)
-    // Range: 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 0, 1, 2
-    const isWithinRange = (hour >= 9 || hour <= 2);
+    const startHour = parseInt(readItem('notificationStart') || '9');
+    const endHour = parseInt(readItem('notificationEnd') || '2');
+    
+    let isWithinRange = false;
+    if (startHour <= endHour) {
+        isWithinRange = (hour >= startHour && hour <= endHour);
+    } else {
+        // Range crosses midnight (e.g., 9 PM to 2 AM)
+        isWithinRange = (hour >= startHour || hour <= endHour);
+    }
     
     if (isWithinRange) {
         const lastNotifiedHour = readItem('lastNotificationHour');

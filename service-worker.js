@@ -87,3 +87,18 @@ self.addEventListener('notificationclick', event => {
         })
     );
 });
+
+// Handle push events
+self.addEventListener('push', event => {
+    const data = event.data.json();
+    const options = {
+        body: data.body,
+        icon: data.icon || './img/icon-192.png',
+        badge: './img/icon-192.png',
+        tag: 'puzzle-reminder',
+        renotify: true
+    };
+    event.waitUntil(
+        self.registration.showNotification(data.title, options)
+    );
+});
