@@ -72,6 +72,12 @@ let isMistakeReviewActive = false;
 let persistentMistakeList = []; // Persists across review sessions
 let persistentSlowestPuzzles = []; // Persists across review sessions
 
+// Auto-advance countdown on the "Set Complete" screen
+const NEXT_SET_COUNTDOWN_SECONDS = 6;
+let nextSetCountdownInterval = null;
+let nextSetCountdownRemainingMs = 0;
+let nextSetCountdownPath = null;
+
 
 
 // -------------
@@ -413,11 +419,81 @@ function getSetLabel(path) {
  * Used by the "Next Set" and "Repeat Set" buttons in the results modal.
  */
 function loadAndStartSet(path) {
+        cancelNextSetCountdown();
         document.getElementById('resmodal').style.display = 'none';
         $('#openPGN').val(path);
         loadPGNFile();
         syncBrowserToPath(path);
         setTimeout(() => startTest(), 600);
+}
+
+/**
+ * Start (or restart) the auto-advance countdown shown on the "Set Complete"
+ * screen. Only called when a genuine next set exists — we never
+ * auto-navigate into a blind "Repeat", that always requires a tap.
+ */
+function startNextSetCountdown(path) {
+        cancelNextSetCountdown();
+        nextSetCountdownPath = path;
+        nextSetCountdownRemainingMs = NEXT_SET_COUNTDOWN_SECONDS * 1000;
+
+        const row = document.getElementById('next-set-countdown-row');
+        if (row) row.style.display = 'block';
+        renderNextSetCountdown();
+
+        nextSetCountdownInterval = setInterval(tickNextSetCountdown, 250);
+}
+
+function tickNextSetCountdown() {
+        nextSetCountdownRemainingMs -= 250;
+        if (nextSetCountdownRemainingMs <= 0) {
+                const path_ = nextSetCountdownPath;
+                cancelNextSetCountdown();
+                if (path_) loadAndStartSet(path_);
+                return;
+        }
+        renderNextSetCountdown();
+}
+
+function renderNextSetCountdown() {
+        const bar = document.getElementById('next-set-countdown-bar');
+        const text = document.getElementById('next-set-countdown-text');
+        const pct = Math.max(0, nextSetCountdownRemainingMs / (NEXT_SET_COUNTDOWN_SECONDS * 1000)) * 100;
+        const secs = Math.max(0, Math.ceil(nextSetCountdownRemainingMs / 1000));
+        if (bar) bar.style.width = pct + '%';
+        if (text) text.textContent = `Continuing to next set in ${secs}s…`;
+}
+
+/**
+ * Stop the countdown entirely (user chose something else, closed the
+ * modal, or a new set started loading).
+ */
+function cancelNextSetCountdown() { // eslint-disable-line no-unused-vars
+        if (nextSetCountdownInterval) {
+                clearInterval(nextSetCountdownInterval);
+                nextSetCountdownInterval = null;
+        }
+        nextSetCountdownPath = null;
+        const row = document.getElementById('next-set-countdown-row');
+        if (row) row.style.display = 'none';
+}
+
+/**
+ * Pause the countdown without losing progress — used when the browser
+ * tab/app is backgrounded, so we never auto-navigate while the user
+ * isn't actually looking at the screen.
+ */
+function pauseNextSetCountdown() { // eslint-disable-line no-unused-vars
+        if (nextSetCountdownInterval) {
+                clearInterval(nextSetCountdownInterval);
+                nextSetCountdownInterval = null;
+        }
+}
+
+function resumeNextSetCountdown() { // eslint-disable-line no-unused-vars
+        if (nextSetCountdownPath && nextSetCountdownRemainingMs > 0 && !nextSetCountdownInterval) {
+                nextSetCountdownInterval = setInterval(tickNextSetCountdown, 250);
+        }
 }
 
 /**
@@ -493,6 +569,25 @@ function initalize() {
         // Start hourly notification checker
         checkHourlyNotification(); // Run once immediately
         setInterval(checkHourlyNotification, 60000); // Then every minute
+
+        // Daily practice streak badge
+        if (typeof renderStreakBadge === 'function') renderStreakBadge();
+
+        // Wire up the "Stay here" link and pause the auto-advance countdown
+        // whenever the user interacts with anything else in the results modal.
+        const cancelLink = document.getElementById('btn-cancel-countdown');
+        if (cancelLink) cancelLink.addEventListener('click', () => cancelNextSetCountdown());
+        const resultsModalContent = document.querySelector('#resmodal .w3-modal-content');
+        if (resultsModalContent) {
+                resultsModalContent.addEventListener('click', (e) => {
+                        if (e.target && e.target.id === 'btn-next-set') return; // let it navigate immediately
+                        cancelNextSetCountdown();
+                });
+        }
+        document.addEventListener('visibilitychange', () => {
+                if (document.hidden) pauseNextSetCountdown();
+                else resumeNextSetCountdown();
+        });
 }
 
 /**
@@ -731,10 +826,18 @@ async function subscribeToPush() {
 }
 
 async function sendSubscriptionToServer(subscription) {
+    const _streak = (typeof getDailyStreakData === 'function') ? getDailyStreakData() : { current: 0, lastPlayedDate: null };
     const config = {
         enabled: readItem('notifications'),
         startHour: readItem('notificationStart'),
-        endHour: readItem('notificationEnd')
+        endHour: readItem('notificationEnd'),
+        // getTimezoneOffset() is minutes BEHIND UTC (e.g. Houston/CDT = 300).
+        // The server uses this to compute each user's own local hour/date
+        // instead of the server's, so the daily window and streak-day
+        // boundary line up with where the user actually is.
+        timezoneOffsetMinutes: new Date().getTimezoneOffset(),
+        dailyStreak: _streak.current || 0,
+        lastPlayedDate: _streak.lastPlayedDate || null
     };
 
     await fetch('/subscribe', {
@@ -744,6 +847,26 @@ async function sendSubscriptionToServer(subscription) {
             'content-type': 'application/json'
         }
     });
+}
+
+/**
+ * After recording today's practice, push the updated streak/lastPlayedDate
+ * to the server (if the user has push notifications enabled) so the cron
+ * job knows not to send a "come back" reminder later today.
+ */
+async function syncStreakToServerIfSubscribed() { // eslint-disable-line no-unused-vars
+    try {
+        if (readItem('notifications') !== '1') return;
+        if (!('serviceWorker' in navigator)) return;
+        const registration = await navigator.serviceWorker.ready;
+        const subscription = await registration.pushManager.getSubscription();
+        if (subscription) {
+            await sendSubscriptionToServer(subscription);
+        }
+    } catch (e) {
+        // Non-critical — the next hourly sync (or next completion) will catch up.
+        console.error('Streak sync to server failed:', e);
+    }
 }
 
 function urlBase64ToUint8Array(base64String) {
@@ -787,6 +910,12 @@ function checkHourlyNotification() {
     if (readItem('notifications') !== '1') return;
     if (Notification.permission !== "granted") return;
 
+    // Already practiced today (streak recorded) — no need to nag while the tab is open.
+    if (typeof getDailyStreakData === 'function') {
+        const _streak = getDailyStreakData();
+        if (_streak.lastPlayedDate === getTodayLocalDateString()) return;
+    }
+
     const now = new Date();
     const hour = now.getHours();
     
@@ -806,8 +935,13 @@ function checkHourlyNotification() {
         const currentHourKey = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}-${hour}`;
         
         if (lastNotifiedHour !== currentHourKey) {
-            new Notification("Time for Puzzles!", {
-                body: "It's time to solve your hourly set of chess puzzles!",
+            const _streak = (typeof getDailyStreakData === 'function') ? getDailyStreakData() : { current: 0 };
+            const _title = _streak.current >= 1 ? `🔥 Keep your ${_streak.current}-day streak alive!` : "Time for Puzzles!";
+            const _body = _streak.current >= 1
+                ? "You haven't practiced yet today — solve a set to keep your streak going."
+                : "It's time to solve your hourly set of chess puzzles!";
+            new Notification(_title, {
+                body: _body,
                 icon: "./img/icon-192.png",
                 tag: "puzzle-reminder"
             });
@@ -984,6 +1118,7 @@ function clearMessages() {
         const _btnNext = document.getElementById('btn-next-set');
         if (_prompt) _prompt.style.display = 'none';
         if (_btnNext) _btnNext.style.display = '';
+        if (typeof cancelNextSetCountdown === 'function') cancelNextSetCountdown();
 }
 
 /**
@@ -1876,6 +2011,31 @@ function showStats() {
         const _completedLabel = _completedPath ? getSetLabel(_completedPath) : '';
         $('#messagecomplete').html(`<h2>Set Complete</h2>${_completedLabel ? `<p style="color:#666; margin:0 0 4px 0; font-size:0.95em;">${_completedLabel}</p>` : ''}`);
 
+        // Record today's practice toward the daily streak, and celebrate if it changed.
+        if (typeof recordDailyCompletion === 'function') {
+                const _streakResult = recordDailyCompletion();
+                if (typeof renderStreakBadge === 'function') renderStreakBadge();
+
+                const _celebrationEl = document.getElementById('streak-celebration');
+                if (_celebrationEl) {
+                        if (_streakResult.streakChanged && _streakResult.isNewRecord) {
+                                _celebrationEl.textContent = `🎉 New record! 🔥 ${_streakResult.current}-day streak`;
+                                _celebrationEl.style.display = 'block';
+                        } else if (_streakResult.streakChanged && _streakResult.current >= 2) {
+                                _celebrationEl.textContent = `🔥 ${_streakResult.current}-day streak!`;
+                                _celebrationEl.style.display = 'block';
+                        } else {
+                                _celebrationEl.style.display = 'none';
+                        }
+                }
+
+                // Let the server know today is covered, so it doesn't send a
+                // "come back" push later today.
+                if (typeof syncStreakToServerIfSubscribed === 'function') {
+                        syncStreakToServerIfSubscribed();
+                }
+        }
+
         // Populate the next-set / repeat-set prompt
         const _nextSet = _completedPath ? getNextPuzzleSet(_completedPath) : null;
         const _prompt = document.getElementById('next-set-prompt');
@@ -1884,12 +2044,15 @@ function showStats() {
         const _btnRepeat = document.getElementById('btn-repeat-set');
         if (_prompt && _msg && _btnNext && _btnRepeat) {
                 if (_nextSet) {
-                        _msg.textContent = `You finished ${_completedLabel}. Would you like to solve ${_nextSet.label}?`;
+                        _msg.textContent = `You finished ${_completedLabel}. Up next: ${_nextSet.label}.`;
                         _btnNext.textContent = `Next Set: ${_nextSet.label} ➜`;
                         _btnNext.onclick = () => loadAndStartSet(_nextSet.path);
+                        _btnNext.style.display = '';
+                        startNextSetCountdown(_nextSet.path);
                 } else {
                         _msg.textContent = `You finished ${_completedLabel}. Would you like to repeat it?`;
                         _btnNext.style.display = 'none';
+                        cancelNextSetCountdown();
                 }
                 _btnRepeat.onclick = _completedPath ? () => loadAndStartSet(_completedPath) : null;
                 _prompt.style.display = 'block';
@@ -2108,6 +2271,7 @@ function startMistakeReview() {
         // Preserve the original puzzleset before resetGame() clears it
         const originalPuzzleset = puzzleset;
 
+        cancelNextSetCountdown();
         document.getElementById('resmodal').style.display = 'none';
         if (typeof setGameMode === 'function') setGameMode('standard');
 
@@ -2153,6 +2317,7 @@ function startSlowestReview() {
         // Preserve the original puzzleset before resetGame() clears it
         const originalPuzzleset = puzzleset;
 
+        cancelNextSetCountdown();
         document.getElementById('resmodal').style.display = 'none';
         if (typeof setGameMode === 'function') setGameMode('standard');
 

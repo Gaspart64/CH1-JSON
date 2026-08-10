@@ -64,6 +64,7 @@ async function loadScript(src) {
 		}
 
 		await loadScript('./assets/storage.js');
+		await loadScript('./assets/streaks.js');
 		await loadScript('./assets/game-modes.js');
         await loadScript('./assets/chess-pgn-trainer.js');
         await loadScript('./assets/piece-list.js');

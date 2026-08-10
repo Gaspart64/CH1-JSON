@@ -1,9 +1,9 @@
-const CACHE_NAME = 'chess-json-trainer-v1.2.3';
+const CACHE_NAME = 'chess-json-trainer-v1.3.0';
 
 const PRECACHE = [
     './', './index.html',
     './assets/app.js', './assets/chess-pgn-trainer.js',
-    './assets/game-modes.js', './assets/storage.js',
+    './assets/game-modes.js', './assets/storage.js', './assets/streaks.js',
     './assets/database.js', './assets/puzzle-manifest.js',
     './assets/json-parser.js', './assets/pgn-upload-handler.js',
     './assets/piece-list.js', './assets/pagestyle.css', './assets/w3.js',

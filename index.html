@@ -70,7 +70,10 @@
                         style="text-align: right; padding-bottom: 4px;">Close &times;</button>
 
                 <div class="landscapemode">
-                        <h3>Chess JSON Trainer</h3>
+                        <h3>Chess JSON Trainer
+                                <span id="streak-badge-landscape" title=""
+                                        style="display:none; font-size:0.55em; font-weight:bold; background:#ff7043; color:#fff; border-radius:12px; padding:2px 9px; vertical-align:middle; margin-left:6px;"></span>
+                        </h3>
                 </div>
                 <p>
                         <button type="button" id="openPGN_button"
@@ -197,6 +200,8 @@
                         <div>
                                 <h3>
                                     <span id='Title'>Chess JSON Trainer</span>
+                                    <span id="streak-badge-portrait" title=""
+                                            style="display:none; font-size:0.5em; font-weight:bold; background:#ff7043; color:#fff; border-radius:12px; padding:2px 9px; vertical-align:middle; margin-left:6px;"></span>
                                     <button class="w3-button w3-large w3-hide-large" onclick="w3_open()"
                                             style="padding: 0; min-height: auto; min-width: auto;">&#9776;</button>
                                 </h3>
@@ -229,11 +234,12 @@
                         <div id="resmodal" class="w3-modal w3-animate-opacity">
                                 <div class="w3-modal-content">
                                         <div class="w3-container light-mode-control">
-                                                <span onclick="document.getElementById('resmodal').style.display='none'"
+                                                <span onclick="if(typeof cancelNextSetCountdown === 'function') cancelNextSetCountdown(); document.getElementById('resmodal').style.display='none'"
                                                         class="w3-button w3-display-topright">&times;</span>
                                                 <p>
                                                 <div class="w3-container w3-center">
                                                         <div id="messagecomplete"></div>
+                                                        <div id="streak-celebration" style="display:none; margin:2px 0 8px; font-size:1.15em; font-weight:bold; color:#ff7043;"></div>
                                                         <div id="errors"></div>
                                                         <div id="errorRate"></div>
                                                         <div id="elapsedTime"></div>
@@ -251,6 +257,16 @@
                                                                         style="background:#e0e0e0; color:#333; border:none; border-radius:6px; padding:10px 22px; font-size:0.95em; cursor:pointer;">
                                                                         🔁 Repeat Set
                                                                 </button>
+                                                        </div>
+                                                        <div id="next-set-countdown-row" style="display:none; margin-top:12px;">
+                                                                <div style="height:4px; background:#e0e0e0; border-radius:2px; overflow:hidden; max-width:220px; margin:0 auto 6px;">
+                                                                        <div id="next-set-countdown-bar"
+                                                                                style="height:100%; width:100%; background:#3d6b9e; transition: width 1s linear;"></div>
+                                                                </div>
+                                                                <span id="next-set-countdown-text" style="font-size:0.85em; color:#888;"></span>
+                                                                &nbsp;·&nbsp;
+                                                                <a id="btn-cancel-countdown"
+                                                                        style="font-size:0.85em; color:#3d6b9e; cursor:pointer; text-decoration:underline;">Stay here</a>
                                                         </div>
                                                 </div>
                                                 <a class="w3-bar-item w3-button" onclick="outputStats2Clipboard();">Copy results to
