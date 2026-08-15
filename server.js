@@ -130,11 +130,16 @@ function buildNotificationPayload(kind, config, localDateStr) {
     };
 }
 
-// Hourly Cron Job (every hour at :00)
-cron.schedule('0 * * * *', () => {
-    console.log('Running hourly notification check...');
+// Runs the notification check for every subscriber. Called both by the
+// in-process cron (fires when the dyno happens to already be awake) and by
+// the /run-notifications HTTP endpoint (fires via an external scheduler,
+// which also wakes a sleeping free-tier dyno). notifyState de-dupes sends,
+// so it's harmless if both triggers fire the same hour.
+function runNotificationCheck() {
+    console.log('Running notification check...');
     const subs = getSubscriptions();
     let dirty = false;
+    let sent = 0;
 
     subs.forEach(item => {
         const { subscription, config } = item;
@@ -182,9 +187,34 @@ cron.schedule('0 * * * *', () => {
         if (kind === 'risk') item.notifyState.riskSent = true;
         item.notifyState.reminderSent = true;
         dirty = true;
+        sent += 1;
     });
 
     if (dirty) writeSubscriptions(subs);
+    return sent;
+}
+
+// In-process hourly cron. Only fires if the dyno happens to be awake at
+// the top of the hour — on a free tier that sleeps after inactivity, that
+// won't reliably be true, hence the HTTP trigger below as the real source
+// of truth for scheduling.
+cron.schedule('0 * * * *', runNotificationCheck);
+
+// External-trigger endpoint. Point a free scheduler (e.g. cron-job.org) at
+// this once an hour: GET /run-notifications?token=YOUR_SECRET
+// Requires CRON_TRIGGER_SECRET to be set in the environment — without it,
+// this route stays disabled so nobody can trigger pushes to your users by
+// guessing the URL.
+app.get('/run-notifications', (req, res) => {
+    const secret = process.env.CRON_TRIGGER_SECRET;
+    if (!secret) {
+        return res.status(503).json({ error: 'CRON_TRIGGER_SECRET not configured on the server' });
+    }
+    if (req.query.token !== secret) {
+        return res.status(403).json({ error: 'Invalid token' });
+    }
+    const sent = runNotificationCheck();
+    res.status(200).json({ ok: true, sent });
 });
 
 app.listen(PORT, () => {
