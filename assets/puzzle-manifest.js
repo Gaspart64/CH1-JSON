@@ -130,6 +130,113 @@ const PUZZLE_MANIFEST = [
     // ... repeat for all 18 collections
 ];
 
+// ── Combined puzzle pools ─────────────────────────────────────────────────────
+//
+// Each JSON file only holds a handful of puzzles (15), which is far too few for
+// most game modes (Repetition needs 20 per level, Three/Haste/Countdown run out
+// of puzzles before the clock does, Woodpecker/Speedrun want a real set).
+//
+// This block generates a "★ Combined Sets" collection from the manifest above,
+// so nothing needs to be maintained by hand. Three kinds of pool are built:
+//
+//   combined:all                  every file in every collection
+//   combined:<module>             every file of one collection (e.g. Mod-01)
+//   combined:<module>/<a>-<b>     a block of COMBINED_CHUNK_SIZE consecutive
+//                                 files (default 10 files ≈ 150 puzzles, about
+//                                 the size of the sets in the original CH1)
+//
+// A combined path is just a string; loadCombinedSet() in chess-pgn-trainer.js
+// resolves it to a list of real files, loads them all and concatenates the
+// puzzles. Because the order is deterministic, Spaced Repetition and Woodpecker
+// progress (keyed by the path) stays valid between sessions.
+
+const COMBINED_PREFIX     = 'combined:';
+const COMBINED_CHUNK_SIZE = 10;
+const COMBINED_LABEL      = '★ Combined Sets (for game modes)';
+
+// path -> { label, files: [{ path, label }], module, chunk }
+const COMBINED_SETS = {};
+
+function moduleKeyFromPath(p) {
+    const parts = p.split('/');
+    return parts.length >= 2 ? parts[parts.length - 2] : 'Puzzles';
+}
+
+(function buildCombinedSets() {
+    const sourceCollections = PUZZLE_MANIFEST.filter(c => !c.combined && c.files && c.files.length);
+    if (sourceCollections.length === 0) return;
+
+    const entries = [];
+
+    function register(path, label, files, module, chunk) {
+        COMBINED_SETS[path] = { label, files, module, chunk };
+        entries.push({ label, path, group: module, chunk });
+    }
+
+    // Everything
+    const everything = [];
+    sourceCollections.forEach(col => col.files.forEach(f =>
+        everything.push({ path: f.path, label: `${col.label} ${f.label}` })));
+    register(COMBINED_PREFIX + 'all',
+             `All collections (${everything.length} files)`, everything, null, null);
+
+    // Per collection: the whole thing, then fixed-size blocks
+    sourceCollections.forEach(col => {
+        const files = col.files.map(f => ({ path: f.path, label: `${col.label} ${f.label}` }));
+        const key   = moduleKeyFromPath(col.files[0].path);
+
+        register(COMBINED_PREFIX + key,
+                 `${col.label} — all ${files.length} exercises`, files, key, null);
+
+        for (let start = 0, n = 0; start < files.length; start += COMBINED_CHUNK_SIZE, n++) {
+            const slice = files.slice(start, start + COMBINED_CHUNK_SIZE);
+            const from  = start + 1;
+            const to    = start + slice.length;
+            register(`${COMBINED_PREFIX}${key}/${from}-${to}`,
+                     `${col.label} — exercises ${from}–${to}`, slice, key, n);
+        }
+    });
+
+    PUZZLE_MANIFEST.push({
+        label: COMBINED_LABEL,
+        combined: true,
+        files: entries,
+    });
+})();
+
+function isCombinedPath(path) {
+    return typeof path === 'string' && path.startsWith(COMBINED_PREFIX);
+}
+
+/** Returns { label, files: [{path,label}] } for a combined path, or null. */
+function getCombinedSet(path) {
+    return isCombinedPath(path) ? (COMBINED_SETS[path] || null) : null;
+}
+
+/**
+ * Find the combined pool that contains a single file.
+ *
+ * @param {string} path      Path of a normal (single-file) set.
+ * @param {string} strategy  'chunk'  → the ~150-puzzle block containing the file
+ *                           'module' → every file in the file's collection
+ * @returns {{path:string,label:string}|null}
+ */
+function findPoolForPath(path, strategy) {
+    if (!path || isCombinedPath(path)) return null;
+    const key = moduleKeyFromPath(path);
+
+    for (const [poolPath, set] of Object.entries(COMBINED_SETS)) {
+        if (set.module !== key) continue;
+        const isChunk = set.chunk !== null;
+        if (strategy === 'module' && isChunk) continue;
+        if (strategy !== 'module' && !isChunk) continue;
+        if (set.files.some(f => f.path === path)) {
+            return { path: poolPath, label: set.label };
+        }
+    }
+    return null;
+}
+
 // ── Browser initialisation ────────────────────────────────────────────────────
 
 function initPuzzleBrowser() {

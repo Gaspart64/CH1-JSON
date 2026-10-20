@@ -388,8 +388,22 @@ function handleResumeChoice(resume) {
  */
 function getNextPuzzleSet(currentPath) {
         if (typeof PUZZLE_MANIFEST === 'undefined') return null;
+
+        // Combined pools: only chunk -> next chunk of the same collection.
+        // "All ..." pools have no successor, and a finished single exercise
+        // never auto-continues into a combined pool.
+        if (typeof isCombinedPath === 'function' && isCombinedPath(currentPath)) {
+                const combinedCol = PUZZLE_MANIFEST.find(c => c.combined);
+                if (!combinedCol) return null;
+                const cur = combinedCol.files.find(f => f.path === currentPath);
+                if (!cur || cur.chunk === null || cur.chunk === undefined) return null;
+                const next = combinedCol.files.find(f => f.group === cur.group && f.chunk === cur.chunk + 1);
+                return next ? { label: next.label, path: next.path } : null;
+        }
+
         let allFiles = [];
         PUZZLE_MANIFEST.forEach(col => {
+                if (col.combined) return;
                 col.files.forEach(f => {
                         allFiles.push({ label: `${col.label} ${f.label}`, path: f.path });
                 });
@@ -408,7 +422,7 @@ function getSetLabel(path) {
         if (typeof PUZZLE_MANIFEST === 'undefined') return path;
         for (const col of PUZZLE_MANIFEST) {
                 for (const f of col.files) {
-                        if (f.path === path) return `${col.label} ${f.label}`;
+                        if (f.path === path) return col.combined ? f.label : `${col.label} ${f.label}`;
                 }
         }
         return path;
@@ -1370,6 +1384,13 @@ function startTest() {
                 return;
         }
 
+        // Some modes need more puzzles than a single file holds; offer a bigger pool
+        // (returns false if it is swapping the set and will call startTest() again,
+        // or if the mode cannot run with this few puzzles)
+        if (typeof ensureAdequatePuzzlePool === 'function' && !ensureAdequatePuzzlePool()) {
+                return;
+        }
+
         // Reset mode state when starting
         if (typeof resetModeState === 'function') {
                 resetModeState();
@@ -1770,7 +1791,7 @@ function onDialogClose() {
 /**
  * Feed the PGN file provided by the user here to the PGN Parser and update/enable the controls
  */
-function loadPGNFile() { // eslint-disable-line no-unused-vars
+function loadPGNFile(afterLoad) { // eslint-disable-line no-unused-vars
         const selectedFile = document.getElementById('openPGN').value;
         if (!selectedFile) return;
 
@@ -1779,6 +1800,13 @@ function loadPGNFile() { // eslint-disable-line no-unused-vars
         document.getElementById('openPGN').value = selectedFile;
 
         console.log('Attempting to load:', selectedFile);
+
+        // Combined pools (several JSON files merged into one set)
+        if (typeof isCombinedPath === 'function' && isCombinedPath(selectedFile)) {
+                loadCombinedSet(selectedFile, typeof afterLoad === 'function' ? afterLoad : null);
+                setCheckboxSelectability(true);
+                return;
+        }
 
         if (selectedFile) {
                 if (selectedFile === 'uploaded' || selectedFile === 'uploaded_json') {
@@ -1838,6 +1866,52 @@ function loadPGNFile() { // eslint-disable-line no-unused-vars
 
                 setCheckboxSelectability(true);
         }
+}
+
+/**
+ * Load a combined pool: fetch every JSON file it covers, concatenate the
+ * puzzles (in manifest order, so indexes are stable between sessions) and
+ * update the UI exactly like a single-file load does.
+ *
+ * @param {string}        path      A "combined:..." path from puzzle-manifest.js
+ * @param {Function|null} afterLoad Called once the set is ready (e.g. to start the test)
+ */
+function loadCombinedSet(path, afterLoad) {
+        const set = getCombinedSet(path);
+        if (!set) {
+                alert('Unknown combined puzzle set: ' + path);
+                resetGame();
+                return;
+        }
+
+        Promise.all(set.files.map(f =>
+                fetch(f.path).then(response => {
+                        if (!response.ok) { throw new Error(`Could not load ${f.path} (HTTP ${response.status})`); }
+                        return response.text();
+                })
+        ))
+                .then(texts => {
+                        // The user may have picked something else while the files were loading
+                        if (document.getElementById('openPGN').value !== path) { return; }
+
+                        puzzleset = [];
+                        texts.forEach((text, i) => parseJSON(text, { append: true, labelPrefix: set.files[i].label + ' · ' }));
+
+                        if (puzzleset.length === 0) { throw new Error('No valid puzzles found in this combined set'); }
+
+                        $('#puzzleNumber_landscape').text('1');
+                        $('#puzzleNumber_portrait').text('1');
+                        $('#puzzleNumbertotal_landscape').text(puzzleset.length);
+                        $('#puzzleNumbertotal_portrait').text(puzzleset.length);
+
+                        setDisplayAndDisabled(['#btn_starttest_landscape', '#btn_starttest_portrait'], 'block', false);
+
+                        if (afterLoad) { afterLoad(); }
+                })
+                .catch(error => {
+                        alert('Error loading combined set: ' + error);
+                        resetGame();
+                });
 }
 
 /**
@@ -1945,7 +2019,12 @@ function generateStats() {
 
         if (filename.indexOf('\\') === 0 || filename.indexOf('/') === 0) { filename = filename.substring(1); }
 
-        filename = filename.substring(0, filename.lastIndexOf('.'));
+        if (typeof isCombinedPath === 'function' && isCombinedPath(fullPath)) {
+                // e.g. "combined:Mod-01/1-10" -> "combined-Mod-01-1-10"
+                filename = fullPath.replace(':', '-').replace(/\//g, '-');
+        } else {
+                filename = filename.substring(0, filename.lastIndexOf('.'));
+        }
 
 
         // Get the mode (random or sequential)

@@ -67,8 +67,19 @@ function parseMoveString(str) {
  * Parses a JSON string and populates the global puzzleset array.
  * Skips puzzles with missing required fields or illegal moves (logs a warning).
  * Relies on the global Chess constructor (chess.js) being available.
+ *
+ * @param {string} jsonText
+ * @param {object} [opts]
+ * @param {boolean} [opts.append=false]  Add to the existing puzzleset instead of
+ *                                       replacing it (used to build combined sets).
+ * @param {string}  [opts.labelPrefix]   Text put in front of each puzzle's event name,
+ *                                       so puzzles stay identifiable when several
+ *                                       files with identical "(1)", "(2)"… names are
+ *                                       merged into one set.
  */
-function parseJSON(jsonText) {
+function parseJSON(jsonText, opts) {
+    opts = opts || {};
+    const labelPrefix = opts.labelPrefix || '';
     let raw;
     try {
         raw = JSON.parse(jsonText);
@@ -80,7 +91,7 @@ function parseJSON(jsonText) {
         throw new Error('JSON root must be an array of puzzle objects');
     }
 
-    puzzleset = [];
+    if (!opts.append) puzzleset = [];
 
     raw.forEach((p, i) => {
         // Validate required fields
@@ -124,7 +135,11 @@ function parseJSON(jsonText) {
         let valid = true;
         for (const san of sanList) {
             try {
-                const result = tempGame.move(san);
+                // Strict SAN first; fall back to chess.js "sloppy" parsing, which
+                // accepts over-disambiguated moves such as "Rcxb8" when only one
+                // rook can actually capture (the stored value is the normalised SAN).
+                let result = tempGame.move(san);
+                if (!result) result = tempGame.move(san, { sloppy: true });
                 if (!result) {
                     console.warn(`[parseJSON] Puzzle ${i}: illegal move "${san}" in "${moveStr}" — skipped`);
                     valid = false;
@@ -140,7 +155,8 @@ function parseJSON(jsonText) {
         }
         if (!valid) return;
 
-        const eventName   = (p.event && p.event.en) ? p.event.en : (p.title || `Puzzle ${i + 1}`);
+        const baseName    = (p.event && p.event.en) ? p.event.en : (p.title || `Puzzle ${i + 1}`);
+        const eventName   = labelPrefix + baseName;
         const gameResult  = p.game_terminator || '*';
         const moveText    = sanList.join(' ') + ' ' + gameResult; // for PGN export
 
@@ -155,8 +171,7 @@ function parseJSON(jsonText) {
         };
         
         puzzleset.push(puzzleObj);
-        console.log(`[parseJSON] Loaded puzzle: ${eventName}`);
     });
 
-    console.log(`[parseJSON] ${puzzleset.length} / ${raw.length} puzzles loaded`);
+    console.log(`[parseJSON] ${raw.length} puzzles read; puzzleset now holds ${puzzleset.length}`);
 }

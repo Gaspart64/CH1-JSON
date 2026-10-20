@@ -32,41 +32,49 @@ const MODE_CONFIGS = {
         name: 'Repetition Mode',
         description: 'Complete levels perfectly to unlock the next (20 puzzles per level)',
         hasTimer: false, hasLives: false, hasHints: false, hasLevels: true,
-        puzzlesPerLevel: 20
+        puzzlesPerLevel: 20,
+        // pool sizing: a level is 20 puzzles, so it cannot run on a smaller set
+        minPuzzles: 40, hardMin: true, pool: 'chunk'
     },
     [GAME_MODES.THREE]: {
         name: 'Three Mode',
         description: '3 minutes, 3 lives, 3 hints',
         hasTimer: true, hasLives: true, hasHints: true, hasLevels: false,
-        timeLimit: 180, lives: 3, hints: 3
+        timeLimit: 180, lives: 3, hints: 3,
+        minPuzzles: 60, pool: 'module'
     },
     [GAME_MODES.HASTE]: {
         name: 'Haste Mode',
         description: 'Start with base time, gain/lose time on correct/incorrect moves',
         hasTimer: true, hasLives: false, hasHints: false, hasLevels: false,
-        baseTime: 30, timeGain: 5, timeLoss: 10
+        baseTime: 30, timeGain: 5, timeLoss: 10,
+        minPuzzles: 100, pool: 'module'
     },
     [GAME_MODES.COUNTDOWN]: {
         name: 'Countdown Mode',
         description: 'Fixed total time to solve as many puzzles as possible',
         hasTimer: true, hasLives: false, hasHints: false, hasLevels: false,
-        timeLimit: 600
+        timeLimit: 600,
+        minPuzzles: 150, pool: 'module'
     },
     [GAME_MODES.SPEEDRUN]: {
         name: 'Speedrun Mode',
         description: 'Complete all puzzles as fast as possible',
         hasTimer: true, hasLives: false, hasHints: false, hasLevels: false,
-        isSpeedrun: true
+        isSpeedrun: true,
+        minPuzzles: 100, pool: 'chunk'
     },
     [GAME_MODES.INFINITY]: {
         name: 'Spaced Repetition',
         description: 'Puzzles you struggle with appear more often. Progress is saved across sessions.',
-        hasTimer: false, hasLives: false, hasHints: false, hasLevels: false
+        hasTimer: false, hasLives: false, hasHints: false, hasLevels: false,
+        minPuzzles: 100, pool: 'module'
     },
     [GAME_MODES.WOODPECKER]: {
         name: 'Woodpecker',
         description: 'Complete the full set. Each cycle must be faster than the last.',
-        hasTimer: true, hasLives: false, hasHints: false, hasLevels: false
+        hasTimer: true, hasLives: false, hasHints: false, hasLevels: false,
+        minPuzzles: 100, pool: 'chunk'
     },
     [GAME_MODES.BRUTAL]: {
         name: 'Brutal Mode',
@@ -74,7 +82,8 @@ const MODE_CONFIGS = {
         hasTimer: false,
         hasLives: false,
         hasHints: false,
-        hasLevels: false
+        hasLevels: false,
+        minPuzzles: 50, pool: 'chunk'
     }
 };
 
@@ -1154,6 +1163,70 @@ function shouldContinueToNextPuzzle() {
     }
 
     return increment + 1 < puzzleset.length;
+}
+
+// ---------------------------------------------------------------------------
+// Pool sizing — make sure the loaded set is big enough for the selected mode
+// ---------------------------------------------------------------------------
+
+/**
+ * Called by startTest() before anything else.
+ *
+ * Each JSON file only holds ~15 puzzles, which is too few for most modes
+ * (see minPuzzles / pool in MODE_CONFIGS). When the loaded set is smaller than
+ * the selected mode needs, offer the matching combined pool from
+ * puzzle-manifest.js:
+ *   pool 'chunk'  → ~150-puzzle block containing the current file (set-based modes)
+ *   pool 'module' → the whole collection (modes that draw from a big pool)
+ *
+ * @returns {boolean} true  = go ahead and start with the current set
+ *                    false = don't start now (the set is being swapped and
+ *                            startTest() will be called again once it has
+ *                            loaded, or the mode cannot run on this set)
+ */
+function ensureAdequatePuzzlePool() {
+    const config = MODE_CONFIGS[currentGameMode];
+    if (!config || !config.minPuzzles) return true;
+    if (puzzleset.length >= config.minPuzzles) return true;
+
+    const currentPath = $('#openPGN').val();
+
+    // Uploaded files and sets that are already combined: nothing bigger to offer
+    const pool = (typeof findPoolForPath === 'function')
+        ? findPoolForPath(currentPath, config.pool)
+        : null;
+
+    // Smallest set the mode can function on at all (e.g. one Repetition level)
+    const hardMin = config.hardMin ? (config.puzzlesPerLevel || config.minPuzzles) : 0;
+    const cannotRun = puzzleset.length < hardMin;
+
+    if (!pool) {
+        if (cannotRun) {
+            alert(`${config.name} needs at least ${hardMin} puzzles, but this set only has ${puzzleset.length}. ` +
+                  `Choose a Combined Set from the collection list (or load a larger file).`);
+            return false;
+        }
+        return true;
+    }
+
+    const message =
+        `${config.name} works best with at least ${config.minPuzzles} puzzles, ` +
+        `but this set only has ${puzzleset.length}.\n\n` +
+        `Load "${pool.label}" instead?`;
+
+    if (confirm(message)) {
+        $('#openPGN').val(pool.path);
+        loadPGNFile(() => startTest());
+        if (typeof syncBrowserToPath === 'function') syncBrowserToPath(pool.path);
+        return false;
+    }
+
+    if (cannotRun) {
+        alert(`${config.name} can't run with only ${puzzleset.length} puzzles ` +
+              `(it needs at least ${hardMin}). Pick another mode or a larger set.`);
+        return false;
+    }
+    return true;
 }
 
 // ---------------------------------------------------------------------------

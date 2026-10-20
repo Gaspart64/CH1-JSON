@@ -8,7 +8,14 @@
  * @param {Object} state - The game state to persist
  */
 function saveGameState(state) {
-    localStorage.setItem('savedGameState', JSON.stringify(state));
+    try {
+        localStorage.setItem('savedGameState', JSON.stringify(state));
+    } catch (e) {
+        // Large combined sets can exceed the localStorage quota; losing the
+        // resume point is better than throwing out of unload/visibility handlers.
+        console.warn('[storage] Could not save game state:', e);
+        try { localStorage.removeItem('savedGameState'); } catch (_) { /* ignore */ }
+    }
 }
 
 /**

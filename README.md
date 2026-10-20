@@ -79,6 +79,28 @@ Once a test group is completed, tool displays the following performance informat
 
 ![screenshot](screenshot2.png)
 
+## Game modes and puzzle pools
+Each JSON file in `Puzzles/` holds only 15 puzzles, which is too few for most game modes. To make the modes useful, the collection list ends with a generated **★ Combined Sets** collection (built automatically from `assets/puzzle-manifest.js`):
+
+* **All collections** – every puzzle in every module
+* **Module – all exercises** – every puzzle in one module
+* **Module – exercises a–b** – blocks of 10 consecutive exercises (150 puzzles, about the size of the original CH1 sets)
+
+Combined sets behave like any other set (randomize, flip, CSV export, spaced-repetition and Woodpecker progress are all kept per set). When you press **Start** in a mode that needs more puzzles than the loaded file has, you are offered the right pool automatically:
+
+| Mode | Needs at least | Pool offered |
+|:-----|:--------------:|:-------------|
+| Repetition | 40 (cannot run on < 20) | 150-puzzle block |
+| Three | 60 | whole module |
+| Haste | 100 | whole module |
+| Countdown | 150 | whole module |
+| Speedrun | 100 | 150-puzzle block |
+| Spaced Repetition | 100 | whole module |
+| Woodpecker | 100 | 150-puzzle block |
+| Brutal | 50 | 150-puzzle block |
+
+The thresholds live in `MODE_CONFIGS` (`minPuzzles`, `pool`) in `assets/game-modes.js`, and the block size is `COMBINED_CHUNK_SIZE` in `assets/puzzle-manifest.js`.
+
 ## Download to CSV
 Upon completion of a set you will have the option to download a CSV file of your performance via the "Download to CSV" button on the results screen.  This file can then be opened up in spreadsheet programs like Excel or Google Sheets and can function as a way to keep track of your progress.  By default, the CSV file will include all the header information so you know what each column contains.  You can disable the headers for subsequent entries via the settings menu.  
 
