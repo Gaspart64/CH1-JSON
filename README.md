@@ -90,9 +90,18 @@ Combined sets behave like any other set (randomize, flip, CSV export, spaced-rep
 
 Every mode runs on whatever set you pick. Choosing a single exercise (for example *Module 01 – Exercise 01*) plays the mode on those 15 puzzles. When the file is finished, or the round ends because nothing is left, the results screen offers **Next set** (the next exercise file) or **Repeat set**. In Repetition and Brutal the same two buttons appear next to the streak counter once the set is cleared. Pick a **★ Combined Set** instead whenever you want a bigger pool for a round.
 
+### Spaced Repetition and Woodpecker: independent, resumable progress
+
+These two modes keep their own progress per set, separate from every other mode (training Brutal, Haste, Standard… in between never changes it). Each remembers the set it was last trained on, and a green **▶ Continue …** button appears under the mode selector when the mode is selected.
+
+* **Spaced Repetition** – one SM-2 card per puzzle, saved after every puzzle. A session contains the puzzles that are **due** (most overdue first, so missed ones and old reviews come first) followed by **new** ones; puzzles that are not due yet are left alone. When nothing is due and nothing is new, the mode tells you when the next review is instead of starting. The Continue button shows `N due · M new`.
+* **Woodpecker** – the puzzle order is always fixed (Randomize is ignored) so a saved position always means the same puzzle. Closing the app mid-cycle and pressing Continue puts you back on the puzzle you were on, with mistakes kept. Cycle time counts only time spent solving, so days between sittings do not inflate it. A cycle saved for a set with a different number of puzzles is discarded.
+* Progress is stored in `localStorage` and mirrored to IndexedDB; if the browser clears `localStorage` but IndexedDB survives, Spaced Repetition (all sets) and Woodpecker (last set) are restored automatically. The Export/Import buttons remain the real backup.
+* Progress belongs to the loaded set: Module 01 Exercise 35 and a Combined Set containing it have separate schedules.
+
 ### How the timed and streak modes work
 
-Repetition, Brutal, Three, Haste, Countdown and Speedrun follow the rules of [linrock/blitz-tactics](https://github.com/linrock/blitz-tactics). Standard, Spaced Repetition and Woodpecker are this project's own and are unchanged.
+Repetition, Brutal, Three, Haste, Countdown and Speedrun follow the rules of [linrock/blitz-tactics](https://github.com/linrock/blitz-tactics). Standard, Spaced Repetition and Woodpecker are this project's own (see below).
 
 | Mode | Rules |
 |:-----|:------|

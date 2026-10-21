@@ -144,6 +144,9 @@ const IDLE_HINT_DELAY_MS  = 750;   // blitz PuzzleHint: hint button shows this l
 // Woodpecker mode tracking
 let wpData = null;
 let wpCurrentPgn = null;
+let wpResumePosition = 0;      // puzzle position to continue from when a cycle is resumed
+let wpAutoResume = false;      // set by "Continue last session": resume without asking
+let wpSegmentStart = 0;        // start of the current stretch of active solving time
 const WP_STORAGE_PREFIX = 'wp_data_';
 
 // ── Streak engine state (Repetition + Brutal; names kept from the original Brutal code) ──
@@ -536,6 +539,23 @@ let srPendingRetry          = new Set();
 
 // ── Persistence ─────────────────────────────────────────────────────────────
 
+/** Storage key for a set path (same sanitising the session has always used). */
+function srPgnKey(path) {
+    return (path || $('#openPGN').val() || 'default').replace(/[^a-zA-Z0-9]/g, '_');
+}
+
+/** How many cards are due / how many puzzles are new, for a card map and a puzzle count. */
+function srCountDue(cards, total) {
+    const now = Date.now();
+    let due = 0, seen = 0;
+    Object.keys(cards || {}).forEach(k => {
+        if (+k >= total) return;
+        seen++;
+        if (cards[k].nextReview <= now) due++;
+    });
+    return { due, fresh: Math.max(0, total - seen), seen };
+}
+
 function srGetStorageKey() {
     return SR_STORAGE_PREFIX + srCurrentPgnFile;
 }
@@ -608,7 +628,6 @@ function srBuildInitialQueue(totalPuzzles) {
     const now    = Date.now();
     const due    = [];
     const fresh  = [];
-    const future = [];
 
     for (let i = 0; i < totalPuzzles; i++) {
         const card = srCards[i];
@@ -616,25 +635,22 @@ function srBuildInitialQueue(totalPuzzles) {
             fresh.push(i);
         } else if (card.nextReview <= now) {
             due.push({ i, overdue: now - card.nextReview });
-        } else {
-            future.push({ i, nextReview: card.nextReview });
         }
+        // cards that are not due yet are left alone: reviewing them early only distorts the schedule
     }
 
     due.sort((a, b) => b.overdue - a.overdue);
-    future.sort((a, b) => a.nextReview - b.nextReview);
 
     return [
         ...due.map(x => x.i),
-        ...fresh,
-        ...future.map(x => x.i)
+        ...fresh
     ];
 }
 
 // ── Session initialisation ───────────────────────────────────────────────────
 
 function srInitSession() {
-    srCurrentPgnFile        = ($('#openPGN').val() || 'default').replace(/[^a-zA-Z0-9]/g, '_');
+    srCurrentPgnFile        = srPgnKey();
     srCurrentPuzzleHadError = false;
     srPendingRetry          = new Set();
     srLoadCards();
@@ -779,6 +795,7 @@ function initializeGameModes() {
         select.addEventListener('change', handleModeChange);
     }
     srLoadParams();
+    modeRestoreFromDb();
     const srInitialEaseEl   = document.getElementById('sr-initial-ease');
     const srMinEaseEl       = document.getElementById('sr-min-ease');
     const srReinsertAfterEl = document.getElementById('sr-reinsert-after');
@@ -858,12 +875,9 @@ function resetModeState() {
     if (currentGameMode === GAME_MODES.WOODPECKER) {
         if (typeof puzzleset !== 'undefined' && puzzleset.length > 0) {
             const pgnName = ($('#openPGN').val() || 'default').replace(/[^a-zA-Z0-9]/g, '_');
-            const resumeIndex = typeof wpCheckResume === 'function' ? wpCheckResume(pgnName, puzzleset.length) : 0;
+            wpResumePosition = typeof wpCheckResume === 'function' ? wpCheckResume(pgnName, puzzleset.length) : 0;
             if (typeof wpStartCycle === 'function') {
                 wpStartCycle(pgnName, puzzleset.length);
-            }
-            if (resumeIndex > 0) {
-                increment = resumeIndex - 1;
             }
         }
     }
@@ -1434,7 +1448,156 @@ function shouldContinueToNextPuzzle() {
  * repeat it). Bigger pools are chosen explicitly via the "Combined Sets" collection.
  * @returns {boolean} always true
  */
-function ensureAdequatePuzzlePool() { return true; }
+function ensureAdequatePuzzlePool() { return modeCanStart(); }
+
+/**
+ * Pre-start check. Spaced Repetition has nothing to do when no card is due and the set
+ * has no new puzzles: say when the next review is instead of replaying the whole file.
+ * @returns {boolean} false = don't start
+ */
+function modeCanStart() {
+    if (currentGameMode !== GAME_MODES.INFINITY) return true;
+    srCurrentPgnFile = srPgnKey();
+    srLoadCards();
+    const c = srCountDue(srCards, puzzleset.length);
+    if (c.due + c.fresh > 0) return true;
+    let next = Infinity;
+    Object.values(srCards).forEach(k => { if (k.nextReview < next) next = k.nextReview; });
+    alert('Nothing is due in this set right now' +
+          (isFinite(next) ? ` — the next review is ${new Date(next).toLocaleString()}.` : '.') +
+          '\nPick another set, or switch to a different mode.');
+    return false;
+}
+
+// ---------------------------------------------------------------------------
+// "Continue last session" — Spaced Repetition and Woodpecker each remember the set they
+// were last trained on, independently of everything else done in the app.
+// ---------------------------------------------------------------------------
+
+const LAST_SESSION_PREFIX = 'lastSession_';
+
+function modeLastSession(mode) {
+    try { return JSON.parse(localStorage.getItem(LAST_SESSION_PREFIX + mode) || 'null'); }
+    catch (e) { return null; }
+}
+
+function modeRememberSession() {
+    if (currentGameMode !== GAME_MODES.INFINITY && currentGameMode !== GAME_MODES.WOODPECKER) return;
+    const path = $('#openPGN').val();
+    if (!path) return;
+    try {
+        localStorage.setItem(LAST_SESSION_PREFIX + currentGameMode, JSON.stringify({
+            path,
+            label: (typeof getSetLabel === 'function') ? getSetLabel(path) : path,
+            puzzleCount: puzzleset.length,
+            at: Date.now()
+        }));
+    } catch (e) { /* storage full: the button just won't show */ }
+}
+
+/** One-line status for the Continue button of the current mode (null = nothing to continue). */
+function modeContinueInfo() {
+    const mode = currentGameMode;
+    if (mode !== GAME_MODES.INFINITY && mode !== GAME_MODES.WOODPECKER) return null;
+    const last = modeLastSession(mode);
+    if (!last || !last.path) return null;
+    const key = srPgnKey(last.path);
+    try {
+        if (mode === GAME_MODES.INFINITY) {
+            const raw = localStorage.getItem(SR_STORAGE_PREFIX + key);
+            const c = srCountDue(raw ? JSON.parse(raw) : {}, last.puzzleCount || 0);
+            return { last, text: `${c.due} due · ${c.fresh} new` };
+        }
+        const raw = localStorage.getItem(WP_STORAGE_PREFIX + key);
+        const d = raw ? JSON.parse(raw) : null;
+        if (d && d.currentCycle) {
+            return { last, text: `Cycle ${d.currentCycle.cycleNumber} · puzzle ${d.currentCycle.lastPuzzleIndex + 1}/${d.currentCycle.puzzleCount}` };
+        }
+        return { last, text: `next: Cycle ${(d && d.cycleHistory ? d.cycleHistory.length : 0) + 1}` };
+    } catch (e) { return { last, text: '' }; }
+}
+
+function modeRefreshContinueRow() {
+    const select = document.getElementById('game-mode-select-manual');
+    if (!select || !select.parentNode) return;
+    let row = document.getElementById('mode-continue-row');
+    const info = modeContinueInfo();
+    const startBtn = document.getElementById('btn_starttest_landscape');
+    const idle = !startBtn || startBtn.style.display !== 'none';
+    if (!info || !idle) { if (row) row.style.display = 'none'; return; }
+    if (!row) {
+        row = document.createElement('div');
+        row.id = 'mode-continue-row';
+        row.style.cssText = 'margin:6px 0;';
+        select.parentNode.insertAdjacentElement('afterend', row);
+    }
+    const name = currentGameMode === GAME_MODES.INFINITY ? 'Spaced Repetition' : 'Woodpecker';
+    const html = `▶ Continue ${name}: ${info.last.label}${info.text ? ' — ' + info.text : ''}`;
+    if (row.dataset.html !== html) {
+        row.dataset.html = html;
+        row.innerHTML = '';
+        const b = document.createElement('button');
+        b.className = 'w3-button w3-round-large w3-green w3-small';
+        b.textContent = html;
+        b.onclick = modeContinueLastSession;
+        row.appendChild(b);
+    }
+    row.style.display = 'block';
+}
+if (typeof setInterval === 'function') setInterval(modeRefreshContinueRow, 1000);
+
+/** Load the set this mode was last trained on and start straight away, resuming where it left off. */
+function modeContinueLastSession() {
+    const info = modeContinueInfo();
+    if (!info) return;
+    const path = info.last.path;
+    if (currentGameMode === GAME_MODES.WOODPECKER) wpAutoResume = true;
+    if (typeof cancelNextSetCountdown === 'function') cancelNextSetCountdown();
+    const rm = document.getElementById('resmodal');
+    if (rm) rm.style.display = 'none';
+    $('#openPGN').val(path);
+    loadPGNFile(() => startTest());
+    if (typeof syncBrowserToPath === 'function') syncBrowserToPath(path);
+}
+
+/**
+ * If the browser dropped localStorage but IndexedDB still has the data, copy it back
+ * (Spaced Repetition for every set; Woodpecker for the last-trained set).
+ */
+function modeRestoreFromDb() {
+    if (!window.ChessDB) return;
+    try {
+        if (typeof ChessDB.srGetPgnFiles === 'function') {
+            ChessDB.srGetPgnFiles().then(files => files.forEach(f => {
+                const key = SR_STORAGE_PREFIX + f;
+                if (localStorage.getItem(key)) return;
+                ChessDB.srGetCards(f).then(rows => {
+                    const cards = {};
+                    Object.values(rows).forEach(r => {
+                        cards[r.puzzleIndex] = { index: r.puzzleIndex, interval: r.interval, easeFactor: r.easeFactor,
+                                                 repetitions: r.repetitions, nextReview: r.nextReview, due: r.due };
+                    });
+                    if (Object.keys(cards).length) localStorage.setItem(key, JSON.stringify(cards));
+                }).catch(() => {});
+            })).catch(() => {});
+        }
+        const last = modeLastSession(GAME_MODES.WOODPECKER);
+        if (last && last.path && typeof ChessDB.wpGetCurrent === 'function') {
+            const f = srPgnKey(last.path), key = WP_STORAGE_PREFIX + f;
+            if (!localStorage.getItem(key)) {
+                Promise.all([ChessDB.wpGetCurrent(f), ChessDB.wpGetCycleHistory(f)]).then(([cur, hist]) => {
+                    if (!cur && !(hist && hist.length)) return;
+                    const clean = r => { const c = Object.assign({}, r); delete c.pgnFile; return c; };
+                    localStorage.setItem(key, JSON.stringify({
+                        currentCycle: cur ? clean(cur) : null,
+                        cycleHistory: (hist || []).map(h => ({ cycleNumber: h.cycleNumber, totalMs: h.totalMs, puzzleCount: h.puzzleCount,
+                                                              mistakeCount: h.mistakeCount, completedAt: h.completedAt, mistakeIndexes: h.mistakeIndexes || [] }))
+                    }));
+                }).catch(() => {});
+            }
+        }
+    } catch (e) { /* best effort */ }
+}
 
 // ---------------------------------------------------------------------------
 // Hook called by startTest()
@@ -1443,6 +1606,17 @@ function ensureAdequatePuzzlePool() { return true; }
 function onStartTest() {
     if (currentGameMode === GAME_MODES.INFINITY) {
         srInitSession();
+        modeRememberSession();
+    }
+
+    if (currentGameMode === GAME_MODES.WOODPECKER) {
+        // The method needs the same order every cycle, so Randomize is ignored here and the
+        // saved position always means the same puzzle.
+        PuzzleOrder = Array.from({ length: puzzleset.length }, (_, i) => i);
+        increment = Math.min(Math.max(0, wpResumePosition), puzzleset.length - 1);
+        wpResumePosition = 0;
+        wpSegmentStart = Date.now();
+        modeRememberSession();
     }
 
     // blitz Three / Haste: every round is a fresh random selection of puzzles
@@ -1791,13 +1965,39 @@ function wpStartCycle(pgnName, puzzleCount) {
         wpData.currentCycle = {
             cycleNumber: wpGetCycleNumber(),
             startedAt: Date.now(),
+            activeMs: 0,
             puzzleCount: puzzleCount,
             mistakesThisCycle: [],
             lastPuzzleIndex: 0
         };
         wpSave();
     }
+    wpSegmentStart = Date.now();
     updateWpUI();
+}
+
+/** Time actually spent solving in the current cycle (days away from the app don't count). */
+function wpFlushActive() {
+    if (!wpData || !wpData.currentCycle || !wpSegmentStart) return;
+    const now = Date.now();
+    wpData.currentCycle.activeMs = (wpData.currentCycle.activeMs || 0) + (now - wpSegmentStart);
+    wpSegmentStart = now;
+}
+function wpActiveMs() {
+    if (!wpData || !wpData.currentCycle) return 0;
+    return (wpData.currentCycle.activeMs || 0) + (wpSegmentStart ? Date.now() - wpSegmentStart : 0);
+}
+if (typeof document !== 'undefined' && document.addEventListener) {
+    document.addEventListener('visibilitychange', () => {
+        if (currentGameMode !== GAME_MODES.WOODPECKER || !wpData || !wpData.currentCycle) return;
+        if (document.visibilityState === 'hidden') { wpFlushActive(); wpSegmentStart = 0; wpSave(); }
+        else if (!wpSegmentStart) wpSegmentStart = Date.now();
+    });
+}
+if (typeof window !== 'undefined' && window.addEventListener) {
+    window.addEventListener('beforeunload', () => {
+        if (currentGameMode === GAME_MODES.WOODPECKER && wpData && wpData.currentCycle) { wpFlushActive(); wpSave(); }
+    });
 }
 
 function wpRecordMistake(puzzleIndex) {
@@ -1810,15 +2010,18 @@ function wpRecordMistake(puzzleIndex) {
 
 function wpUpdateLastPuzzleIndex(index) {
     if (!wpData || !wpData.currentCycle) return;
+    wpFlushActive();
     wpData.currentCycle.lastPuzzleIndex = index;
     wpSave();
 }
 
 function wpCompleteCycle() {
     if (!wpData || !wpData.currentCycle) return null;
-    const elapsed = Date.now() - wpData.currentCycle.startedAt;
+    wpFlushActive();
+    const elapsed = wpData.currentCycle.activeMs || 0;
     const completedCycle = {
         cycleNumber: wpData.currentCycle.cycleNumber,
+        startedAt: wpData.currentCycle.startedAt,
         totalMs: elapsed,
         puzzleCount: wpData.currentCycle.puzzleCount,
         mistakeCount: wpData.currentCycle.mistakesThisCycle.length,
@@ -1840,15 +2043,22 @@ function wpCompleteCycle() {
 
 function wpCheckResume(pgnName, puzzleCount) {
     wpLoad(pgnName);
+    if (wpData.currentCycle && wpData.currentCycle.puzzleCount !== puzzleCount) {
+        wpData.currentCycle = null;           // the set changed size: the old position is meaningless
+        wpSave();
+    }
     if (wpData.currentCycle) {
-        const elapsed = msToHMS(Date.now() - wpData.currentCycle.startedAt);
-        const confirmed = confirm(
-            `You have an in-progress Cycle ${wpData.currentCycle.cycleNumber} ` +
-            `(elapsed: ${elapsed}, at puzzle ${wpData.currentCycle.lastPuzzleIndex + 1}/${puzzleCount}). Resume it?`
+        const cyc = wpData.currentCycle;
+        const auto = wpAutoResume;
+        wpAutoResume = false;
+        const confirmed = auto || confirm(
+            `You have an in-progress Cycle ${cyc.cycleNumber} ` +
+            `(solving time so far: ${msToHMS(cyc.activeMs || 0)}, at puzzle ${cyc.lastPuzzleIndex + 1}/${puzzleCount}). Resume it?`
         );
-        if (confirmed) return wpData.currentCycle.lastPuzzleIndex;
+        if (confirmed) return cyc.lastPuzzleIndex;
         else { wpData.currentCycle = null; wpSave(); }
     }
+    wpAutoResume = false;
     return 0;
 }
 

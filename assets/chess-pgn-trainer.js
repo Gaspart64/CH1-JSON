@@ -1868,6 +1868,7 @@ function loadPGNFile(afterLoad) { // eslint-disable-line no-unused-vars
                                         $('#puzzleNumbertotal_portrait').text(puzzleset.length);
 
                                         setDisplayAndDisabled(['#btn_starttest_landscape', '#btn_starttest_portrait'], 'block', false);
+                                        if (typeof afterLoad === 'function') afterLoad();
                                 }
                                 catch (err) {
                                         alert('There is an issue with the file. Error message is as follows:\n\n' + err

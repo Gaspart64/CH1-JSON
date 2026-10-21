@@ -1,4 +1,4 @@
-const CACHE_NAME = 'chess-json-trainer-v1.5.1';
+const CACHE_NAME = 'chess-json-trainer-v1.6.0';
 
 const PRECACHE = [
     './', './index.html',
