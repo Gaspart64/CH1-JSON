@@ -86,20 +86,31 @@ Each JSON file in `Puzzles/` holds only 15 puzzles, which is too few for most ga
 * **Module – all exercises** – every puzzle in one module
 * **Module – exercises a–b** – blocks of 10 consecutive exercises (150 puzzles, about the size of the original CH1 sets)
 
-Combined sets behave like any other set (randomize, flip, CSV export, spaced-repetition and Woodpecker progress are all kept per set). When you press **Start** in a mode that needs more puzzles than the loaded file has, you are offered the right pool automatically:
+Combined sets behave like any other set (randomize, flip, CSV export, spaced-repetition and Woodpecker progress are all kept per set). When you press **Start** in a mode that needs more puzzles than the loaded file has, you are offered the right pool automatically (Repetition and Brutal treat the loaded set as the level, so they never prompt):
 
 | Mode | Needs at least | Pool offered |
 |:-----|:--------------:|:-------------|
-| Repetition | 40 (cannot run on < 20) | 150-puzzle block |
 | Three | 60 | whole module |
 | Haste | 100 | whole module |
 | Countdown | 150 | whole module |
 | Speedrun | 100 | 150-puzzle block |
 | Spaced Repetition | 100 | whole module |
 | Woodpecker | 100 | 150-puzzle block |
-| Brutal | 50 | 150-puzzle block |
 
 The thresholds live in `MODE_CONFIGS` (`minPuzzles`, `pool`) in `assets/game-modes.js`, and the block size is `COMBINED_CHUNK_SIZE` in `assets/puzzle-manifest.js`.
+
+### How the timed and streak modes work
+
+Repetition, Brutal, Three, Haste, Countdown and Speedrun follow the rules of [linrock/blitz-tactics](https://github.com/linrock/blitz-tactics). Standard, Spaced Repetition and Woodpecker are this project's own and are unchanged.
+
+| Mode | Rules |
+|:-----|:------|
+| **Repetition** | The loaded set is the level. Solve every puzzle **in a row** to clear it. A mistake resets your progress to zero (you stay on the puzzle, and the puzzle you then solve counts as the first of the new run). The set loops forever and is reshuffled every lap. Lap times are recorded from your first move. No move timer; a hint button appears after 7 s idle and using it costs your progress. Clearing the set offers a "Next set" button. |
+| **Brutal** | Repetition plus blitz's 7-second rule: 7 s without a move also resets your progress (the hint button appears 0.75 s later). |
+| **Three** | 3 minutes (the clock starts on your first move), 3 lives, 3 hints. A mistake costs a life **and skips the puzzle**. Every 3 puzzles solved in a row adds 3 s. A hint reveals only the from- or to-square. Score = puzzles solved. Puzzle order is random every run. |
+| **Haste** | 3 minutes, running from the start. Every mistake costs 30 s. Every 10 correct **moves** in a row adds 7 s, plus 3 s more for each further 10 (10 → +7, 20 → +10, 30 → +13…). No hints. Score = puzzles solved. Random order every run. |
+| **Countdown** | 5 minutes (starts on your first move). Every mistake costs 30 s. Score = puzzles solved; accuracy (correct ÷ attempted moves) is shown at the end. No hints. |
+| **Speedrun** | Solve the whole set as fast as you can; the stopwatch starts on your first move and mistakes add no time. Accuracy is shown with your time. A hint button appears after 7 s idle. |
 
 ## Download to CSV
 Upon completion of a set you will have the option to download a CSV file of your performance via the "Download to CSV" button on the results screen.  This file can then be opened up in spreadsheet programs like Excel or Google Sheets and can function as a way to keep track of your progress.  By default, the CSV file will include all the header information so you know what each column contains.  You can disable the headers for subsequent entries via the settings menu.  

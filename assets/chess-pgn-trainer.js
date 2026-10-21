@@ -116,6 +116,10 @@ function saveCurrentGameProgress() {
         if (!puzzleset || puzzleset.length === 0 || setcomplete) {
                 return;
         }
+        // A finished Three / Haste / Countdown round has nothing to resume
+        if (typeof modeSessionIsOver === 'function' && modeSessionIsOver()) {
+                return;
+        }
 
         const gameState = {
                 increment: increment,
@@ -997,10 +1001,9 @@ function checkAndPlayNext() {
                                 board.addMarker(MARKER_TYPE.lastMove, opponentMove.to);
                         }
 
-                        // In Brutal Mode, each opponent move also resets the 7-second player timer
-                        if (typeof getCurrentGameMode === 'function' && getCurrentGameMode() === 'brutal') {
-                                if (typeof brutalStartMoveTimer === 'function') brutalStartMoveTimer();
-                        }
+                        // Every move made on the board (the opponent's reply too) restarts the
+                        // 7-second idle clock in Repetition / Brutal / Speedrun
+                        if (typeof idleHintRestart === 'function') idleHintRestart();
                 }
                 // Board sync is handled by handleMoveInput after the move
                 // animation promise resolves — do not call updateBoard here.
@@ -1013,12 +1016,25 @@ function checkAndPlayNext() {
                 error = true;
 
                 // Handle incorrect move in current game mode
+                // ('skip' = the mode wants to abandon this puzzle and move on)
+                let skipPuzzle = false;
                 if (typeof handleIncorrectMove === 'function') {
-                        handleIncorrectMove();
+                        skipPuzzle = handleIncorrectMove() === 'skip';
                 }
 
                 // Undo that move from the game
                 game.undo();
+
+                if (skipPuzzle && typeof modeSessionIsOver === 'function' && !modeSessionIsOver()) {
+                        if (increment + 1 < PuzzleOrder.length) {
+                                increment += 1;
+                                // Deferred, like the normal "next puzzle" path, so cm-chessboard
+                                // finishes the current validateMoveInput event first
+                                setTimeout(() => loadPuzzle(puzzleset[PuzzleOrder[increment]]), 0);
+                        } else if (typeof endGameSession === 'function') {
+                                endGameSession('Out of puzzles!');
+                        }
+                }
 
                 // Snap the bad piece back
                 return 'snapback';
@@ -1059,8 +1075,7 @@ function checkAndPlayNext() {
                 // longer than puzzleset.length due to reinserted retries.
                 const isInfinityMode = typeof getCurrentGameMode === 'function' &&
                         getCurrentGameMode() === 'infinity';
-                const isBrutalMode = typeof getCurrentGameMode === 'function' &&
-                        getCurrentGameMode() === 'brutal';
+                const isBrutalMode = typeof isStreakMode === 'function' && isStreakMode();
                 if (!isInfinityMode && !isBrutalMode && increment + 1 === PuzzleOrder.length) {
                         setcomplete = true;
                 }
@@ -1190,8 +1205,8 @@ function pauseGame() {
                         $('#btn_hint_landscape').prop('disabled', true);
                         $('#btn_hint_portrait').prop('disabled', true);
 
-                        // Suspend Brutal Mode move timer during pause
-                        if (typeof brutalClearMoveTimer === 'function') brutalClearMoveTimer();
+                        // Suspend the 7-second idle clock (Repetition / Brutal / Speedrun) during pause
+                        if (typeof idleHintClear === 'function') idleHintClear();
                         break;
 
                 case true:
@@ -1217,10 +1232,8 @@ function pauseGame() {
                         $('#btn_hint_landscape').prop('disabled', false);
                         $('#btn_hint_portrait').prop('disabled', false);
 
-                        // Resume Brutal Mode move timer on unpause
-                        if (typeof getCurrentGameMode === 'function' && getCurrentGameMode() === 'brutal') {
-                            if (typeof brutalStartMoveTimer === 'function') brutalStartMoveTimer();
-                        }
+                        // Resume the 7-second idle clock on unpause
+                        if (typeof idleHintRestart === 'function') idleHintRestart();
                         break;
         }
         $(window).trigger('resize');
@@ -1493,8 +1506,8 @@ function shuffle(array) {
  * @param {int} total_value - The total number of puzzles (denominator)
  */
 function updateProgressBar(partial_value, total_value) {
-        // In Brutal Mode, the progress bar is managed by brutalUpdateProgressBar()
-        if (typeof getCurrentGameMode === 'function' && getCurrentGameMode() === 'brutal') {
+        // In Repetition / Brutal the progress bar is managed by brutalUpdateProgressBar()
+        if (typeof isStreakMode === 'function' && isStreakMode()) {
                 return;
         }
         // Do the math
@@ -2248,6 +2261,9 @@ function showStats() {
                         }
                 }
         }
+
+        // Mode-specific score / accuracy lines (Three, Haste, Countdown, Speedrun); no-op for other modes
+        if (typeof modeDecorateResults === 'function') { modeDecorateResults(); }
 
         // Display the modal
         showresults();
