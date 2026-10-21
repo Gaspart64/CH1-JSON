@@ -1032,7 +1032,10 @@ function checkAndPlayNext() {
                                 // finishes the current validateMoveInput event first
                                 setTimeout(() => loadPuzzle(puzzleset[PuzzleOrder[increment]]), 0);
                         } else if (typeof endGameSession === 'function') {
-                                endGameSession('Out of puzzles!');
+                                // Ran out of puzzles in this file: round over, offer next file / repeat
+                                lastCompletedSet = $('#openPGN').val();
+                                endGameSession('Set finished');
+                                populateNextSetPrompt(lastCompletedSet, getSetLabel(lastCompletedSet));
                         }
                 }
 
@@ -2084,6 +2087,33 @@ function generateStats() {
 /**
  * Show the final stats after finishing all the puzzles in the set
  */
+/**
+ * Fill in the "Next set / Repeat set" prompt of the results modal.
+ * Used when a set is completed and when a mode round ends with no puzzles left.
+ */
+function populateNextSetPrompt(_completedPath, _completedLabel) {
+        const _nextSet = _completedPath ? getNextPuzzleSet(_completedPath) : null;
+        const _prompt = document.getElementById('next-set-prompt');
+        const _msg = document.getElementById('next-set-message');
+        const _btnNext = document.getElementById('btn-next-set');
+        const _btnRepeat = document.getElementById('btn-repeat-set');
+        if (_prompt && _msg && _btnNext && _btnRepeat) {
+                if (_nextSet) {
+                        _msg.textContent = `You finished ${_completedLabel}. Up next: ${_nextSet.label}.`;
+                        _btnNext.textContent = `Next Set: ${_nextSet.label} ➜`;
+                        _btnNext.onclick = () => loadAndStartSet(_nextSet.path);
+                        _btnNext.style.display = '';
+                        startNextSetCountdown(_nextSet.path);
+                } else {
+                        _msg.textContent = `You finished ${_completedLabel}. Would you like to repeat it?`;
+                        _btnNext.style.display = 'none';
+                        cancelNextSetCountdown();
+                }
+                _btnRepeat.onclick = _completedPath ? () => loadAndStartSet(_completedPath) : null;
+                _prompt.style.display = 'block';
+        }
+}
+
 function showStats() {
 
         // Format the error rate to 1 decimal place
@@ -2128,27 +2158,7 @@ function showStats() {
                 }
         }
 
-        // Populate the next-set / repeat-set prompt
-        const _nextSet = _completedPath ? getNextPuzzleSet(_completedPath) : null;
-        const _prompt = document.getElementById('next-set-prompt');
-        const _msg = document.getElementById('next-set-message');
-        const _btnNext = document.getElementById('btn-next-set');
-        const _btnRepeat = document.getElementById('btn-repeat-set');
-        if (_prompt && _msg && _btnNext && _btnRepeat) {
-                if (_nextSet) {
-                        _msg.textContent = `You finished ${_completedLabel}. Up next: ${_nextSet.label}.`;
-                        _btnNext.textContent = `Next Set: ${_nextSet.label} ➜`;
-                        _btnNext.onclick = () => loadAndStartSet(_nextSet.path);
-                        _btnNext.style.display = '';
-                        startNextSetCountdown(_nextSet.path);
-                } else {
-                        _msg.textContent = `You finished ${_completedLabel}. Would you like to repeat it?`;
-                        _btnNext.style.display = 'none';
-                        cancelNextSetCountdown();
-                }
-                _btnRepeat.onclick = _completedPath ? () => loadAndStartSet(_completedPath) : null;
-                _prompt.style.display = 'block';
-        }
+        populateNextSetPrompt(_completedPath, _completedLabel);
         $('#elapsedTime').text(`Elapsed time (hh:mm:ss): ${stats.totaltime}`);
         $('#avgTime').text(`Average time/puzzle (hh:mm:ss): ${stats.avgtime}`);
         $('#errors').text(`Number of errors: ${stats.errors}`);

@@ -86,18 +86,9 @@ Each JSON file in `Puzzles/` holds only 15 puzzles, which is too few for most ga
 * **Module – all exercises** – every puzzle in one module
 * **Module – exercises a–b** – blocks of 10 consecutive exercises (150 puzzles, about the size of the original CH1 sets)
 
-Combined sets behave like any other set (randomize, flip, CSV export, spaced-repetition and Woodpecker progress are all kept per set). When you press **Start** in a mode that needs more puzzles than the loaded file has, you are offered the right pool automatically (Repetition and Brutal treat the loaded set as the level, so they never prompt):
+Combined sets behave like any other set (randomize, flip, CSV export, spaced-repetition and Woodpecker progress are all kept per set).
 
-| Mode | Needs at least | Pool offered |
-|:-----|:--------------:|:-------------|
-| Three | 60 | whole module |
-| Haste | 100 | whole module |
-| Countdown | 150 | whole module |
-| Speedrun | 100 | 150-puzzle block |
-| Spaced Repetition | 100 | whole module |
-| Woodpecker | 100 | 150-puzzle block |
-
-The thresholds live in `MODE_CONFIGS` (`minPuzzles`, `pool`) in `assets/game-modes.js`, and the block size is `COMBINED_CHUNK_SIZE` in `assets/puzzle-manifest.js`.
+Every mode runs on whatever set you pick. Choosing a single exercise (for example *Module 01 – Exercise 01*) plays the mode on those 15 puzzles. When the file is finished, or the round ends because nothing is left, the results screen offers **Next set** (the next exercise file) or **Repeat set**. In Repetition and Brutal the same two buttons appear next to the streak counter once the set is cleared. Pick a **★ Combined Set** instead whenever you want a bigger pool for a round.
 
 ### How the timed and streak modes work
 
